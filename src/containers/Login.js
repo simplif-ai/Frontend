@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Login = () => (
-  <div>
+  <div className="page bgorange">
     this is the login page!
   </div>
 );

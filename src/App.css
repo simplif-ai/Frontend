@@ -1,24 +1,23 @@
-.App {
+body {
+  font-family: 'Questrial', sans-serif;
+  margin: 0 auto;
   text-align: center;
+  color: #1A334F;
+  width: 100%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+h1 {
+  font-family: 'Questrial', sans-serif;
+}
+p {
+  font-family: 'Crimson Text', serif;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
+.page {
   padding: 20px;
-  color: white;
+  height: 100vh;
 }
 
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.bgorange {
+  background-color: #F9B045;
 }
