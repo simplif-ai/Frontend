@@ -15,9 +15,10 @@ p {
 
 .page {
   padding: 20px;
-  height: 100vh;
+  height: 80vh;
 }
 
 .bgorange {
   background-color: #F9B045;
+  color: #1A334F;
 }
