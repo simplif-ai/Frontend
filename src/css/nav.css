@@ -1,8 +1,13 @@
 .nav {
   opacity:.6;
   color: red;
+
 }
 
 .nav:hover {
   opacity:1;
+}
+
+.home {
+  text-align: left;
 }

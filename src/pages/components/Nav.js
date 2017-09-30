@@ -3,8 +3,11 @@ import '../../css/nav.css';
 
 const Nav = () => (
   <div className="nav">
-  hey im a nav bar
+    <div className="home">
+    home
+    </div>
   </div>
+
 );
 
 export default Nav;
