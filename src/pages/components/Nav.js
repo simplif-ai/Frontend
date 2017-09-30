@@ -2,10 +2,8 @@ import React from 'react';
 import '../../css/nav.css';
 
 const Nav = () => (
-  <div className="nav">
-    <div className="home">
-    home
-    </div>
+  <div className="nav home">
+    home lol
   </div>
 
 );
