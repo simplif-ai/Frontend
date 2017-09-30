@@ -1,10 +1,20 @@
 import React from 'react';
 import LoginForm from './LoginForm';
+import GoogleLogin from './GoogleLogin';
 
 const Login = () => (
   <div className="page bgorange">
-    this is the login page!
-    <LoginForm />
+      <div className="title">
+        simplif.ai<span></span>
+      </div>
+      <div className="logincontainer">
+          <div className="loginbox">
+            <LoginForm />
+          </div>
+      </div>
+      <div className="logincontainer">
+            <GoogleLogin/>
+      </div>
   </div>
 );
 

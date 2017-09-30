@@ -2,11 +2,11 @@ import React from 'react';
 
 const LoginForm = ({ login }) => (
   <form onSubmit={login}>
-    <label placeholder="email" type="" htmlFor="email" />
+    <label htmlFor="email">email </label>
     <input type="email" name="email" required />
-    <label placeholder="password" type="" htmlFor="password" />
+    <label htmlFor="password">password </label>
     <input type="password" name="password" required />
-    <input type="submit" value="Submit" />
+    <input type="submit" name="submit" value="submit" style={{"color":"#1A334F"}} />
   </form>
 );
 
