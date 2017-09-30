@@ -12,6 +12,9 @@ const Login = () => (
             <LoginForm />
           </div>
       </div>
+      <label style={{"style":"underline","margin-bottom":"6px"}}>
+          or 
+        </label>
       <div className="logincontainer">
             <GoogleLogin/>
       </div>

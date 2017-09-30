@@ -2,10 +2,11 @@ import React from 'react';
 import '../../css/nav.css';
 
 const Nav = () => (
-  <div className="nav home">
-    home lol
-  </div>
-
+    <div className="container">
+      <div className="bar1"></div>
+      <div className="bar2"></div>
+      <div className="bar3"></div>
+    </div>
 );
 
 export default Nav;

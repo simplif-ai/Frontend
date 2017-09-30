@@ -1,13 +1,35 @@
-.nav {
-  opacity:.6;
-  color: red;
-
+.container {
+  display: right;
+  cursor: pointer;
+  opacity: .5;
 }
-
-.nav:hover {
+.container:hover{
   opacity:1;
 }
 
-.home {
-  text-align: left;
+.bar1, .bar2, .bar3 {
+  opacity:.6;
+  background-color: #F9B045;
+  width:20px;
+  height:3px;
+  margin: 3px 0;
+  transition: .5s;
+}
+
+/*Use later, probs*/
+/* Rotate first bar */
+.change .bar1 {
+    -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
+    transform: rotate(-45deg) translate(-9px, 6px) ;
+}
+
+/* Fade out the second bar */
+.change .bar2 {
+    opacity: 0;
+}
+
+/* Rotate last bar */
+.change .bar3 {
+    -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
+    transform: rotate(45deg) translate(-8px, -8px) ;
 }

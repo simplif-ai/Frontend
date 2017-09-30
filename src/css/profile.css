@@ -1,3 +1,38 @@
-div {
-  color: orange;
+.profileCard {
+  background-color: white;
+  height: 80vh;
+  width:25%;
+  float:left;
+  padding: 3px 16px;
+  border-radius:4px;
+}
+.profileCard .title{
+  font-size: 20px;
+  font-style: bold, italic;
+  color: black;
+}
+img {
+  border-radius:50%;
+  display:inline-block;
+  max-width:100%;
+  margin-top: 10px;
+}
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius:4px;
+    transition: 0.3s;
+    background-color: white;
+    float: left;
+    margin: 8px;
+    opacity: .7;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.3);
+    opacity:1;
+}
+
+.container {
+    padding: 3px 16px;
+    font-style: italic;
 }
