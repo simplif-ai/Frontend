@@ -4,7 +4,7 @@ import LoginForm from './LoginForm';
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.setState({ redirectToReferrer: false });
+    this.state = { redirectToReferrer: false };
   }
   handleSubmit = (e) => {
     e.preventDefault();
