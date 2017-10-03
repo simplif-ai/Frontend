@@ -9,6 +9,7 @@ const Register = ({ login }) => (
     <label placeholder="password" type="" htmlFor="password" />
     <input type="password" name="password" required />
     <input type="submit" value="Submit" />
+    <a href='/login'>Already have an account? Sign In</a>
   </form>
 );
 

@@ -8,6 +8,7 @@ const PasswordReset = ({ login }) => (
     <input type="email" name="email" required />
     <input type="submit" value="Submit" />
     <a href='/login'>Already have an account? Sign In</a>
+    <a href='/register'>Register for an account.</a>
   </form>
 );
 
