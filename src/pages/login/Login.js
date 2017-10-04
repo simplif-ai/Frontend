@@ -13,7 +13,6 @@ class Login extends Component {
       password: e.target.password,
     }
     console.log('req', req);
-
   };
   render() {
 
