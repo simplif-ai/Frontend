@@ -1,8 +1,46 @@
 .footer {
   opacity:.6;
   color: green;
+  height: 50px;
 }
 
 .footer:hover {
   opacity: 1;
+}
+
+.button {
+  opacity: 1;
+  z-index: 2;
+  bottom: 20px;
+  right: 20px;
+  position: fixed;
+  background: #1A334F;
+  color: white;
+  border: none;
+  display: inline;
+  border-radius: 50px;
+  width: 50px;
+  height: 50px;
+  padding: 13px;
+}
+
+.button:focus {
+  outline: none;
+}
+
+/*.button:hover {
+  opacity: .8;
+  transition: opacity .2s ease-in-out;
+ -moz-transition: opacity .2s ease-in-out;
+ -webkit-transition: opacity .2s ease-in-out;
+ -o-transition: opacity .2s ease-in-out;
+  cursor: pointer;
+}*/
+
+button:hover {
+  opacity: 1;
+}
+.button:first-child {
+  bottom: 20px;
+  right: 85px;
 }
