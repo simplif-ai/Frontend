@@ -7,9 +7,8 @@ import '../../css/profile.css';
 const Profile = () => (
   <div className="page bgorange">
     <div className="profileCard">
-      <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png"/>
+      <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png" alt="cute prof pic"/>
       <div className="title"> Name </div>
-      
     </div>
     <label style={{"margin-bottom": "15px"}}><b>Summaries<span/> </b></label>
     <div className="col-3 col-m-3">

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import LoginForm from './LoginForm';
 import GoogleLogin from './GoogleLogin';
+import '../../css/login.css';
 
 class Login extends Component {
   constructor(props) {
@@ -18,21 +19,15 @@ class Login extends Component {
   render() {
     return (
       <div className="page bgorange">
-      <div className="title">
-        simplif.ai<span></span>
+        <div className="title logo">
+          simplif.ai
+        </div>
+        <div className="loginbox">
+            <LoginForm login={this.handleSubmit} />
+        </div>
+        <label> or </label> 
+      <GoogleLogin/>
       </div>
-      <div className="logincontainer">
-          <div className="loginbox">
-             <LoginForm login={this.handleSubmit} />
-          </div>
-      </div>
-      <label style={{"style":"underline","margin-bottom":"6px"}}>
-          or 
-        </label>
-      <div className="logincontainer">
-            <GoogleLogin/>
-      </div>
-  </div>
     );
   }
 }
