@@ -7,9 +7,11 @@ import './App.css';
 
 const App = () => (
   <BrowserRouter>
-    <div>
-      <Nav />
-      <Routes/>
+    <div className="app-root">
+      <div className="wrapper">
+        <Nav />
+        <Routes/>
+      </div>
       <Footer />
     </div>
   </BrowserRouter>

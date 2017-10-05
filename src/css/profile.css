@@ -11,7 +11,7 @@
   font-style: bold, italic;
   color: black;
 }
-img {
+.profileCard img {
   border-radius:50%;
   display:inline-block;
   max-width:100%;
