@@ -22,3 +22,76 @@ p {
   background-color: #F9B045;
   color: #1A334F;
 }
+
+.title {
+  font-family: 'Questrial', sans-serif;
+  color: #FFFFFF;
+  font-size: 100px;
+  text-align: center;
+  line-height: 128px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.title span {
+  display:block;
+  border-bottom: 6px solid white;
+  width: 50%;
+  margin: 0 auto;
+  padding-bottom: 4px;
+
+}
+
+.logincontainer{
+  display:block;
+  margin:0 auto;
+}
+
+.loginbox {
+  display: inline-block;
+  width: 200px;
+  border: 3px solid white;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+label {
+  color:#FFFFFF;
+  padding-top: 5px;
+  display: inline-block;
+  text-align: center;
+  width: 50px;
+}
+
+input[type=email], input[type=password], input[type=submit] {
+  display:inline-block;
+  vertical-align:middle;
+  width: 150px;
+  padding: 12px 20px;
+  border: 2px #FFFFFF;
+  background-color: #FCCD8C;
+  border-radius: 4px;
+  margin: 5px;
+}
+
+input[type=email]:focus, input[type=password]:focus {
+  border: 2px #FFFFFF;
+}
+
+/*Starting animation stuff! I guess*/
+.svg {
+  width: 100%;
+  height: auto;
+}
+
+@keyframes planeguy {
+  0%   {transform: translateY(0)}
+  25%  {transform: translateY(-25px)}
+  75%  {transform: translateY(25px)}
+  100% {transform: translateY(0)}
+}
+
+.planeguy {
+  animation: planeguy 10s linear infinite;
+}
