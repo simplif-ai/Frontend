@@ -5,12 +5,19 @@
 button {
   background: #1A334F;
   border-radius: 50px;
-  padding: 20px;
+  padding: 10px 20px;
   color: white;
   border: none;
   margin-top: 10px;
 }
 
+button:focus {
+  outline: none;
+}
+button:hover {
+  background-color: #101F31;
+  cursor: pointer;
+}
 textarea, .edit {
   font-family: 'Crimson Text', serif;
   width: 100%;

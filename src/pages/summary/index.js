@@ -35,15 +35,16 @@ class Summary extends Component {
           this.setState({
             summary: json.text
           });
-          console.log('json.text', json.text);
-          // const sentences = [];
           const summary = [];
-          const sentences = json.text.forEach(sentence => {
+          const sentenceCount = this.state.brevity * (1/100) * json.text.length;
+          const sentences = [];
+          json.text.forEach(sentence => {
+            if (sentence[1] <= sentenceCount) {
+              summary.push(sentence[0]);
+            }
             console.log('sentece', sentence[0]);
-            return sentence[0];
+            sentences.push(sentence[0]);
           });
-
-          console.log('sentences', sentences);
           e.target.textarea.value = sentences;
         }
       });
