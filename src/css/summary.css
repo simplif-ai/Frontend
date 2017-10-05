@@ -1,0 +1,92 @@
+.summary {
+  padding: 20px;
+
+}
+button {
+  background: #1A334F;
+  border-radius: 50px;
+  padding: 20px;
+  color: white;
+  border: none;
+  margin-top: 10px;
+}
+
+textarea, .edit {
+  font-family: 'Crimson Text', serif;
+  width: 100%;
+  color: #95989A;
+  resize: none;
+  border: none;
+  overflow: hidden;
+}
+
+textarea::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #BCBDBE;
+}
+textarea::-moz-placeholder { /* Firefox 19+ */
+  color: #BCBDBE;
+}
+textarea:-ms-input-placeholder { /* IE 10+ */
+  color: #BCBDBE;
+}
+textarea:-moz-placeholder { /* Firefox 18- */
+  color: #BCBDBE;
+}
+textarea:focus {
+  outline: none;
+}
+.summary h1 {
+  font-family: 'Crimson Text', serif;
+}
+
+.brevity {
+  width: 250px;
+  display: inline-block;
+}
+.brevity label {
+  color: #1A334F;
+  display: block;
+  text-align: center;
+  display: inline-block;
+  padding: 20px;
+  width: auto;
+}
+.slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 250px; /* Full-width */
+    height: 15px; /* Specified height */
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use webkit (Chrome, Opera, Safari, Edge) and moz (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #F9B045;
+    border-radius: 50%;
+    cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #4CAF50; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+@media (min-width: 500px) {
+  .summary {
+    padding: 0 20%;
+  }
+}

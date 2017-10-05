@@ -4,9 +4,12 @@ body {
   text-align: center;
   color: #1A334F;
   width: 100%;
+  font-size: 20px;
 }
-
-h1 {
+button, textarea {
+  font-size: 20px;
+}
+h1, button {
   font-family: 'Questrial', sans-serif;
 }
 p {

@@ -34,21 +34,21 @@ class Login extends Component {
   render() {
     return (
       <div className="page bgorange">
-      <div className="title">
-        simplif.ai<span></span>
-      </div>
-      <div className="logincontainer">
-          <div className="loginbox">
-             <LoginForm login={this.handleSubmit} />
-          </div>
-      </div>
-      <label style={{"style":"underline","margin-bottom":"6px"}}>
-          or
+        <div className="title">
+          simplif.ai<span></span>
+        </div>
+        <div className="logincontainer">
+            <div className="loginbox">
+               <LoginForm login={this.handleSubmit} />
+            </div>
+        </div>
+        <label style={{"style":"underline","margin-bottom":"6px"}}>
+            or
         </label>
-      <div className="logincontainer">
-            <GoogleLogin/>
+        <div className="logincontainer">
+              <GoogleLogin/>
+        </div>
       </div>
-  </div>
     );
   }
 }
