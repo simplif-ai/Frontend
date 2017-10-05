@@ -2,6 +2,10 @@
   padding: 20px;
 
 }
+.summary h1 {
+  margin-right: 20px;
+  display: inline;
+}
 button {
   background: #1A334F;
   border-radius: 50px;
@@ -15,7 +19,11 @@ button:focus {
   outline: none;
 }
 button:hover {
-  background-color: #101F31;
+  opacity: .8;
+  transition: opacity .2s ease-in-out;
+ -moz-transition: opacity .2s ease-in-out;
+ -webkit-transition: opacity .2s ease-in-out;
+ -o-transition: opacity .2s ease-in-out;
   cursor: pointer;
 }
 textarea, .edit {
@@ -25,6 +33,7 @@ textarea, .edit {
   resize: none;
   border: none;
   overflow: hidden;
+  min-height: 50vh;
 }
 
 textarea::-webkit-input-placeholder { /* Chrome/Opera/Safari */
@@ -51,23 +60,25 @@ textarea:focus {
   display: inline-block;
 }
 .brevity label {
+  font-size: 14px;
   color: #1A334F;
   display: block;
   text-align: center;
   display: inline-block;
-  padding: 20px;
+  padding: 10px 20px;
   width: auto;
 }
 .slider {
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
-    width: 250px; /* Full-width */
-    height: 15px; /* Specified height */
+    width: 200px; /* Full-width */
+    height: 12px; /* Specified height */
     background: #d3d3d3; /* Grey background */
     outline: none; /* Remove outline */
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
+    border-radius: 36px;
 }
 
 /* Mouse-over effects */
@@ -92,6 +103,40 @@ textarea:focus {
     background: #4CAF50; /* Green background */
     cursor: pointer; /* Cursor on hover */
 }
+
+.icon {
+  margin: 0 20px;
+  display: inline;
+  border-radius: 50px;
+  margin: 0px;
+  width: 50px;
+  height: 50px;
+  padding: 13px;
+}
+
+.orange {
+  background: white;
+}
+.orange:hover {
+  border: 1px solid #95989A;
+  transition: border-color .2s ease-in-out;
+ -moz-transition: border-color .2s ease-in-out;
+ -webkit-transition: border-color .2s ease-in-out;
+ -o-transition: border-color .2s ease-in-out;
+}
+.fixed {
+  z-index: 1;
+  bottom: 20px;
+  position: fixed;
+}
+.summarize {
+  margin-left: -60px;
+}
+.fixed-slider {
+  left: 20px;
+  border-top: ;
+}
+
 @media (min-width: 500px) {
   .summary {
     padding: 0 20%;
