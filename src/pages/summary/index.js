@@ -9,33 +9,26 @@ class Summary extends Component {
   }
   summarize = (e) => {
     e.preventDefault();
-    const req = {
-      summary: e.target.textarea.value
-    }
-    console.log('text', req.summary);
-    let d = new FormData();
-    d.append('text', req.summary);
-    return apiFetch('summarize',{
+    return apiFetch('sumarizertext', {
       headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+       'Accept': 'application/json',
+       'Content-Type': 'application/json'
       },
-      method: 'POST',
-      body: d
-    }).then(response => {
-      console.log('response', response);
-      response.json();
-    }).then((json) => {
-            // if(json.success === false) {
-            //     console.log('error', json.message);
-            // }
-            // else {
-            //
-            console.log('json',json);
-        });
-
+      body: JSON.stringify({
+        text: e.target.textarea.value
+      }),
+      method: 'POST'
+    }).then(response =>
+      response.json()
+    ).then((json) => {
+        if (json.success === false) {
+            console.log('error', json.error);
+        }
+        else {
+          // call funtion to send data to page
+          console.log('success',json);
+        }
+      });
   }
   render() {
     return (
