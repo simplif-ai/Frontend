@@ -5,7 +5,7 @@ import '../../css/profile.css';
       //also profile stuff
 
 const Profile = () => (
-  <div className="page bgorange profile">
+  <div className="page bgorange inline-block">
     <div className="profileCard">
       <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png" alt="cute prof pic"/>
       <div className="title"> Name </div>
@@ -18,7 +18,7 @@ const Profile = () => (
             <div className="header">
               <b>Example Summary1</b>
             </div>
-            <div className="container">
+            <div className="profile-container">
               Example Summary 1 lorem ipsum woooo look at all the text that has been summarized here
               </div>
           </div>
@@ -28,7 +28,7 @@ const Profile = () => (
             <div className="header">
               <b>Example Summary2</b>
             </div>
-            <div className="container">
+            <div className="profile-container">
               Example Summary 2 lorem ipsum woooo look at all the text that has been summarized here
               </div>
           </div>
@@ -38,7 +38,7 @@ const Profile = () => (
             <div className="header">
               <b>Example Summary3</b>
             </div>
-            <div className="container">
+            <div className="profile-container">
               Example Summary 3 lorem ipsum woooo look at all the text that has been summarized here
               </div>
           </div>

@@ -64,6 +64,7 @@
   height: auto;
   display: inline-block;
   padding: 20px;
+  z-index: 5;
 }
 .drop a {
   color: white;

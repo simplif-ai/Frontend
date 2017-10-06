@@ -42,7 +42,7 @@ class Login extends Component {
     return (
       <div className="page bgorange">
         <img src={plane} width="20%" className="plane"/>
-        <div className="title logo">
+        <div className="logo">
           simplif.ai
         </div>
         <h1>Create an account</h1>

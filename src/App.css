@@ -69,5 +69,5 @@ p {
   animation: planeguy 8s linear infinite;
   display:block;
   position:absolute;
-  z-index: 10;
+  z-index: 4;
 }
