@@ -1,0 +1,12 @@
+import React from 'react';
+import Register from '../src/pages/login/Register';
+import {mount} from 'enzyme';
+
+test('Invalid registration error message', ()=> {
+    const response = {error: 'Invalid Registration'};
+    const wrapper = mount(
+        <Login error={response.error}/>
+    );
+    const p = wrapper.find('errorClass');
+    expect(p.text()).toBe('Invalid Registration');
+});

@@ -1,0 +1,38 @@
+.registerbox {
+  display: block;
+  width: 50%;
+  border: 3px solid white;
+  padding: 10px;
+  border-radius: 6px;
+  margin:auto;
+}
+
+label {
+  color:#FFFFFF;
+  padding-top: 5px;
+  display: block;
+  text-align: center;
+  margin: auto;
+  margin-bottom: 6px;
+}
+
+input[type=email], input[type=password], input[type=submit] {
+  display:block;
+  width: 50%;
+  padding: 12px 20px;
+  border: 2px #FFFFFF;
+  background-color: #FCCD8C;
+  border-radius: 4px;
+  margin: auto;
+  margin-bottom: 6px;
+}
+
+input[type=email]:focus, input[type=password]:focus {
+  border: 2px #FFFFFF;
+}
+input[type=submit]:hover {
+    opacity: .8;
+}
+errorClass {
+  display:inline-block;
+}
