@@ -4,6 +4,28 @@
       .cls-1 {
         fill: #fff;
       }
+      @keyframes planeguy {
+        0%   {
+          transform: translateY(0);
+          opacity: .6;
+          }
+        25%  {
+          transform: translateY(-25px);
+          opacity: 1;
+          }
+        75%  {
+          transform: translateY(25px);
+          opacity: .6;
+          }
+        100% {
+          transform: translateY(0);
+          opacity: 1;
+          }
+      }
+
+      .plane {
+        animation: planeguy 10s linear infinite;
+      }
     </style>
   </defs>
   <g id="Group_61" data-name="Group 61" transform="translate(-217.312 1593.313)">

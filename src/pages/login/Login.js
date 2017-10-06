@@ -3,6 +3,7 @@ import LoginForm from './LoginForm';
 import GoogleLogin from './GoogleLogin';
 import '../../css/login.css';
 import apiFetch from '../../utils/api.js';
+import plane from '../../assets/background/white-plane.svg';
 
 class Login extends Component {
   constructor(props) {
@@ -35,6 +36,7 @@ class Login extends Component {
   render() {
     return (
       <div className="page bgorange">
+        <img className="plane" src={plane} style={{"width": "20%", "top": "10", "left": "10", "position": "absolute"}}/>
         <div className="title logo">
           simplif.ai
         </div>
