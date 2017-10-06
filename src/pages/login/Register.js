@@ -4,18 +4,19 @@ import '../../css/login.css';
 
 class Register extends Component {
   register = (e) => {
-    console.log('e.target',e.target.fname.value);
     e.preventDefault();
-    const req = {
-      name: e.target.fname.value,
-      email: e.target.email.value,
-      password: e.target.password.value,
-      prefersEmailUpdates: false
-    }
-    console.log('req', req);
     return apiFetch('createAccount',{
-        method: 'POST',
-        body: req
+      headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        name: e.target.fname.value,
+        email: e.target.email.value,
+        password: e.target.password.value,
+        prefersEmailUpdates: false
+      })
     }).then((response) => response.json())
         .then((json) => {
           console.log('response', json);

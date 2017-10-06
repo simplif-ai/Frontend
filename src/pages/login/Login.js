@@ -20,13 +20,17 @@ class Login extends Component {
     }
     console.log('req', req);
     return apiFetch('login',{
+        headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json'
+        },
         method: 'POST',
         body: req
     }).then((response) => response.json())
         .then((json) => {
           console.log('response', json);
           if(json.success === false) {
-              console.log('error', json.message);
+              console.log('error', json.error);
           }
           else {
             console.log('json',json);
