@@ -5,7 +5,7 @@ import '../../css/profile.css';
       //also profile stuff
 
 const Profile = () => (
-  <div className="page bgorange">
+  <div className="page bgorange profile">
     <div className="profileCard">
       <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png" alt="cute prof pic"/>
       <div className="title"> Name </div>
@@ -43,7 +43,7 @@ const Profile = () => (
               </div>
           </div>
         </td>
-        
+
       </table>
     </div>
   </div>
