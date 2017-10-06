@@ -27,7 +27,8 @@ class Nav extends Component {
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
-    if (isAuthenticated === "false") {
+    const login = cookies.get('login');
+    if (isAuthenticated === "false" && login === true) {
       return (<Redirect to="/login"/>);
     }
     return (

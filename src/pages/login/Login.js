@@ -55,6 +55,7 @@ class Login extends Component {
             console.log('json',json);
             const { cookies } = this.props;
             cookies.set('isAuthenticated', true);
+            cookies.set('login', true);
             cookies.set('jwt', json.token);
             this.setState({redirectToReferrer: true, error: null});
             cookies.set('email', e.target.email.value, { path: '/' });
@@ -74,7 +75,7 @@ class Login extends Component {
         </div>
         <h1>Create an account</h1>
         <div className="registerbox">
-            <LoginForm login={this.handleSubmit} error={this.state.error} />
+            <LoginForm login={this.handleSubmit} error={this.state.error} googleLogin={this.googleLogin}/>
         </div>
       </div>
     );
