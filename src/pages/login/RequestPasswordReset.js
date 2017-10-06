@@ -10,7 +10,7 @@ const PasswordReset = ({ login, error }) => (
           {error ? `Error=${error}`:null}
         </div>
         <label placeholder="email" type="" htmlFor="email">
-          Enter your email address to reset your password.
+          Enter your email address to reset your password
         </label>
         <input type="email" name="email" required />
         <input className="btn" type="submit" value="submit" style={{"color":"#1A334F"}}/>

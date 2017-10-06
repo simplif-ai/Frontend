@@ -7,6 +7,7 @@
   display: inline;
 }
 button {
+  opacity: 1;
   background: #1A334F;
   border-radius: 50px;
   padding: 10px 20px;
@@ -134,7 +135,6 @@ textarea:focus {
 }
 .fixed-slider {
   left: 20px;
-  border-top: ;
 }
 
 @media (min-width: 500px) {
