@@ -8,7 +8,10 @@ import plane from '../../assets/background/white-plane.svg';
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { redirectToReferrer: false };
+    this.state = { 
+      redirectToReferrer: false,
+      error: null
+    };
   }
   handleSubmit = (e) => {
     e.preventDefault();
@@ -41,7 +44,7 @@ class Login extends Component {
           simplif.ai
         </div>
         <div className="loginbox">
-            <LoginForm login={this.handleSubmit} />
+            <LoginForm login={this.handleSubmit} error={this.state.error} />
         </div>
         <label> or </label> 
       <GoogleLogin/>

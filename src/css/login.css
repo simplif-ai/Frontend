@@ -52,3 +52,6 @@ input[type=email]:focus, input[type=password]:focus {
 input[type=submit]:hover {
     opacity: .8;
 }
+errorClass {
+  display:inline-block;
+}
