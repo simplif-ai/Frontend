@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import '../../css/summary.css';
 import edit_icon_orange from '../../assets/pencil-icon-orange.svg';
-import edit_icon_white from '../../assets/pencil-icon.svg';
 
 class Summary extends Component {
   static propTypes = {

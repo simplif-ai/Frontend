@@ -15,7 +15,6 @@ class Nav extends Component {
     };
   }
   onOpen = (e) => {
-    console.log('open before', this.state.open);
     this.setState({
       open: !this.state.open
     });

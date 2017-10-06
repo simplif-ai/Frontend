@@ -6,16 +6,13 @@ import { Redirect } from 'react-router-dom';
 
 import '../../css/login.css';
 import '../../css/register.css';
-import apiFetch from '../../utils/api.js';
+// import apiFetch from '../../utils/api.js';
 import plane from '../../assets/background/white-plane.svg';
 
 class Login extends Component {
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired
   };
-  componentWillMount() {
-    const { cookies } = this.props;
-  }
   constructor(props) {
     super(props);
     this.state = {
@@ -33,8 +30,6 @@ class Login extends Component {
     const { cookies } = this.props;
     cookies.set('email', req.email);
     cookies.set('isAuthenticated', true);
-    console.log('cookie test', cookies.get('email'));
-    console.log('req', req);
     this.setState({redirectToReferrer: true});
 
     // return apiFetch('login',{
@@ -62,15 +57,13 @@ class Login extends Component {
     //     });
   };
   render() {
-    const { cookies } = this.props;
-    const isAuthenticated = cookies.get('isAuthenticated');
     if (this.state.redirectToReferrer === true) {
       console.log('im now authenticated');
       return (<Redirect to="/summary"/>);
     }
     return (
       <div className="page bgorange">
-        <img src={plane} width="20%" className="plane"/>
+        <img src={plane} width="20%" className="plane" alt="plane"/>
         <div className="logo">
           simplif.ai
         </div>

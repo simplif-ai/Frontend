@@ -38,7 +38,7 @@ class Register extends Component {
         <div className="title logo">
           simplif.ai
         </div>
-        <img className="headphones" src={headphones}/>
+        <img className="headphones" src={headphones} alt="headphones"/>
         <h1>Create an account</h1>
         <div className = "registerbox">
           <form onSubmit={this.register}>

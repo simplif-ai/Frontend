@@ -4,7 +4,7 @@ import coffee from '../../assets/background/paper-coffee.svg';
 
 const PasswordReset = ({ login, error }) => (
   <div className="page bgorange">
-    <img src={coffee} style={{"width":"40%", "opacity":".1", "position":"absolute", "left":"10", "bottom":"20"}}/>
+    <img src={coffee} alt="coffee-icon" style={{"width":"40%", "opacity":".1", "position":"absolute", "left":"10", "bottom":"20"}}/>
     <h1> Reset Password </h1>
     <div className="registerbox">
       <form onSubmit={login}>
