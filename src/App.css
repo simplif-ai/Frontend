@@ -55,9 +55,14 @@ p {
     }
   100% {
     transform: translateY(0);
-    opacity: .1;}
+    opacity: .1;
+    }
 }
 
+/*on load, fadeout.plane*/
 .plane {
   animation: planeguy 8s linear infinite;
+  display:block;
+  position:absolute;
+  z-index: 10;
 }
