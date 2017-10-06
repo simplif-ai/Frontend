@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "react": "^15.6.1",
+    "react-cookie": "^2.1.1",
     "react-dom": "^15.6.1",
     "react-google-login": "^2.11.2",
     "react-router": "^4.2.0",
