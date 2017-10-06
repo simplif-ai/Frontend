@@ -22,6 +22,7 @@ class Nav extends Component {
   logout = () => {
     const { cookies } = this.props;
     cookies.set('isAuthenticated', false);
+    cookies.remove('jwt');
   }
   render() {
     const { cookies } = this.props;

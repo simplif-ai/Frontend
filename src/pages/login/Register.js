@@ -17,7 +17,7 @@ class Register extends Component {
         name: e.target.fname.value,
         email: e.target.email.value,
         password: e.target.password.value,
-        prefersEmailUpdates: false
+        prefersEmailUpdates: 0
       })
     }).then((response) => response.json())
         .then((json) => {
