@@ -35,7 +35,7 @@ label {
   margin-bottom: 6px;
 }
 
-input[type=email], input[type=password], input[type=submit] {
+input {
   display:block;
   width: 50%;
   padding: 12px 20px;
@@ -46,11 +46,38 @@ input[type=email], input[type=password], input[type=submit] {
   margin-bottom: 6px;
 }
 
-input[type=email]:focus, input[type=password]:focus {
+input {
   border: 2px #FFFFFF;
 }
-input[type=submit]:hover {
-    opacity: .8;
+.btn {
+  text-align: center;
+  color: white;
+  font-family: 'Questrial', sans-serif;
+  font-size: 15px;
+  width: 100%;
+}
+.btn:hover {
+  opacity: .8;
+}
+input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #1A334F;
+  font-family: 'Questrial', sans-serif;
+  font-size: 15px;
+}
+input::-moz-placeholder { /* Firefox 19+ */
+  color: #1A334F;
+  font-family: 'Questrial', sans-serif;
+  font-size: 15px;
+}
+input:-ms-input-placeholder { /* IE 10+ */
+  color: #1A334F;
+  font-family: 'Questrial', sans-serif;
+  font-size: 15px;
+}
+input:-moz-placeholder { /* Firefox 18- */
+  color: #1A334F;
+  font-family: 'Questrial', sans-serif;
+  font-size: 15px;
 }
 errorClass {
   display:inline-block;

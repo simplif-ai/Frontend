@@ -4,11 +4,17 @@ body {
   text-align: center;
   color: #1A334F;
   width: 100%;
-  font-size: 20px;
+  font-size: 15px;
 }
 html, body, #root, .app-root {
   height: 100%;
   margin: 0;
+}
+a {
+  color:  #1A334F;
+}
+a:hover {
+  opacity: .8;
 }
 .wrapper {
   min-height: 100%;
@@ -26,7 +32,6 @@ p {
 
 .page {
   padding: 20px;
-  height: 80vh;
 }
 
 .bgorange {

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../css/register.css'
+import '../../css/login.css'
 import coffee from '../../assets/background/paper-coffee.svg';
 
 const PasswordReset = ({ login, error }) => (
@@ -15,7 +15,7 @@ const PasswordReset = ({ login, error }) => (
         <input type="password" name="password" required />
         <label placeholder="confirm password" type="" htmlFor="password">Confirm Password</label>
         <input type="password" name="password" required />
-        <input type="submit" value="Submit" style={{"width":"25%"}} />
+        <input className="btn" type="submit" value="Submit" style={{"width":"25%"}} />
       </form>
     </div>
   </div>
