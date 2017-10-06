@@ -19,21 +19,19 @@ class Login extends Component {
       password: e.target.password,
     }
     console.log('req', req);
-    // let d = new FormData();
-    // d.append('email', e.target.email);
-    // d.append('password', e.target.password);
-    // return apiFetch('login',{
-    //     method: 'POST',
-    //     body: d
-    // }).then((response) => response.json())
-    //     .then((json) => {
-    //       if(json.success === false) {
-    //           console.log('error', json.message);
-    //       }
-    //       else {
-    //         console.log('json',json);
-    //       }
-    //     });
+    return apiFetch('login',{
+        method: 'POST',
+        body: req
+    }).then((response) => response.json())
+        .then((json) => {
+          console.log('response', json);
+          if(json.success === false) {
+              console.log('error', json.message);
+          }
+          else {
+            console.log('json',json);
+          }
+        });
   };
   render() {
     return (
@@ -44,7 +42,6 @@ class Login extends Component {
         <div className="loginbox">
             <LoginForm login={this.handleSubmit} error={this.state.error} />
         </div>
-        <label> or </label>
       </div>
     );
   }
