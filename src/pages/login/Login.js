@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import LoginForm from './LoginForm';
 import '../../css/login.css';
+import '../../css/register.css';
 import apiFetch from '../../utils/api.js';
 import plane from '../../assets/background/white-plane.svg';
 
@@ -44,7 +45,8 @@ class Login extends Component {
         <div className="title logo">
           simplif.ai
         </div>
-        <div className="loginbox">
+        <h1>Create an account</h1>
+        <div className="registerbox">
             <LoginForm login={this.handleSubmit} error={this.state.error} />
         </div>
       </div>

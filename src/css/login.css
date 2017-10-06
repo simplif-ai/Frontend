@@ -14,7 +14,9 @@
 .logo {
   border-bottom: 6px solid white;
 }
-
+a {
+  margin: 10px 0;
+}
 .loginbox {
   display: block;
   width: 25%;
