@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { withCookies, Cookies } from 'react-cookie';
+import { instanceOf } from 'prop-types';
 import '../../css/nav.css';
 
 class Nav extends Component {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -14,7 +20,16 @@ class Nav extends Component {
       open: !this.state.open
     });
   }
+  logout = () => {
+    const { cookies } = this.props;
+    cookies.set('isAuthenticated', false);
+  }
   render() {
+    const { cookies } = this.props;
+    const isAuthenticated = cookies.get('isAuthenticated');
+    if (isAuthenticated === "false") {
+      return (<Redirect to="/login"/>);
+    }
     return (
       <div className="nav">
         <div onClick={this.onOpen} className="container">
@@ -37,11 +52,11 @@ class Nav extends Component {
           ?
           (<div className="drop">
             <a href='/profile'>Profile</a>
-            <a href='/'>Logout</a>
+            <a href='/' onClick={this.logout}>Logout</a>
           </div>) : null
         }
       </div>
     );
   }
 }
-export default Nav;
+export default withCookies(Nav);

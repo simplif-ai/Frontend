@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
+import { withCookies, Cookies } from 'react-cookie';
+import { instanceOf } from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import '../../css/summary.css';
 import edit_icon_orange from '../../assets/pencil-icon-orange.svg';
 import edit_icon_white from '../../assets/pencil-icon.svg';
 
 class Summary extends Component {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -76,6 +82,11 @@ class Summary extends Component {
     this.updateSummary();
   }
   render() {
+    const { cookies } = this.props;
+    const isAuthenticated = cookies.get('isAuthenticated');
+    if (isAuthenticated === "false" || !isAuthenticated) {
+      return (<Redirect to="/login"/>);
+    }
     return (
       <div className="summary">
       <form onSubmit={this.summarize}>
@@ -94,4 +105,4 @@ class Summary extends Component {
   }
 }
 
-export default Summary;
+export default withCookies(Summary);

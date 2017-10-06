@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 import LoginForm from './LoginForm';
+import { Redirect } from 'react-router-dom';
+
 import '../../css/login.css';
 import '../../css/register.css';
 import apiFetch from '../../utils/api.js';
@@ -30,9 +32,10 @@ class Login extends Component {
     }
     const { cookies } = this.props;
     cookies.set('email', req.email);
-    cookies.set('isAuthenticated', false);
+    cookies.set('isAuthenticated', true);
     console.log('cookie test', cookies.get('email'));
     console.log('req', req);
+    this.setState({redirectToReferrer: true});
 
     // return apiFetch('login',{
     //     headers: {
@@ -59,6 +62,12 @@ class Login extends Component {
     //     });
   };
   render() {
+    const { cookies } = this.props;
+    const isAuthenticated = cookies.get('isAuthenticated');
+    if (this.state.redirectToReferrer === true) {
+      console.log('im now authenticated');
+      return (<Redirect to="/summary"/>);
+    }
     return (
       <div className="page bgorange">
         <img src={plane} width="20%" className="plane"/>

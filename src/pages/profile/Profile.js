@@ -13,7 +13,7 @@ class Profile extends Component {
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
-    if (isAuthenticated === "false") {
+    if (isAuthenticated === "false" || !isAuthenticated) {
       return (<Redirect to="/login"/>);
     }
     return (
