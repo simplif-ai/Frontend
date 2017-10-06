@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import '../../css/summary.css';
 import edit_icon_orange from '../../assets/pencil-icon-orange.svg';
+import plane from '../../assets/background/white-plane.svg';
 
 class Summary extends Component {
   static propTypes = {
@@ -73,6 +74,7 @@ class Summary extends Component {
             response: json.text,
             receivedSummary: true
           });
+          console.log('response', json);
           this.updateSummary();
           // const sentences = [];
           // json.text.forEach(sentence => {
@@ -113,6 +115,7 @@ class Summary extends Component {
     }
     return (
       <div className="summary">
+      {this.state.toggleEdit ? <img src={edit_icon_orange} width="20%" className="plane" alt="plane"/> : null}
       <form onSubmit={this.summarize}>
         <h1>Title</h1>
         <button className="icon orange"><img src={edit_icon_orange} alt="edit"/></button>
