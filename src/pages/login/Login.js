@@ -44,7 +44,6 @@ class Login extends Component {
         <div className="loginbox">
             <LoginForm login={this.handleSubmit} error={this.state.error} />
         </div>
-        <label> or </label>
       </div>
     );
   }
