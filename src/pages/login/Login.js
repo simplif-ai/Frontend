@@ -13,10 +13,6 @@ class Login extends Component {
   };
   componentWillMount() {
     const { cookies } = this.props;
-
-    this.state = {
-      name: cookies.get('name') || 'Ben'
-    };
   }
   constructor(props) {
     super(props);
@@ -34,7 +30,7 @@ class Login extends Component {
     }
     const { cookies } = this.props;
     cookies.set('email', req.email);
-    cookies.set('isAuthenticated', true);
+    cookies.set('isAuthenticated', false);
     console.log('cookie test', cookies.get('email'));
     console.log('req', req);
 

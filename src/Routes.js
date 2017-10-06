@@ -14,7 +14,6 @@ const Routes = () => (
     <Route path="/request-password-reset" component={RequestPasswordReset}/>
     <Route path="/password-reset" component={PasswordReset}/>
     <Route path="/register" component={Register}/>
-    <Route path="/login" component={Login}/>
     <Route path="/profile" component={Profile}/>
     <Route path="/summary" component={Summary}/>
   </Switch>
