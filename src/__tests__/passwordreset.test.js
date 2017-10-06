@@ -1,5 +1,5 @@
 import React from 'react';
-import PasswordReset from '../src/pages/login/PasswordReset';
+import PasswordReset from '../pages/login/PasswordReset';
 import {mount} from 'enzyme';
 
 test('Unable to reset password error message', ()=> {

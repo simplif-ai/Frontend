@@ -1,5 +1,5 @@
 import React from 'react';
-import RequestPasswordReset from '../src/pages/login/RequestPasswordReset';
+import RequestPasswordReset from '../pages/login/RequestPasswordReset';
 import {mount} from 'enzyme';
 
 test('Unable to request password reset error message', ()=> {

@@ -1,5 +1,9 @@
 import React from 'react';
-import Login from '../src/pages/login/Login';
+import Login from '../pages/login/Login';
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
 import {mount} from 'enzyme';
 
 test('Invalid login error message', ()=> {

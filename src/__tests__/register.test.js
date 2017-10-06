@@ -1,5 +1,5 @@
 import React from 'react';
-import Register from '../src/pages/login/Register';
+import Register from '../pages/login/Register';
 import {mount} from 'enzyme';
 
 test('Invalid registration error message', ()=> {
