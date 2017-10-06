@@ -122,7 +122,7 @@ class Summary extends Component {
       </form>
         <div className="brevity fixed fixed-slider">
           <label>Brevity {this.state.brevity}%</label>
-          <input type="range" min="1" max="100" className="slider" id="myRange" onChange={this.changeBrevity} />
+          <input type="range" min="1" max="100" className="slider" id="myRange" value={this.state.brevity} onChange={this.changeBrevity} />
         </div>
       </div>
     );
