@@ -19,12 +19,31 @@ class Summary extends Component {
       response: {},
       brevity: 50,
       toggleEdit: false,
-      sentenceCount: null
+      sentenceCount: null,
+      text: '',
+      receivedSummary: false
     };
   }
   updateSummary = () => {
-    const textarea = document.getElementById('summary');
-    console.log('text area', textarea);
+    const summary = [];
+    const sentenceCount = Math.floor(this.state.brevity * (1/100) * this.state.response.length);
+    this.setState({
+      sentenceCount: sentenceCount
+    });
+    const sentences = [];
+    this.state.response.forEach(sentence => {
+      if (sentence[1] <= sentenceCount) {
+        summary.push(sentence[0]);
+      }
+      sentences.push(sentence[0]);
+    });
+    console.log('sentences', sentences.join(' '));
+    console.log('summary', summary.join(' '));
+
+    this.setState({
+      summary: summary.join(' '),
+      text: summary.join(' ')
+    });
     // this.state.sentenceCount
   }
   summarize = (e) => {
@@ -48,23 +67,24 @@ class Summary extends Component {
         else {
           // call funtion to send data to page
           console.log('success',json);
+          // const summary = [];
+          // const sentenceCount = Math.floor(this.state.brevity * (1/100) * json.text.length);
           this.setState({
-            summary: json.text
+            response: json.text,
+            receivedSummary: true
           });
-          const summary = [];
-          const sentenceCount = Math.floor(this.state.brevity * (1/100) * json.text.length);
-          this.setState({ sentenceCount: sentenceCount });
-          const sentences = [];
-          json.text.forEach(sentence => {
-            if (sentence[1] <= sentenceCount) {
-              summary.push(sentence[0]);
-            }
-            sentences.push(sentence[0]);
-          });
-          e.target.textarea.value = summary.join(' ');
-          console.log('sentences', sentences);
-          console.log('summary', summary.join(' '));
-          this.setState({ summary: summary.join(' ')});
+          this.updateSummary();
+          // const sentences = [];
+          // json.text.forEach(sentence => {
+          //   if (sentence[1] <= sentenceCount) {
+          //     summary.push(sentence[0]);
+          //   }
+          //   sentences.push(sentence[0]);
+          // });
+          // e.target.textarea.value = summary.join(' ');
+          // console.log('sentences', sentences.join(' '));
+          // console.log('summary', summary.join(' '));
+          // this.setState({ summary: summary.join(' ')});
         }
       });
   }
@@ -72,13 +92,18 @@ class Summary extends Component {
     e.target.style.height = '1px';
     e.target.style.height = 25 + e.target.scrollHeight + 'px';
   }
+  onEdit = (e) => {
+    this.setState({ text: e.target.value });
+  }
   changeBrevity = (e) => {
     this.setState({
       brevity: e.target.value,
       toggleEdit: true,
       sentenceCount: Math.floor(this.state.brevity * (1/100) * this.state.sentences.length)
     });
-    this.updateSummary();
+    if (this.state.receivedSummary === true) {
+      this.updateSummary();
+    }
   }
   render() {
     const { cookies } = this.props;
@@ -92,7 +117,7 @@ class Summary extends Component {
         <h1>Title</h1>
         <button className="icon orange"><img src={edit_icon_orange} alt="edit"/></button>
 
-        <textarea name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} id="summary"/>
+        <textarea name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} value={this.state.text} onChange={this.onEdit} id="summary"/>
         <button className="summarize fixed" type="submit">Summarize</button>
       </form>
         <div className="brevity fixed fixed-slider">
