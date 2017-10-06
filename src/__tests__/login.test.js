@@ -10,4 +10,3 @@ test('Invalid login error message', ()=> {
     const p = wrapper.find('errorClass');
     expect(p.text()).toBe('Invalid Login');
 });
-

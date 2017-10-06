@@ -38,7 +38,6 @@ class Login extends Component {
   render() {
     return (
       <div className="page bgorange">
-        <img className="plane" src={plane} style={{"width": "20%", "top": "10", "left": "10", "position": "absolute"}}/>
         <div className="title logo">
           simplif.ai
         </div>

@@ -4,7 +4,7 @@ import '../../css/login.css';
 const LoginForm = ({ login , error }) => (
   <form onSubmit={login}>
     <div className = "errorClass">
-      {error ? `Error= ${error}` : null} awef
+      {error ? `Error= ${error}` : null}
     </div>
     <label htmlFor="email">email </label>
     <input type="email" name="email" required />
