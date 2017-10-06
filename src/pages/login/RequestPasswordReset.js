@@ -14,8 +14,8 @@ const PasswordReset = ({ login, error }) => (
         </label>
         <input type="email" name="email" required />
         <input type="submit" value="submit" style={{"color":"#1A334F"}}/>
-        <a href='/login'>Already have an account? Sign In</a>
-        <a href='/register'>Register for an account.</a>
+        <a href='/login' style={{"display":"block", "margin-bottom":"6px"}}>Already have an account? Sign In</a>
+        <a href='/register' style={{"display":"block"}}>Or register for an account.</a>
       </form>
     </div>
   </div>
