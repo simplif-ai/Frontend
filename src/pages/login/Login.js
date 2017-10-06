@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import LoginForm from './LoginForm';
-import GoogleLogin from './GoogleLogin';
 import '../../css/login.css';
 import apiFetch from '../../utils/api.js';
 import plane from '../../assets/background/white-plane.svg';
@@ -8,7 +7,7 @@ import plane from '../../assets/background/white-plane.svg';
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       redirectToReferrer: false,
       error: null
     };
@@ -46,8 +45,7 @@ class Login extends Component {
         <div className="loginbox">
             <LoginForm login={this.handleSubmit} error={this.state.error} />
         </div>
-        <label> or </label> 
-      <GoogleLogin/>
+        <label> or </label>
       </div>
     );
   }
