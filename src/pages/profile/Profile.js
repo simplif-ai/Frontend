@@ -43,11 +43,9 @@ class Profile extends Component {
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
-              const { cookies } = this.props;
           }
           else {
             console.log('componentDidMount on load',json);
-            const { cookies } = this.props;
             this.setState({
               error: null,
               name: json.name,
@@ -83,7 +81,6 @@ class Profile extends Component {
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
-              const { cookies } = this.props;
           }
           else {
             console.log('json',json);

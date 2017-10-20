@@ -28,9 +28,6 @@ class Login extends Component {
       password: e.target.password.value,
     }
     console.log('req', req);
-    const { cookies } = this.props;
-
-
     return apiFetch('login',{
         headers: {
          'Accept': 'application/json',
