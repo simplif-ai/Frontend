@@ -17,8 +17,10 @@ deploy:
   # You can refer to environment variables from Travis repo settings!
   access_key_id: $AWS_ACCESS_KEY_ID
   secret_access_key: $AWS_SECRET_ACCESS_KEY
+  region: us-east-2
   bucket: simplif.ai
   # Prevent Travis from deleting your built site so it can be uploaded.
   skip_cleanup: true
   local_dir: build
   cache_control: "max-age=180"
+  
