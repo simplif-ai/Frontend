@@ -1,0 +1,13 @@
+<div class="svg-container">
+    <svg class="plane" data-name="plane" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 144">
+        <defs>
+            <style>.cls-1{fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:4px;}</style>
+        </defs>
+        <g class="planeguy">
+            <path class="cls-1" d="M123.31,29.25,22.07,57.9a1.9,1.9,0,0,0-.74,3.25L49.37,86Z"/>
+            <path class="cls-1" d="M58.8,95.28l64.51-66L98,111.11a1.9,1.9,0,0,1-2.62,1.16Z"/>
+            <polygon class="cls-1" points="51.52 114.75 64.78 98.33 58.8 95.28 51.52 114.75"/>
+            <line class="cls-1" x1="48.66" y1="86.04" x2="51.42" y2="114.74"/>
+        </g>
+    </svg>
+</div>

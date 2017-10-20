@@ -1,0 +1,73 @@
+body {
+  font-family: 'Questrial', sans-serif;
+  margin: 0 auto;
+  text-align: center;
+  color: #1A334F;
+  width: 100%;
+  font-size: 15px;
+}
+html, body, #root, .app-root {
+  height: 100%;
+  margin: 0;
+}
+a {
+  color:  #1A334F;
+}
+a:hover {
+  opacity: .8;
+}
+.wrapper {
+  min-height: 100%;
+  margin-bottom: -50px;
+}
+button, textarea {
+  font-size: 20px;
+}
+h1, button {
+  font-family: 'Questrial', sans-serif;
+}
+p {
+  font-family: 'Crimson Text', serif;
+}
+
+.page {
+  padding: 20px;
+}
+
+.bgorange {
+  background-color: #F9B045;
+  color: #1A334F;
+}
+
+/*Starting animation stuff! I guess*/
+.svg {
+  width: 10%;
+  height: auto;
+}
+
+@keyframes planeguy {
+  0%   {
+    transform: translateY(0);
+    opacity: .1;
+    }
+  25%  {
+    transform: translateY(-25px);
+    opacity: .1;
+    }
+  75%  {
+    transform: translateY(25px);
+    opacity: .1;
+    }
+  100% {
+    transform: translateY(0);
+    opacity: .1;
+    }
+}
+
+/*on load, fadeout.plane*/
+.plane {
+  animation: planeguy 8s linear infinite;
+  display:block;
+  position:absolute;
+  z-index: 4;
+}

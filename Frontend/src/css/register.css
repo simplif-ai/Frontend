@@ -1,0 +1,52 @@
+.registerbox {
+  display: block;
+  width: 50%;
+  border: 3px solid white;
+  padding: 20px;
+  border-radius: 6px;
+  margin:auto;
+  position: sticky;
+  z-index: 1;
+}
+form input, form label {
+  text-align: left;
+}
+label {
+  color:#FFFFFF;
+  padding-top: 5px;
+  display: block;
+  text-align: center;
+  margin: auto;
+  margin-bottom: 6px;
+}
+
+input {
+  display:block;
+  width: 100%;
+  padding: 12px 20px;
+  border: 2px #FFFFFF;
+  background-color: #FCCD8C;
+  border-radius: 4px;
+  margin: auto;
+  margin-bottom: 6px;
+  box-sizing: border-box;
+}
+
+input:focus {
+  border: 2px #FFFFFF;
+}
+input[type=submit]:hover {
+    opacity: .8;
+}
+.errorClass {
+  display:inline-block;
+}
+.headphones {
+  z-index: 0;
+  position: absolute;
+  letter-spacing: 10px;
+  width: 100%;
+  height: 100%;
+  left: 10px;
+  opacity: .1;
+}
