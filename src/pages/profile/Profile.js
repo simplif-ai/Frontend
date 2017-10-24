@@ -231,16 +231,17 @@ class Profile extends Component {
         </div>
         <button onClick={this.toggleEditMode}>Edit Profile</button>
         {this.state.editMode ? (
-          <form onSubmit={this.editProfile}>
+          <form className="form-width" onSubmit={this.editProfile}>
+            <h1>Edit Profile</h1>
             <div className = "errorClass">
               {this.state.error ? `Error= ${this.state.error}` : null}
             </div>
             <label htmlFor="name">Name </label>
-            <input type="text" name="name" required />
+            <input type="text" name="name" />
             <label htmlFor="email">Email </label>
-            <input type="email" name="email" required />
+            <input type="email" name="email" />
             <br/>
-            <input className="btn" type="submit" name="submit" value="submit" />
+            <input className="btn" type="submit" name="submit" value="Save" />
           </form>
         ) : null
         }
@@ -248,16 +249,17 @@ class Profile extends Component {
         <button onClick={this.googleLogin}>Login With Google</button>
         <button onClick={this.toggleUpdatePassword}>Update Password</button>
         {this.state.editPassword ?
-          (<form onSubmit={this.updatePassword}>
+          (<form  className="form-width" onSubmit={this.updatePassword}>
+            <h1>Edit Password</h1>
             <div className = "errorClass">
               {this.state.error ? `Error= ${this.state.error}` : null}
             </div>
             <label htmlFor="password">Current Password </label>
-            <input type="password" name="password" required />
+            <input type="password" name="password" />
             <label htmlFor="npassword">New Password </label>
-            <input type="password" name="npassword" required />
+            <input type="password" name="npassword" />
             <br/>
-            <input className="btn" type="submit" name="submit" value="submit" />
+            <input className="btn" type="submit" name="submit" value="Save" />
           </form>
           ) : null
         }
