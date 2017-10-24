@@ -40,3 +40,7 @@
 .inline-block {
   display: inline-block;
 }
+
+.topSpacing {
+  margin-top: 20px;
+}
