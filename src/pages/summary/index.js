@@ -15,10 +15,14 @@ class Summary extends Component {
     this.state = {
       redirectToReferrer: false,
       summary: {},
-      sentences: [],
+      sentences: [
+        "Hey.",
+        "you.",
+        "there."
+      ],
       response: {},
       brevity: 50,
-      toggleEdit: false,
+      toggleEdit: true,
       sentenceCount: null,
       text: '',
       receivedSummary: false
@@ -44,12 +48,11 @@ class Summary extends Component {
       summary: summary.join(' '),
       text: summary.join(' ')
     });
-    // this.state.sentenceCount
   }
   summarize = (e) => {
     e.preventDefault();
     e.persist();
-    return apiFetch('sumarizertext', {
+    return apiFetch('summarizertext', {
       headers: {
        'Accept': 'application/json',
        'Content-Type': 'application/json'
@@ -67,25 +70,12 @@ class Summary extends Component {
         else {
           // call funtion to send data to page
           console.log('success',json);
-          // const summary = [];
-          // const sentenceCount = Math.floor(this.state.brevity * (1/100) * json.text.length);
           this.setState({
             response: json.text,
             receivedSummary: true
           });
           console.log('response', json);
           this.updateSummary();
-          // const sentences = [];
-          // json.text.forEach(sentence => {
-          //   if (sentence[1] <= sentenceCount) {
-          //     summary.push(sentence[0]);
-          //   }
-          //   sentences.push(sentence[0]);
-          // });
-          // e.target.textarea.value = summary.join(' ');
-          // console.log('sentences', sentences.join(' '));
-          // console.log('summary', summary.join(' '));
-          // this.setState({ summary: summary.join(' ')});
         }
       });
   }
@@ -112,14 +102,22 @@ class Summary extends Component {
     if (isAuthenticated === "false" || !isAuthenticated) {
       return (<Redirect to="/login"/>);
     }
+    const sentences = [];
+    this.state.sentences.forEach(sentence => {
+      sentences.push(<p>{sentence}</p>);
+    });
+    return <div>{sentences}</div>;
     return (
       <div className="summary">
       {this.state.toggleEdit ? <img src={edit_icon_orange} width="20%" className="plane" alt="plane"/> : null}
       <form onSubmit={this.summarize}>
         <h1>Title</h1>
         <button className="icon orange"><img src={edit_icon_orange} alt="edit"/></button>
-
-        <textarea name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} value={this.state.text} onChange={this.onEdit} id="summary"/>
+        {this.state.toggleEdit ?
+          {sentences}
+          :
+          <textarea name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} value={this.state.text} onChange={this.onEdit} id="summary"/>
+        }
         <button className="summarize fixed" type="submit">Summarize</button>
       </form>
         <div className="brevity fixed fixed-slider">
