@@ -98,7 +98,6 @@ class Summary extends Component {
     const email = cookies.get('email');
     return apiFetch('savetodb', {
       headers: {
-       'Accept': 'application/json',
        'Content-Type': 'application/json'
       },
       body: JSON.stringify({

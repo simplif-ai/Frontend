@@ -30,7 +30,6 @@ class Login extends Component {
     console.log('req', req);
     return apiFetch('login',{
         headers: {
-         'Accept': 'application/json',
          'Content-Type': 'application/json'
         },
         method: 'POST',
