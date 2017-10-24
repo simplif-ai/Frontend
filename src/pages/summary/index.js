@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import '../../css/summary.css';
 import edit_icon_orange from '../../assets/pencil-icon-orange.svg';
+import Loader from '../components/Loader';
 
 class Summary extends Component {
   static propTypes = {
@@ -114,7 +115,7 @@ class Summary extends Component {
     }
     return (
       <div className="summary">
-      {this.state.toggleEdit ? <img src={edit_icon_orange} width="20%" className="plane" alt="plane"/> : null}
+      {this.state.toggleEdit ? <Loader/> : null}
       <form onSubmit={this.summarize}>
         <h1>Title</h1>
         <button className="icon orange"><img src={edit_icon_orange} alt="edit"/></button>

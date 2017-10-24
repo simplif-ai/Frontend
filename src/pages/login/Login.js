@@ -66,7 +66,7 @@ class Login extends Component {
     }
     return (
       <div className="page bgorange">
-  
+        
         <div className="logo">
           simplif.ai
         </div>

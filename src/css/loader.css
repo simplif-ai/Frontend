@@ -58,16 +58,10 @@
   animation-name: Loader-ellipsisDot3;
 }
 
-.svg {
-  width: 5%;
-  height: auto;
-
-}
-
 @keyframes planeguy {
    0% {transform: rotate(360deg) translateX(250px) translateY(10px);}
-   20% {transform: rotate(180deg) translate(125px) translateY(50px);}
-   30% { transform: rotate(0deg) translateX(250px) translateY(-25px);}
+   25% {transform: rotate(180deg) translate(125px) translateY(50px);}
+   40% { transform: rotate(0deg) translateX(250px) translateY(-25px);}
    100% { transform: translateY(-1500px) translateX(1000px);}
 }
 
