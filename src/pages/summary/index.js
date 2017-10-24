@@ -19,6 +19,7 @@ class Summary extends Component {
       sentences: [],
       response: {},
       brevity: 50,
+      isWaiting: false,
       toggleEdit: false,
       sentenceCount: null,
       text: '',
@@ -47,6 +48,9 @@ class Summary extends Component {
     });
   }
   summarize = (e) => {
+    this.setState({
+      isWaiting: true
+    });
     e.preventDefault();
     e.persist();
     return apiFetch('summarizertext', {
@@ -61,14 +65,19 @@ class Summary extends Component {
       response.json()
     ).then((json) => {
         if (json.success === false) {
-            console.log('error', json.error);
+          console.log('error', json.error);
+          this.setState({
+            toggleEdit: false,
+            error: "json.error"
+          });
         }
         else {
           // call funtion to send data to page
           console.log('success',json);
           this.setState({
             response: json.text,
-            receivedSummary: true
+            receivedSummary: true,
+            isWaiting: false
           });
           console.log('response', json);
           this.updateSummary();
@@ -85,7 +94,6 @@ class Summary extends Component {
   changeBrevity = (e) => {
     this.setState({
       brevity: e.target.value,
-      toggleEdit: true,
       sentenceCount: Math.floor(this.state.brevity * (1/100) * this.state.sentences.length)
     });
     if (this.state.receivedSummary === true) {
@@ -96,7 +104,7 @@ class Summary extends Component {
     e.preventDefault();
     const { cookies } = this.props;
     const email = cookies.get('email');
-    return apiFetch('savetodb', {
+    return apiFetch('savesummary', {
       headers: {
        'Content-Type': 'text/plain'
       },
@@ -118,7 +126,7 @@ class Summary extends Component {
             toggleEdit: false
           });
           console.log('response', json);
-          this.updateSummary();
+          // this.updateSummary();
         }
       });
   }
@@ -134,7 +142,7 @@ class Summary extends Component {
     });
     return (
       <div className="summary">
-      {this.state.toggleEdit ? <Loader/> : null}
+      {this.state.isWaiting ? <Loader/> : null}
       <form onSubmit={this.summarize}>
         <h1>Title</h1>
         <button className="icon orange"><img src={edit_icon_orange} alt="edit"/></button>

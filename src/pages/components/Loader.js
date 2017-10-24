@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import plane from '../../assets/background/white-plane.svg';
+import plane from '../../assets/plane-orange.svg';
 
 class Loader extends Component {
     render() {

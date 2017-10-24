@@ -70,6 +70,6 @@
   animation: planeguy 4s linear infinite;
   display: block;
   position: absolute;
-  opacity: .1;
+  opacity: .5;
   z-index: 4;
 }
