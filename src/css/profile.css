@@ -44,3 +44,9 @@
 .topSpacing {
   margin-top: 20px;
 }
+
+.form-width {
+  width: 267px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
