@@ -129,8 +129,8 @@ textarea:focus {
   bottom: 20px;
   position: fixed;
 }
-.summarize {
-  margin-left: -60px;
+.save {
+  margin-left: -100px;
 }
 .fixed-slider {
   left: 20px;
