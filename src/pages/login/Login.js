@@ -70,7 +70,7 @@ class Login extends Component {
         <div className="logo">
           simplif.ai
         </div>
-        <h1>Log In to Simplif.ai</h1>
+        <h1>Login</h1>
         <div className="registerbox">
             <LoginForm login={this.handleSubmit} error={this.state.error} googleLogin={this.googleLogin}/>
         </div>

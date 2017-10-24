@@ -38,36 +38,30 @@ p {
   background-color: #F9B045;
   color: #1A334F;
 }
+/* lol */
+.bgnight {
+  background-color: #1A334F;
+  color: #F9B045;
+}
 
-/*Starting animation stuff! I guess*/
 .svg {
-  width: 10%;
+  width: 5%;
   height: auto;
+
 }
 
 @keyframes planeguy {
-  0%   {
-    transform: translateY(0);
-    opacity: .1;
-    }
-  25%  {
-    transform: translateY(-25px);
-    opacity: .1;
-    }
-  75%  {
-    transform: translateY(25px);
-    opacity: .1;
-    }
-  100% {
-    transform: translateY(0);
-    opacity: .1;
-    }
+   0% {transform: rotate(360deg) translateX(75px) translateY(20px); }
+   30% { transform: rotate(0deg) translateX(75px) translateY(-20px);}
+   100% { transform: translateX(100px) translateY(-500px) ;}
+
 }
 
-/*on load, fadeout.plane*/
+/*on load, fadeout.plane?*/
 .plane {
-  animation: planeguy 8s linear infinite;
-  display:block;
-  position:absolute;
+  animation: planeguy 4s linear infinite;
+  display: block;
+  position: absolute;
+  opacity: .2;
   z-index: 4;
 }
