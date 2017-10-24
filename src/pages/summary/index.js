@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import '../../css/summary.css';
 import edit_icon_orange from '../../assets/pencil-icon-orange.svg';
+import Loader from '../components/Loader';
 
 class Summary extends Component {
   static propTypes = {
@@ -15,14 +16,10 @@ class Summary extends Component {
     this.state = {
       redirectToReferrer: false,
       summary: {},
-      sentences: [
-        "Hey.",
-        "you.",
-        "there."
-      ],
+      sentences: [],
       response: {},
       brevity: 50,
-      toggleEdit: true,
+      toggleEdit: false,
       sentenceCount: null,
       text: '',
       receivedSummary: false
@@ -96,6 +93,36 @@ class Summary extends Component {
       this.updateSummary();
     }
   }
+  saveSummary = (e) => {
+    e.preventDefault();
+    const { cookies } = this.props;
+    const email = cookies.get('email');
+    return apiFetch('savetodb', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        text: this.state.text,
+        email
+      }),
+      method: 'POST'
+    }).then(response =>
+      response.json()
+    ).then((json) => {
+        if (json.success === false) {
+            console.log('error', json.error);
+        }
+        else {
+          // call funtion to send data to page
+          console.log('success',json);
+          this.setState({
+            toggleEdit: false
+          });
+          console.log('response', json);
+          this.updateSummary();
+        }
+      });
+  }
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -106,10 +133,9 @@ class Summary extends Component {
     this.state.sentences.forEach(sentence => {
       sentences.push(<p>{sentence}</p>);
     });
-    return <div>{sentences}</div>;
     return (
       <div className="summary">
-      {this.state.toggleEdit ? <img src={edit_icon_orange} width="20%" className="plane" alt="plane"/> : null}
+      {this.state.toggleEdit ? <Loader/> : null}
       <form onSubmit={this.summarize}>
         <h1>Title</h1>
         <button className="icon orange"><img src={edit_icon_orange} alt="edit"/></button>
@@ -118,7 +144,8 @@ class Summary extends Component {
           :
           <textarea name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} value={this.state.text} onChange={this.onEdit} id="summary"/>
         }
-        <button className="summarize fixed" type="submit">Summarize</button>
+        <button className="fixed" type="submit">Summarize</button>
+        <button onClick={this.saveSummary} className="fixed save">Save</button>
       </form>
         <div className="brevity fixed fixed-slider">
           <label>Brevity {this.state.brevity}%</label>

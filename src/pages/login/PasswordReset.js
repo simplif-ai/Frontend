@@ -28,8 +28,7 @@ class PasswordReset extends Component {
     console.log('req', req);
     return apiFetch('changePassword', {
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+         'Content-Type': 'text/plain'
         },
         method: 'POST',
         body: JSON.stringify({

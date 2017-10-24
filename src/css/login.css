@@ -81,3 +81,19 @@ input:-moz-placeholder { /* Firefox 18- */
 errorClass {
   display:inline-block;
 }
+
+@keyframes planeguy {
+   0% {transform: rotate(360deg) translateX(250px) translateY(10px);}
+   25% {transform: rotate(180deg) translate(125px) translateY(50px);}
+   40% { transform: rotate(0deg) translateX(250px) translateY(-25px);}
+   100% { transform: translateY(-1500px) translateX(1000px);}
+}
+
+/*on load, fadeout.plane?*/
+.plane {
+  animation: planeguy 4s linear infinite;
+  display: block;
+  position: absolute;
+  opacity: .1;
+  z-index: 4;
+}

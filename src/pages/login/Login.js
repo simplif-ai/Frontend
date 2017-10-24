@@ -7,7 +7,6 @@ import { Redirect } from 'react-router-dom';
 import '../../css/login.css';
 import '../../css/register.css';
 import apiFetch from '../../utils/api.js';
-import plane from '../../assets/background/white-plane.svg';
 
 class Login extends Component {
   static propTypes = {
@@ -30,8 +29,7 @@ class Login extends Component {
     console.log('req', req);
     return apiFetch('login',{
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+          'Content-Type': 'text/plain'
         },
         method: 'POST',
         body: JSON.stringify({
@@ -66,11 +64,11 @@ class Login extends Component {
     }
     return (
       <div className="page bgorange">
-        <img src={plane} width="20%" className="plane" alt="plane"/>
+        
         <div className="logo">
           simplif.ai
         </div>
-        <h1>Log In to Simplif.ai</h1>
+        <h1>Login</h1>
         <div className="registerbox">
             <LoginForm login={this.handleSubmit} error={this.state.error} googleLogin={this.googleLogin}/>
         </div>
