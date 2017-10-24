@@ -28,7 +28,6 @@ class Register extends Component {
             console.log('register success json',json);
           }
         });
-
   }
   render() {
     const { error } = this.props;

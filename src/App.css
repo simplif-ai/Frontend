@@ -6,6 +6,12 @@ body {
   width: 100%;
   font-size: 15px;
 }
+.crimson {
+  font-family: 'Crimson Text', serif;
+}
+.questrial {
+  font-family: 'Questrial', sans-serif;
+}
 html, body, #root, .app-root {
   height: 100%;
   margin: 0;
