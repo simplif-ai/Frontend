@@ -7,7 +7,6 @@ import { Redirect } from 'react-router-dom';
 import '../../css/login.css';
 import '../../css/register.css';
 import apiFetch from '../../utils/api.js';
-import plane from '../../assets/background/white-plane.svg';
 
 class Login extends Component {
   static propTypes = {
