@@ -65,10 +65,10 @@
 }
 
 @keyframes planeguy {
-   0% {transform: rotate(360deg) translateX(75px) translateY(20px); }
-   30% { transform: rotate(0deg) translateX(75px) translateY(-20px);}
-   70% { transform: translateX(100px) translateY(-200px);}
-   100% { transform: translateY(-400px);}
+   0% {transform: rotate(360deg) translateX(250px) translateY(10px);}
+   20% {transform: rotate(180deg) translate(125px) translateY(50px);}
+   30% { transform: rotate(0deg) translateX(250px) translateY(-25px);}
+   100% { transform: translateY(-1500px) translateX(1000px);}
 }
 
 /*on load, fadeout.plane?*/
