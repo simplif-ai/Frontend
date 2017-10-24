@@ -19,7 +19,7 @@ class Summary extends Component {
       sentences: [],
       response: {},
       brevity: 50,
-      isWaiting: true,
+      isWaiting: false,
       toggleEdit: false,
       sentenceCount: null,
       text: '',
@@ -104,7 +104,7 @@ class Summary extends Component {
     e.preventDefault();
     const { cookies } = this.props;
     const email = cookies.get('email');
-    return apiFetch('savetodb', {
+    return apiFetch('savesummary', {
       headers: {
        'Content-Type': 'text/plain'
       },
@@ -126,7 +126,7 @@ class Summary extends Component {
             toggleEdit: false
           });
           console.log('response', json);
-          this.updateSummary();
+          // this.updateSummary();
         }
       });
   }
