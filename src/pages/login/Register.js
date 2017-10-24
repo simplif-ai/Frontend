@@ -9,8 +9,7 @@ class Register extends Component {
     e.preventDefault();
     return apiFetch('createAccount',{
       headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json'
+        'Content-Type': 'text/plain'
       },
       method: 'POST',
       body: JSON.stringify({
