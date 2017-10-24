@@ -30,8 +30,7 @@ class Profile extends Component {
     console.log('email', email);
     return apiFetch('profile',{
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+         'Content-Type': 'text/plain'
         },
         method: 'POST',
         body: JSON.stringify({
@@ -66,8 +65,7 @@ class Profile extends Component {
     console.log('req', req);
     return apiFetch('editProfile',{
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+         'Content-Type': 'text/plain'
         },
         method: 'POST',
         body: JSON.stringify({
@@ -102,8 +100,7 @@ class Profile extends Component {
     const email = cookies.get('email');
     return apiFetch('deleteAccount',{
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+         'Content-Type': 'text/plain'
         },
         method: 'POST',
         body: JSON.stringify({
@@ -142,8 +139,7 @@ class Profile extends Component {
     console.log('req', req);
     return apiFetch('changePassword', {
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+         'Content-Type': 'text/plain'
         },
         method: 'POST',
         body: JSON.stringify({
@@ -167,8 +163,7 @@ class Profile extends Component {
   googleLogin = () => {
     return apiFetch('loginToGoogle',{
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+         'Content-Type': 'text/plain'
         },
         method: 'POST',
     }).then((response) => response.json())

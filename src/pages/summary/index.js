@@ -50,8 +50,7 @@ class Summary extends Component {
     e.persist();
     return apiFetch('summarizertext', {
       headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json'
+       'Content-Type': 'text/plain'
       },
       body: JSON.stringify({
         text: e.target.textarea.value
