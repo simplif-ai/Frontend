@@ -45,35 +45,8 @@ p {
   color: #1A334F;
 }
 
-/*Starting animation stuff! I guess*/
-.svg {
-  width: 10%;
-  height: auto;
+.bgnight {
+  background-color: #1A334F;
+  color: #F9B045;
 }
 
-@keyframes planeguy {
-  0%   {
-    transform: translateY(0);
-    opacity: .1;
-    }
-  25%  {
-    transform: translateY(-25px);
-    opacity: .1;
-    }
-  75%  {
-    transform: translateY(25px);
-    opacity: .1;
-    }
-  100% {
-    transform: translateY(0);
-    opacity: .1;
-    }
-}
-
-/*on load, fadeout.plane*/
-.plane {
-  animation: planeguy 8s linear infinite;
-  display:block;
-  position:absolute;
-  z-index: 4;
-}
