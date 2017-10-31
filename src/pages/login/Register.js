@@ -2,9 +2,17 @@ import React, { Component } from 'react';
 import '../../css/register.css';
 import headphones from '../../assets/background/white-headphones.svg';
 import apiFetch from '../../utils/api.js';
+import { Redirect } from 'react-router-dom';
 import '../../css/login.css';
 
 class Register extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      redirect: false,
+      error: null
+    }
+  }
   register = (e) => {
     e.preventDefault();
     return apiFetch('createAccount',{
@@ -20,17 +28,18 @@ class Register extends Component {
       })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
-              console.log('error', json.message);
+              this.setState({ error: json.error });
           }
           else {
-            console.log('register success json',json);
+            this.setState({ redirect: true });
           }
         });
   }
   render() {
-    const { error } = this.props;
+    if (this.state.redirect === true) {
+      return (<Redirect to="/login"/>);
+    }
     return (
       <div className="page bgorange">
         <div className="title logo">
@@ -41,7 +50,7 @@ class Register extends Component {
         <div className = "registerbox">
           <form onSubmit={this.register}>
             <div className = "errorClass">
-              {error ? `Error=${error}` : null}
+              {this.state.error ? `Error=${this.state.error}` : null}
             </div>
             <label htmlFor="fname">First Name</label>
             <input type="text" name="fname" required />
