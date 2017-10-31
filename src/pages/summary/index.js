@@ -39,9 +39,6 @@ class Summary extends Component {
       }
       sentences.push(sentence[0]);
     });
-    console.log('sentences', sentences.join(' '));
-    console.log('summary', summary.join(' '));
-
     this.setState({
       summary: summary.join(' '),
       text: summary.join(' ')
