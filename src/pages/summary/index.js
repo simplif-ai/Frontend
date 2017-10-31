@@ -23,7 +23,8 @@ class Summary extends Component {
       toggleEdit: false,
       sentenceCount: null,
       text: '',
-      receivedSummary: false
+      receivedSummary: false,
+      error: null
     };
   }
   updateSummary = () => {
@@ -98,6 +99,10 @@ class Summary extends Component {
     });
     if (this.state.receivedSummary === true) {
       this.updateSummary();
+    } else {
+      <div className = "errorClass">
+          {this.state.error ? `Error= ${this.state.error}` : null}
+      </div>
     }
   }
   saveSummary = (e) => {

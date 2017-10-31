@@ -141,3 +141,7 @@ textarea:focus {
     padding: 0 20%;
   }
 }
+
+errorClass {
+  display:inline-block;
+}
