@@ -160,7 +160,7 @@ errorClass {
 .modify-button.after {
 content: '';
 	position: absolute;
-  /*change position relative to sentence? always on side? dependent on cursor?*/
+  /*change position relative to sentence? always on side? dependent on cursor? will test*/
 	bottom: 50%;
 	left: 0;
 	width: 0;
