@@ -97,3 +97,18 @@ errorClass {
   opacity: .1;
   z-index: 4;
 }
+
+.check-con {
+  text-align: left;
+  padding-top: 5px;
+}
+.check-con input, .check-con label {
+  display: inline;
+}
+
+.check-con input {
+  width: auto;
+  text-align: left;
+  display: inline;
+  margin-right: 10px;
+}
