@@ -17,6 +17,8 @@ class Summary extends Component {
     this.state = {
       redirectToReferrer: false,
       summary: {},
+      summaryArray: [],
+      sentencesArray: [],
       sentences: [],
       response: {},
       brevity: 50,
@@ -26,10 +28,20 @@ class Summary extends Component {
       text: '',
       receivedSummary: false,
       error: null,
-      title: null,
+      title: '',
       editTitle: false,
       wait: false,
     };
+  }
+  updateResponse = (index, priority) => {
+    let newResponse = this.state.response;
+    console.log('newResponse', newResponse, 'index', index, 'priority', priority);
+    newResponse[index][1] = priority;
+    console.log('newResponse after', newResponse);
+    this.setState({
+      response: newResponse
+    });
+    this.updateSummary();
   }
   updateSummary = () => {
     const summary = [];
@@ -44,9 +56,12 @@ class Summary extends Component {
       }
       sentences.push(sentence[0]);
     });
+    console.log('text', summary.join(' '));
     this.setState({
       summary: summary.join(' '),
-      text: summary.join(' ')
+      summaryArray: summary,
+      text: summary.join(' '),
+      sentencesArray: sentences
     });
   }
   summarize = (e) => {
@@ -54,13 +69,13 @@ class Summary extends Component {
     this.setState({
       wait: true
     });
-    e.persist();
+    console.log('e', this.state.text);
     return apiFetch('summarizertext', {
       headers: {
        'Content-Type': 'text/plain'
       },
       body: JSON.stringify({
-        text: e.target.textarea.value
+        text: this.state.text
       }),
       method: 'POST'
     }).then(response =>
@@ -166,6 +181,7 @@ class Summary extends Component {
     });
   }
   render() {
+    console.log('response', this.state.response);
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
     if (isAuthenticated === "false" || !isAuthenticated) {
@@ -175,15 +191,27 @@ class Summary extends Component {
     this.state.sentences.forEach(sentence => {
       sentences.push(<p>{sentence}</p>);
     });
+    // const dummyResponse = [
+    //   ["It wasn’t too long ago that Silicon Valley scoffed at cryptocurrencies.",2,0],
+    //   ["All over coffee shops in Mountain View and Menlo Park, you heard the same conversation: “Sure, it’s cool technology, but when are we going to see the killer app”?",3,1],
+    //   ["A few merchants dipped their toes into accepting Bitcoin in 2014.",4,2],
+    //   ["But adoption largely backed off.",5,3],
+    //   ["I remember seeing a few Bitcoin ATMs in Austin, and then they disappeared.",6,4],
+    //   ["Bitcoin reneged on its promise to replace cash, so most venture capitalists assumed it was dead on arrival.",7,5],
+    //   ["Without a killer app driving consumer adoption, cryptocurrencies seemed like they would be nothing more than a curiosity for cryptographers and paranoids.",8,6],
+    //   ["In the last year, interest in cryptocurrencies has skyrocketed.",0,7],
+    //   ["The public cryptocurrency market cap has surged to highs of over $170B.",9,8],
+    //   ["With over 1.5B raised through ICOs in 2017, over 70 crypto exchanges open for business, and crypto hedge funds and VCs popping up left and right, it seems that everyone is clambering to get a seat on the rocketship.",1,9]
+    // ];
     return (
       <div className="summary">
       {this.state.wait ? <Loader/> : null}
-      <form onSubmit={(e) => this.summarize(e)}>
+      <form onSubmit={this.summarize}>
         <textarea className="h1" name="textarea" placeholder="Enter a Title..." value={this.state.title} onChange={this.onEditTitle} onKeyUp={this.handleKeyUp} />
         <button className="icon orange" onClick={this.toggleEditMode}><img src={edit_icon_orange} alt="edit"/></button>
         {this.state.error ? <p>{this.state.error}</p> : null}
         {this.state.editMode ?
-          <EditSummary sentences={this.state.sentences} />
+          <EditSummary brevity={this.state.brevity} response={this.state.response} updateResponse={this.updateResponse} setError={this.setError} />
           :
           <textarea className="note" name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} value={this.state.text} onChange={this.onEdit} id="summary"/>
         }

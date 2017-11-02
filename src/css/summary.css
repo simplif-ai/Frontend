@@ -38,7 +38,7 @@ button:hover {
 }
 .h1 {
   font-family: 'Crimson Text', serif;
-  color: #1A334F;;
+  color: #1A334F;
   font-size: 2em;
   resize: none;
   border: none;
@@ -162,4 +162,35 @@ button:hover {
   .summary {
     padding: 0 20%;
   }
+}
+
+.summary-sentence {
+  color: #1A334F;
+  text-align: left;
+  padding-left: 30px;
+  cursor: pointer;
+}
+.non-summary-sentence {
+  color: #95989A;
+  text-align: left;
+  padding-left: 30px;
+  cursor: pointer;
+}
+
+.summary-sentence:hover::before {
+    background: url("../assets/x-icon.svg") no-repeat;
+}
+.non-summary-sentence:hover::before {
+    background: url("../assets/plus-icon.svg") no-repeat;
+}
+.summary-sentence:hover::before, .non-summary-sentence:hover::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  margin-left: -31px;
+  cursor: pointer;
+}
+.marginBottom {
+  margin-bottom: 80px;
 }
