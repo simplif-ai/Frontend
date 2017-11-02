@@ -27,7 +27,8 @@ class Summary extends Component {
       receivedSummary: false,
       error: null,
       title: null,
-      editTitle: false
+      editTitle: false,
+      wait: false,
     };
   }
   updateSummary = () => {
@@ -49,10 +50,10 @@ class Summary extends Component {
     });
   }
   summarize = (e) => {
-    this.setState({
-      isWaiting: true
-    });
     e.preventDefault();
+    this.setState({
+      wait: true
+    });
     e.persist();
     return apiFetch('summarizertext', {
       headers: {
@@ -78,7 +79,7 @@ class Summary extends Component {
           this.setState({
             response: json.text,
             receivedSummary: true,
-            isWaiting: false
+            wait: false
           });
           console.log('response', json);
           this.updateSummary();
@@ -122,6 +123,8 @@ class Summary extends Component {
     ).then((json) => {
         if (json.success === false) {
             console.log('error', json.error);
+            this.setError("Your summary was not saved!");
+            window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
         }
         else {
           // call funtion to send data to page
@@ -129,6 +132,9 @@ class Summary extends Component {
           this.setState({
             editMode: false
           });
+          this.setError("Your summary was successfully saved!");
+          window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+
           console.log('response', json);
           // this.updateSummary();
         }
@@ -139,10 +145,15 @@ class Summary extends Component {
       error
     });
   }
-  toggleEdit = () => {
+  toggleEditMode = (e) => {
+    e.preventDefault( );
     if (this.state.receivedSummary === true) {
       this.setState({
         editMode: !this.state.editMode
+      });
+    } else if (this.state.editMode === true) {
+      this.setState({
+        editMode: false
       });
     } else {
       this.setError("You can only edit summarized text!");
@@ -166,10 +177,10 @@ class Summary extends Component {
     });
     return (
       <div className="summary">
-      {this.state.isWaiting ? <Loader/> : null}
-      <form onSubmit={this.summarize}>
+      {this.state.wait ? <Loader/> : null}
+      <form onSubmit={(e) => this.summarize(e)}>
         <textarea className="h1" name="textarea" placeholder="Enter a Title..." value={this.state.title} onChange={this.onEditTitle} onKeyUp={this.handleKeyUp} />
-        <button className="icon orange" onClick={this.toggleEdit}><img src={edit_icon_orange} alt="edit"/></button>
+        <button className="icon orange" onClick={this.toggleEditMode}><img src={edit_icon_orange} alt="edit"/></button>
         {this.state.error ? <p>{this.state.error}</p> : null}
         {this.state.editMode ?
           <EditSummary sentences={this.state.sentences} />
