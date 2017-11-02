@@ -5,19 +5,10 @@ class Loader extends Component {
     render() {
       return (
         <div>
-            <img src={plane} width="20%" className="plane" alt="plane"/>
-            <span className="Loader">
-            <div className="Loader-indicator" >
-              <h1>
-                <span>loading</span>
-                <span className="Loader-ellipsis" >
-                  <span className="Loader-ellipsisDot">.</span>
-                  <span className="Loader-ellipsisDot">.</span>
-                  <span className="Loader-ellipsisDot">.</span>
-                </span>
-              </h1>
-            </div>
-          </span>
+          <img src={plane} width="20%" className="plane" alt="plane"/>
+          <div className="loading">
+            <h1>loading</h1>
+          </div>
         </div>
       );
     }
