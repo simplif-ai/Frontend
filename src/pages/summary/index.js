@@ -6,6 +6,7 @@ import apiFetch from '../../utils/api.js';
 import '../../css/summary.css';
 import edit_icon_orange from '../../assets/pencil-icon-orange.svg';
 import Loader from '../components/Loader';
+import EditSummary from './EditSummary';
 
 class Summary extends Component {
   static propTypes = {
@@ -20,10 +21,13 @@ class Summary extends Component {
       response: {},
       brevity: 50,
       isWaiting: false,
-      toggleEdit: false,
+      editMode: false,
       sentenceCount: null,
       text: '',
-      receivedSummary: false
+      receivedSummary: false,
+      error: null,
+      title: null,
+      editTitle: false
     };
   }
   updateSummary = () => {
@@ -64,7 +68,7 @@ class Summary extends Component {
         if (json.success === false) {
           console.log('error', json.error);
           this.setState({
-            toggleEdit: false,
+            editMode: false,
             error: "json.error"
           });
         }
@@ -87,6 +91,9 @@ class Summary extends Component {
   }
   onEdit = (e) => {
     this.setState({ text: e.target.value });
+  }
+  onEditTitle = (e) => {
+    this.setState({ title: e.target.value });
   }
   changeBrevity = (e) => {
     this.setState({
@@ -120,12 +127,32 @@ class Summary extends Component {
           // call funtion to send data to page
           console.log('success',json);
           this.setState({
-            toggleEdit: false
+            editMode: false
           });
           console.log('response', json);
           // this.updateSummary();
         }
       });
+  }
+  setError = (error) => {
+    this.setState({
+      error
+    });
+  }
+  toggleEdit = () => {
+    if (this.state.receivedSummary === true) {
+      this.setState({
+        editMode: !this.state.editMode
+      });
+    } else {
+      this.setError("You can only edit summarized text!");
+      window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+    }
+  }
+  toggleEditTitle = () => {
+    this.setState({
+      editTitle: true
+    });
   }
   render() {
     const { cookies } = this.props;
@@ -141,12 +168,13 @@ class Summary extends Component {
       <div className="summary">
       {this.state.isWaiting ? <Loader/> : null}
       <form onSubmit={this.summarize}>
-        <h1>Title</h1>
-        <button className="icon orange"><img src={edit_icon_orange} alt="edit"/></button>
-        {this.state.toggleEdit ?
-          {sentences}
+        <textarea className="h1" name="textarea" placeholder="Enter a Title..." value={this.state.title} onChange={this.onEditTitle} onKeyUp={this.handleKeyUp} />
+        <button className="icon orange" onClick={this.toggleEdit}><img src={edit_icon_orange} alt="edit"/></button>
+        {this.state.error ? <p>{this.state.error}</p> : null}
+        {this.state.editMode ?
+          <EditSummary sentences={this.state.sentences} />
           :
-          <textarea name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} value={this.state.text} onChange={this.onEdit} id="summary"/>
+          <textarea className="note" name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} value={this.state.text} onChange={this.onEdit} id="summary"/>
         }
         <button className="fixed" type="submit">Summarize</button>
         <button onClick={this.saveSummary} className="fixed save">Save</button>
