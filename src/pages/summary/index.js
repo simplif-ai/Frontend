@@ -99,10 +99,6 @@ class Summary extends Component {
     });
     if (this.state.receivedSummary === true) {
       this.updateSummary();
-    } else {
-      <div className = "errorClass">
-          {this.state.error ? `Error= ${this.state.error}` : null}
-      </div>
     }
   }
   saveSummary = (e) => {
@@ -151,6 +147,9 @@ class Summary extends Component {
       <form onSubmit={this.summarize}>
         <h1>Title</h1>
         <button className="icon orange"><img src={edit_icon_orange} alt="edit"/></button>
+        <div className = "errorClass">
+          {this.state.error ? `Error= ${this.state.error}` : null}
+        </div>
         {this.state.toggleEdit ?
           {sentences}
           :
