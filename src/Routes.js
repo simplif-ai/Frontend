@@ -6,6 +6,7 @@ import PasswordReset from './pages/login/PasswordReset';
 import Register from './pages/login/Register';
 import Profile from './pages/profile/Profile';
 import Summary from './pages/summary/index';
+import ListNotes from './pages/summary/ListNotes';
 
 const Routes = () => (
   <Switch>
@@ -16,6 +17,7 @@ const Routes = () => (
     <Route path="/register" component={Register}/>
     <Route path="/profile" component={Profile}/>
     <Route path="/summary" component={Summary}/>
+    <Route path="/notes" component={ListNotes}/>
   </Switch>
 );
 
