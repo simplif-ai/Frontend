@@ -16,8 +16,7 @@ class Summary extends Component {
     const email = cookies.get('email');
     apiFetch('listnotes', {
       headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json'
+       'Content-Type': 'text/plain'
       },
       body: JSON.stringify({
         email: email
