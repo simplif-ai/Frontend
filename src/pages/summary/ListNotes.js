@@ -41,16 +41,28 @@ class Summary extends Component {
         else {
           console.log('success',json);
           this.setState({
-            notes: json
+            notes: json,
+            noteID: json[0][1]
           });
         }
       });
   }
 
   createFolder = (e) => {
+    e.preventDefault();
     const { cookies } = this.props;
     const token = cookies.get('token');
-    e.preventDefault();
+    if (token === '') {
+      this.setState({
+        popUp: "You need to authenticate with Google Drive!"
+      });
+      window.setTimeout(function() {
+        if (this.state.popUp) {
+          this.setState({ popUp: '' });
+        }
+      }.bind(this), 2000);
+      return;
+    }
     e.persist();
     const req = {
       name: e.target.name.value,
@@ -64,52 +76,66 @@ class Summary extends Component {
         method: 'POST',
         body: JSON.stringify({
           name: e.target.name.value,
+          googleToken: token
         })
     }).then((response) => response.json())
         .then((json) => {
           console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
-              this.setState({ error: json.error });
-          }
+              this.setState({
+                popUp: json.error
+              });
+              window.setTimeout(function() {
+                if (this.state.popUp) {
+                  this.setState({ popUp: '' });
+                }
+              }.bind(this), 2000);          }
           else {
             console.log('json',json);
-            this.setState('success',json.success);
+            this.setState({
+              popUp: "Your Folder was Added"
+            });
+            window.setTimeout(function() {
+              if (this.state.popUp) {
+                this.setState({ popUp: '' });
+              }
+            }.bind(this), 2000);
           }
         });
   };
   addCollaborator = (e) => {
     e.preventDefault();
     e.persist();
-    const { cookies } = this.props;
-    const token = cookies.get('token');
-    const req = {
-      collaboratorEmail: e.target.collabEmail.value,
-      fileID: e.target.fileId.value,
-      googleToken: token
-    }
-    console.log('req', req);
-    return apiFetch('addCollaborator',{
-        headers: {
-          'Content-Type': 'text/plain'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          collaboratorEmail: e.target.collabEmail.value,
-          fileID: e.target.fileId.value
-        })
-    }).then((response) => response.json())
-        .then((json) => {
-          console.log('response', json);
-          if(json.success === false) {
-              console.log('error', json.error);
-              this.setState({ error: json.error });
-          }
-          else {
-            console.log('json',json);
-            this.setState('success',json.success);
-          }
-        });
+    // const { cookies } = this.props;
+    // const token = cookies.get('token');
+    // const req = {
+    //   collaboratorEmail: e.target.collabEmail.value,
+    //   fileID: this.state.noteID,
+    //   googleToken: token
+    // }
+    // console.log('req', req);
+    // return apiFetch('addCollaborator',{
+    //     headers: {
+    //       'Content-Type': 'text/plain'
+    //     },
+    //     method: 'POST',
+    //     body: JSON.stringify({
+    //       collaboratorEmail: e.target.collabEmail.value,
+    //       fileID: e.target.fileId.value
+    //     })
+    // }).then((response) => response.json())
+    //     .then((json) => {
+    //       console.log('response', json);
+    //       if(json.success === false) {
+    //           console.log('error', json.error);
+    //           this.setState({ error: json.error });
+    //       }
+    //       else {
+    //         console.log('json',json);
+    //         this.setState('success',json.success);
+    //       }
+    //     });
   };
   popUp = () => {
     if (!this.state.popUp) {
@@ -163,6 +189,11 @@ class Summary extends Component {
     if (this.state.newNote === true) {
       return <Redirect to={`/notes/${this.state.nodeID}`} />
     }
+    let google = true;
+    const token = cookies.get('token');
+    if (token !== '') {
+      google = true;
+    }
     return (
       <div className="summary">
         <div className="title-icon">
@@ -179,12 +210,15 @@ class Summary extends Component {
           })
           : null
         }
-        <div className="inputField">
-          <h2> Create a new Simplif.ai folder </h2>
-          <FolderForm createFolder={this.createFolder}/>
-          <h2>Add collaborator to folder</h2>
-          <CollabForm addCollaborator={this.addCollaborator}/>
-        </div>
+        {google ?
+          <div className="inputField">
+            <h2> Create a new Simplif.ai folder </h2>
+            <FolderForm createFolder={this.createFolder}/>
+            <h2>Add collaborator to folder</h2>
+            <CollabForm addCollaborator={this.addCollaborator}/>
+          </div>
+          : null
+        }
       </div>
 
     );

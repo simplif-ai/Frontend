@@ -262,3 +262,6 @@ errorClass {
 textarea {
   background: none;
 }
+.inputField input, .inputField label {
+  color: black;
+}
