@@ -51,8 +51,8 @@ class Summary extends Component {
     e.preventDefault();
     e.persist();
     const req = {
-      name: e.target.name.value/*,
-      googleToken: */
+      name: e.target.name.value,
+      googleToken: token
     }
     console.log('req', req);
     return apiFetch('createFolder',{
@@ -81,8 +81,8 @@ class Summary extends Component {
     e.persist();
     const req = {
       collaboratorEmail: e.target.collabEmail.value,
-      fileID: e.target.fileId.value/*,
-      googleToken: */
+      fileID: e.target.fileId.value,
+      googleToken: token
     }
     console.log('req', req);
     return apiFetch('addCollaborator',{
