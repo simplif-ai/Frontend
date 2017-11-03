@@ -39,7 +39,6 @@ p {
 .page {
   padding: 20px;
 }
-
 .bgorange {
   background-color: #F9B045;
   color: #1A334F;
@@ -49,4 +48,6 @@ p {
   background-color: #1A334F;
   color: #F9B045;
 }
-
+errorClass {
+  display:inline-block;
+}
