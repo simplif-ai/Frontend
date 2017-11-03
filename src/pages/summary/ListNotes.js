@@ -15,7 +15,7 @@ class Summary extends Component {
       notes: [],
       token: cookies.get('token'),
       error: null,
-      success: null
+      success: null,
       popUp: false,
       noteID: 0,
       newNote: false
@@ -47,7 +47,9 @@ class Summary extends Component {
       });
   }
 
-  handleFSubmit = (e) => { /*Sorry Audrey :< */
+  createFolder = (e) => {
+    const { cookies } = this.props;
+    const token = cookies.get('token');
     e.preventDefault();
     e.persist();
     const req = {
@@ -76,9 +78,11 @@ class Summary extends Component {
           }
         });
   };
-  handleCSubmit = (e) => { /*Double sorry, Audrey*/
+  addCollaborator = (e) => {
     e.preventDefault();
     e.persist();
+    const { cookies } = this.props;
+    const token = cookies.get('token');
     const req = {
       collaboratorEmail: e.target.collabEmail.value,
       fileID: e.target.fileId.value,
@@ -177,12 +181,12 @@ class Summary extends Component {
         }
         <div className="inputField">
           <h2> Create a new Simplif.ai folder </h2>
-          <FolderForm folder={this.handleFSubmit}/>
+          <FolderForm createFolder={this.createFolder}/>
           <h2>Add collaborator to folder</h2>
-          <CollabForm collab={this.handleCSubmit}/>
+          <CollabForm addCollaborator={this.addCollaborator}/>
         </div>
       </div>
-      
+
     );
   }
 }

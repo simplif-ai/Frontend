@@ -1,7 +1,7 @@
 import React from 'react';
 
-const CollabForm = ({ collab }) => (
-  <form onSubmit={collab}>
+const CollabForm = ({ addCollaborator }) => (
+  <form onSubmit={addCollaborator}>
     <label htmlFor="collabEmail">Collaborator email </label>
     <input type="text" name="collabEmail" required />
     <label htmlFor="fileId">File ID </label>

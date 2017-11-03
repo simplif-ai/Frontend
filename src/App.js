@@ -1,22 +1,10 @@
-import { withCookies, Cookies } from 'react-cookie';
+import { withCookies } from 'react-cookie';
 import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Routes from './Routes';
 import Nav from './pages/components/Nav';
-//import Footer from './pages/components/Footer';
 import './App.css';
 
-const App = ({ cookies }) => {
-  return (
-      <BrowserRouter>
-        <div className={`${cookies.get('scheme')}`}>
-          <Nav />
-          <Routes/>
-          <Footer />
-        </div>
-      </BrowserRouter>
-  );
-}
 
 class App extends Component {
   constructor(props) {
@@ -26,7 +14,7 @@ class App extends Component {
     }
   }
   componentWillReceiveProps() {
-    const { cookies } = this.props
+    const { cookies } = this.props;
     if (cookies.get('night')) {
       this.setState({
         nightMode: this.props.cookies.get('night')
@@ -34,9 +22,10 @@ class App extends Component {
     }
   }
   render() {
+    const { cookies } = this.props;
     return(
       <BrowserRouter>
-        <div className={`${this.state.nightMode}`}>
+        <div className={`${this.state.nightMode} ${cookies.get('scheme')}`}>
           <Nav />
           <Routes/>
         </div>
