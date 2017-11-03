@@ -61,7 +61,7 @@ class Login extends Component {
   render() {
     if (this.state.redirectToReferrer === true) {
       console.log('im now authenticated');
-      return (<Redirect to="/summary"/>);
+      return (<Redirect to="/profile"/>);
     }
     return (
       <div className="page bgorange">

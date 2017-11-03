@@ -16,6 +16,14 @@ class Profile extends Component {
     let tokenFromCookie = '';
     if (cookies.get('token') !== '') {
       tokenFromCookie = cookies.get('token');
+    } else {
+      let url = this.props.location.search;
+      let parsedToken = '';
+      url = url.split('=');
+      if (url) {
+        parsedToken = url[1];
+      }
+      tokenFromCookie = parsedToken;
     }
     this.state = {
       name: '',
@@ -82,25 +90,9 @@ class Profile extends Component {
         });
   }
   componentWillMount() {
-    if (this.state.token === '') {
-      console.log('componentWillMount');
-      let url = this.props.location.search;
-      let parsedToken = '';
-      url = url.split('=');
-      if (url) {
-        parsedToken = url[1];
-      }
-      console.log('token', parsedToken);
-
-      this.setState({
-        token: parsedToken,
-        error: '',
-      });
-      console.log('state token', this.state.token);
-      if (this.state.token.length > 0) {
-        console.log('call link google');
-        this.linkGoogleAccount();
-      }
+    if (this.state.token && this.state.token.length > 0) {
+      console.log('call link google');
+      this.linkGoogleAccount();
     }
   }
   componentDidMount() {
@@ -261,7 +253,6 @@ class Profile extends Component {
         }
         else {
           console.log('success',json, 'The profile pic was saved!');
-          window.location.reload();
         }
       });
   }

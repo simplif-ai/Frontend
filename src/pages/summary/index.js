@@ -266,7 +266,7 @@ class Summary extends Component {
   }
   exportToGoogle = (e) => {
     e.preventDefault();
-    if (this.state.toke === '') {
+    if (this.state.token === '') {
       this.setError("You do have an account attached.");
       return;
     }
