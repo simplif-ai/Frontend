@@ -54,10 +54,12 @@ class Summary extends Component {
           })
           : null
         }
-        <h1> Create a New Simplifai Folder </h1>
+        <h2> Create a New Simplifai Folder </h2>
         <div className="folderField">
-          <input type="text" name="Title">Title:</input>
-          <input type="submit" value="submit"/>
+          <form>
+          <label type="text" name="title">Title </label>
+          <input type="submit" value="submit"/> 
+          </form>
         </div>
       </div>
     );

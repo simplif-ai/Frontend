@@ -230,3 +230,7 @@ errorClass {
   border-radius:4px;
   margin: auto;
 }
+.input {
+  width:25%;
+  text-align: center;
+}

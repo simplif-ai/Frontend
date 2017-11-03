@@ -39,6 +39,7 @@ p {
 .page {
   padding: 20px;
 }
+
 .bgorange {
   background-color: #F9B045;
   color: #1A334F;
@@ -50,4 +51,9 @@ p {
 }
 errorClass {
   display:inline-block;
+}
+
+.bgnight .bgorange {
+  background-color: #1A334F;
+  color: #F9B045;
 }

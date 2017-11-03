@@ -1,21 +1,21 @@
 import React from 'react';
+import { withCookies, Cookies } from 'react-cookie';
 import { BrowserRouter } from 'react-router-dom';
-import { CookiesProvider } from 'react-cookie';
 import Routes from './Routes';
 import Nav from './pages/components/Nav';
 import Footer from './pages/components/Footer';
 import './App.css';
 
-const App = () => (
-  <CookiesProvider>
-    <BrowserRouter>
-      <div>
-        <Nav />
-        <Routes/>
-        <Footer />
-      </div>
-    </BrowserRouter>
-  </CookiesProvider>
-);
+const App = ({ cookies }) => {
+  return (
+      <BrowserRouter>
+        <div className={`${cookies.get('scheme')}`}>
+          <Nav />
+          <Routes/>
+          <Footer />
+        </div>
+      </BrowserRouter>
+  );
+}
 
-export default App;
+export default withCookies(App);

@@ -182,6 +182,13 @@ class Profile extends Component {
           }
         });
   }
+  changeColor = () => {
+    const { cookies } = this.props;
+    //cookies.set('scheme','bgnight');
+    cookies.get('scheme') === 'bgnight' ? cookies.set('scheme','bgorange') : cookies.set('scheme','bgnight');
+    console.log('cookie', cookies.get('scheme'));
+    window.location.reload();
+  }
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -227,7 +234,7 @@ class Profile extends Component {
           </table>
         </div>
         <button onClick={this.toggleEditMode}>Edit Profile</button>
-        <button /*onClick={change color scheme}*/>Toggle Scheme</button>
+        <button onClick={this.changeColor}>Toggle Scheme</button>
         {this.state.editMode ? (
           <form className="form-width" onSubmit={this.editProfile}>
             <h1>Edit Profile</h1>

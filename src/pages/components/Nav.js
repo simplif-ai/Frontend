@@ -57,6 +57,10 @@ class Nav extends Component {
             <a href='/notes'>My Notes</a>
           </div>) : null
         }
+        <div className="user"> 
+          <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png" alt="cute prof pic"/>
+        </div>
+        
       </div>
     );
   }
