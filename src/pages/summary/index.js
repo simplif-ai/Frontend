@@ -35,7 +35,8 @@ class Summary extends Component {
       wait: false,
       noteID: '',
       options: false,
-      token: ''
+      token: '',
+      nightMode: false
     };
   }
   componentDidMount() {
@@ -264,6 +265,18 @@ class Summary extends Component {
   exportToGoogle = () => {
 
   }
+  toggleNightMode = () => {
+    this.setState({
+      nightMode: !this.state.nightMode
+    });
+    const { cookies } = this.props;
+    if (this.state.nightMode === true) {
+      cookies.set('night', '');
+    } else {
+      cookies.set('night', 'night');
+    }
+    console.log('cookie', cookies.get('night'));
+  }
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -302,6 +315,7 @@ class Summary extends Component {
           (<div className="options drop">
             <p onClick={this.exportToText}>Export to text File</p>
             {this.state.token !== 'undefined' ? <p onClick={this.exportToGoogle}>Export to Google Drive</p> : null}
+            <p onClick={this.toggleNightMode}>Toggle Night Mode</p>
           </div>) : null
         }
       </div>

@@ -254,3 +254,7 @@ errorClass {
 .drop.options p:hover {
   opacity: .5;
 }
+
+textarea {
+  background: none;
+}

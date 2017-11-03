@@ -3,14 +3,20 @@ import '../../css/profile.css';
 import { Redirect } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
+import {withRouter} from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 
 class Profile extends Component {
   static propTypes = {
-    cookies: instanceOf(Cookies).isRequired
+    cookies: instanceOf(Cookies)
   };
   constructor(props) {
     super(props);
+    const { cookies } = this.props;
+    let tokenFromCookie = '';
+    if (cookies.get('token') !== '') {
+      tokenFromCookie = cookies.get('token');
+    }
     this.state = {
       name: '',
       email: '',
@@ -21,17 +27,106 @@ class Profile extends Component {
       editPassword: false,
       file: '',
       imagePreviewUrl: '',
-      token: ''
+      token: tokenFromCookie
     };
+  }
+  linkGoogleAccount = () => {
+    const { cookies } = this.props;
+    if (cookies.get('token') !== '') {
+      this.setState({
+        error: "You are already successfully linked to a google account!!"
+      });
+      return;
+    }
+
+    var e = document.createElement("a");
+    console.log('link google', this.state.token);
+    let token = this.state.token;
+    // let token = '';
+
+    if (typeof this.state.token === 'undefined') {
+      token = '';
+    }
+    console.log('token 2', token);
+    apiFetch('loginToGoogle',{
+        headers: {
+         'Content-Type': 'text/plain'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          googleCode: token
+        })
+    }).then((response) => response.json())
+        .then((json) => {
+          console.log('response', json);
+          if(json.success === false) {
+              console.log('error', json.error);
+              e.href = json.authorizeURL;
+              e.click();
+          }
+          else {
+            console.log('json',json);
+            const { cookies } = this.props;
+            cookies.set('token', JSON.stringify(json.googleToken));
+            console.log('saved token', cookies.get('token'));
+            this.setState({
+              token: json.googleToken,
+              error: "You successfully linked you're google account"
+            });
+            window.setTimeout(function() {
+              this.setState({
+                error: ''
+              });
+            }.bind(this), 4000);
+          }
+        });
+  }
+  componentWillMount() {
+    if (this.state.token === '') {
+      console.log('componentWillMount');
+      let url = this.props.location.search;
+      let parsedToken = '';
+      url = url.split('=');
+      if (url) {
+        parsedToken = url[1];
+      }
+      console.log('token', parsedToken);
+
+      this.setState({
+        token: parsedToken,
+        error: '',
+      });
+      console.log('state token', this.state.token);
+      if (this.state.token.length > 0) {
+        console.log('call link google');
+        this.linkGoogleAccount();
+      }
+    }
   }
   componentDidMount() {
     const { cookies } = this.props;
     const email = cookies.get('email');
-    console.log('token', this.props.match.params.token);
-    this.setState({
-      token: this.props.match.params.token,
-      error: ''
-    });
+    if (this.state.token === '') {
+      console.log('componentDidMount');
+      let url = this.props.location.search;
+      let parsedToken = '';
+      url = url.split('=');
+      if (url) {
+        parsedToken = url[1];
+      }
+      console.log('token', parsedToken);
+
+      this.setState({
+        token: parsedToken,
+        error: '',
+      });
+      console.log('state token', this.state.token);
+    }
+    if (this.state.token && this.state.token.length > 0) {
+      console.log('call link google');
+      this.linkGoogleAccount();
+    }
+
     return apiFetch('profile',{
         headers: {
          'Content-Type': 'text/plain'
@@ -147,26 +242,6 @@ class Profile extends Component {
           }
         });
   }
-  linkGoogleAccount = () => {
-    return apiFetch('loginToGoogle',{
-        headers: {
-         'Content-Type': 'text/plain'
-        },
-        method: 'POST',
-    }).then((response) => response)
-        .then((json) => {
-          console.log('response', json);
-          if(json.success === false) {
-              console.log('error', json.error);
-              this.setState({ error: json.error });
-          }
-          else {
-            console.log('json',json);
-            const { cookies } = this.props;
-            cookies.set('token', json.token);
-          }
-        });
-  }
   savePicture = (e) => {
     e.preventDefault();
     const formData  = new FormData();
@@ -186,6 +261,7 @@ class Profile extends Component {
         }
         else {
           console.log('success',json, 'The profile pic was saved!');
+          window.location.reload();
         }
       });
   }
@@ -206,6 +282,7 @@ class Profile extends Component {
   }
   render() {
     const { cookies } = this.props;
+    console.log('render', cookies.get('token'), 'is empty', cookies.get('token') !== '');
     const isAuthenticated = cookies.get('isAuthenticated');
     if (isAuthenticated === "false" || !isAuthenticated || this.state.redirect === true) {
       return (<Redirect to="/"/>);
@@ -213,6 +290,7 @@ class Profile extends Component {
     let {imagePreviewUrl} = this.state;
     return (
       <div className="page bgorange inline-block">
+        {this.state.error ? <p>{this.state.error}</p> : null}
         <div className="profileCard">
           <img src={imagePreviewUrl} alt="cute prof pic"/>
           <h2 className="topSpacing questrial">{this.state.name}</h2>
@@ -266,4 +344,4 @@ class Profile extends Component {
   }
 }
 
-export default withCookies(Profile);
+export default withCookies(withRouter(Profile));

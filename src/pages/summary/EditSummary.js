@@ -21,7 +21,9 @@ const EditSummary = ({ response, updateResponse, setError, brevity }) => {
       }
     });
   } else {
-    () => setError('You can only edit summarized text!');
+    if (setError) {
+      setError('You can only edit summarized text!');
+    }
   }
   return <div className="marginBottom">{sentences}</div>;
 }

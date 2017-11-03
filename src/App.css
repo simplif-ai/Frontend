@@ -38,6 +38,7 @@ p {
 
 .page {
   padding: 20px;
+  width: 100%;
 }
 .bgorange {
   background-color: #F9B045;
@@ -50,4 +51,24 @@ p {
 }
 errorClass {
   display:inline-block;
+}
+
+.night {
+  background: #1A334F;
+}
+
+.night p, .night h1 {
+  color: white;
+}
+.night .h1::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #BCBDBE;
+}
+.night .h1::-moz-placeholder { /* Firefox 19+ */
+  color: #BCBDBE;
+}
+.night .h1:-ms-input-placeholder { /* IE 10+ */
+  color: #BCBDBE;
+}
+.night .h1:-moz-placeholder { /* Firefox 18- */
+  color: #BCBDBE;
 }
