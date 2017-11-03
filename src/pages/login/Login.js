@@ -3,7 +3,7 @@ import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 import LoginForm from './LoginForm';
 import { Redirect } from 'react-router-dom';
-import Loader from '../components/Loader';
+
 import '../../css/login.css';
 import '../../css/register.css';
 import apiFetch from '../../utils/api.js';
@@ -64,7 +64,6 @@ class Login extends Component {
     }
     return (
       <div className="page bgorange">
-        <Loader/>
         <div className="logo">
           simplif.ai
         </div>
