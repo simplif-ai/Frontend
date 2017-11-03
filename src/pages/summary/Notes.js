@@ -6,7 +6,7 @@ import Summary from './index';
 const Notes = () => (
   <Switch>
     <Route exact path='/notes' component={ListNotes}/>
-    <Route path='/notes/:noteId' component={Summary}/>
+    <Route path='/notes/:noteID' component={Summary}/>
   </Switch>
 )
 
