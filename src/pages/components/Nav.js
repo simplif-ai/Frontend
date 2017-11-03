@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import '../../css/nav.css';
@@ -52,9 +52,9 @@ class Nav extends Component {
         {this.state.open
           ?
           (<div className="drop">
-            <a href='/profile'>Profile</a>
-            <a href='/' onClick={this.logout}>Logout</a>
-            <a href='/notes'>My Notes</a>
+            <Link to='/profile'>Profile</Link>
+            <Link to='/' onClick={this.logout}>Logout</Link>
+            <Link to='/notes'>My Notes</Link>
           </div>) : null
         }
       </div>
