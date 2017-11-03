@@ -30,7 +30,7 @@ class Summary extends Component {
       error: null,
       title: '',
       editTitle: false,
-      wait: false,
+      wait: false
     };
   }
   updateResponse = (index, priority) => {

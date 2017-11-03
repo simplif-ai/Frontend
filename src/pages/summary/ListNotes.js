@@ -7,8 +7,10 @@ import '../../css/summary.css';
 class Summary extends Component {
   constructor(props) {
     super(props);
+    const { cookies } = this.props;
     this.state = {
-      notes: []
+      notes: [],
+      token: cookies.get('token')
     };
   }
   componentDidMount() {
@@ -35,6 +37,7 @@ class Summary extends Component {
           });
         }
       });
+
   }
   render() {
     const { cookies } = this.props;
@@ -42,7 +45,6 @@ class Summary extends Component {
     if (isAuthenticated === "false" || !isAuthenticated) {
       return (<Redirect to="/login"/>);
     }
-
     return (
       <div className="summary">
         <h1>My Notes</h1>
@@ -52,6 +54,11 @@ class Summary extends Component {
           })
           : null
         }
+        <h1> Create a New Simplifai Folder </h1>
+        <div className="folderField">
+          <input type="text" name="Title">Title:</input>
+          <input type="submit" value="submit"/>
+        </div>
       </div>
     );
   }
