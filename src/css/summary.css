@@ -2,7 +2,7 @@
   padding: 20px;
 
 }
-.summary h1 {
+.summary .h1 {
   margin-right: 20px;
   display: inline;
 }
@@ -27,7 +27,7 @@ button:hover {
  -o-transition: opacity .2s ease-in-out;
   cursor: pointer;
 }
-textarea, .edit {
+.note, .edit {
   font-family: 'Crimson Text', serif;
   width: 100%;
   color: #95989A;
@@ -36,23 +36,45 @@ textarea, .edit {
   overflow: hidden;
   min-height: 50vh;
 }
-
-textarea::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+.h1 {
+  font-family: 'Crimson Text', serif;
+  color: #1A334F;
+  font-size: 2em;
+  resize: none;
+  border: none;
+  overflow: hidden;
+}
+.h1, .icon {
+    vertical-align: top;
+}
+.h1::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #1A334F;
+}
+.h1::-moz-placeholder { /* Firefox 19+ */
+  color: #1A334F;
+}
+.h1:-ms-input-placeholder { /* IE 10+ */
+  color: #1A334F;
+}
+.h1:-moz-placeholder { /* Firefox 18- */
+  color: #1A334F;
+}
+.note::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: #BCBDBE;
 }
-textarea::-moz-placeholder { /* Firefox 19+ */
+.note::-moz-placeholder { /* Firefox 19+ */
   color: #BCBDBE;
 }
-textarea:-ms-input-placeholder { /* IE 10+ */
+.note:-ms-input-placeholder { /* IE 10+ */
   color: #BCBDBE;
 }
-textarea:-moz-placeholder { /* Firefox 18- */
+.note:-moz-placeholder { /* Firefox 18- */
   color: #BCBDBE;
 }
-textarea:focus {
+.note:focus, .h1:focus {
   outline: none;
 }
-.summary h1 {
+.summary .h1 {
   font-family: 'Crimson Text', serif;
 }
 
@@ -141,6 +163,36 @@ textarea:focus {
     padding: 0 20%;
   }
 }
+.summary-sentence {
+  color: #1A334F;
+  text-align: left;
+  padding-left: 30px;
+  cursor: pointer;
+}
+.non-summary-sentence {
+  color: #95989A;
+  text-align: left;
+  padding-left: 30px;
+  cursor: pointer;
+}
+
+.summary-sentence:hover::before {
+    background: url("../assets/x-icon.svg") no-repeat;
+}
+.non-summary-sentence:hover::before {
+    background: url("../assets/plus-icon.svg") no-repeat;
+}
+.summary-sentence:hover::before, .non-summary-sentence:hover::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  margin-left: -31px;
+  cursor: pointer;
+}
+.marginBottom {
+  margin-bottom: 80px;
+}
 errorClass {
   display:inline-block;
 }
@@ -158,7 +210,7 @@ errorClass {
   opacity: 1;
 }
 .modify-button.after {
-content: '';
+  content: '';
 	position: absolute;
   /*change position relative to sentence? always on side? dependent on cursor? will test*/
 	bottom: 50%;

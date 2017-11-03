@@ -6,6 +6,7 @@ import apiFetch from '../../utils/api.js';
 import '../../css/summary.css';
 import edit_icon_orange from '../../assets/pencil-icon-orange.svg';
 import Loader from '../components/Loader';
+import EditSummary from './EditSummary';
 
 class Summary extends Component {
   static propTypes = {
@@ -16,16 +17,31 @@ class Summary extends Component {
     this.state = {
       redirectToReferrer: false,
       summary: {},
+      summaryArray: [],
+      sentencesArray: [],
       sentences: [],
       response: {},
       brevity: 50,
       isWaiting: false,
-      toggleEdit: false,
+      editMode: false,
       sentenceCount: null,
       text: '',
       receivedSummary: false,
-      error: null
+      error: null,
+      title: '',
+      editTitle: false,
+      wait: false,
     };
+  }
+  updateResponse = (index, priority) => {
+    let newResponse = this.state.response;
+    console.log('newResponse', newResponse, 'index', index, 'priority', priority);
+    newResponse[index][1] = priority;
+    console.log('newResponse after', newResponse);
+    this.setState({
+      response: newResponse
+    });
+    this.updateSummary();
   }
   updateSummary = () => {
     const summary = [];
@@ -40,26 +56,26 @@ class Summary extends Component {
       }
       sentences.push(sentence[0]);
     });
-    console.log('sentences', sentences.join(' '));
-    console.log('summary', summary.join(' '));
-
+    console.log('text', summary.join(' '));
     this.setState({
       summary: summary.join(' '),
-      text: summary.join(' ')
+      summaryArray: summary,
+      text: summary.join(' '),
+      sentencesArray: sentences
     });
   }
   summarize = (e) => {
-    this.setState({
-      isWaiting: true
-    });
     e.preventDefault();
-    e.persist();
+    this.setState({
+      wait: true
+    });
+    console.log('e', this.state.text);
     return apiFetch('summarizertext', {
       headers: {
        'Content-Type': 'text/plain'
       },
       body: JSON.stringify({
-        text: e.target.textarea.value
+        text: this.state.text
       }),
       method: 'POST'
     }).then(response =>
@@ -68,7 +84,7 @@ class Summary extends Component {
         if (json.success === false) {
           console.log('error', json.error);
           this.setState({
-            toggleEdit: false,
+            editMode: false,
             error: "json.error"
           });
         }
@@ -78,7 +94,7 @@ class Summary extends Component {
           this.setState({
             response: json.text,
             receivedSummary: true,
-            isWaiting: false
+            wait: false
           });
           console.log('response', json);
           this.updateSummary();
@@ -91,6 +107,9 @@ class Summary extends Component {
   }
   onEdit = (e) => {
     this.setState({ text: e.target.value });
+  }
+  onEditTitle = (e) => {
+    this.setState({ title: e.target.value });
   }
   changeBrevity = (e) => {
     this.setState({
@@ -119,19 +138,50 @@ class Summary extends Component {
     ).then((json) => {
         if (json.success === false) {
             console.log('error', json.error);
+            this.setError("Your summary was not saved!");
+            window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
         }
         else {
           // call funtion to send data to page
           console.log('success',json);
           this.setState({
-            toggleEdit: false
+            editMode: false
           });
+          this.setError("Your summary was successfully saved!");
+          window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+
           console.log('response', json);
           // this.updateSummary();
         }
       });
   }
+  setError = (error) => {
+    this.setState({
+      error
+    });
+  }
+  toggleEditMode = (e) => {
+    e.preventDefault( );
+    if (this.state.receivedSummary === true) {
+      this.setState({
+        editMode: !this.state.editMode
+      });
+    } else if (this.state.editMode === true) {
+      this.setState({
+        editMode: false
+      });
+    } else {
+      this.setError("You can only edit summarized text!");
+      window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+    }
+  }
+  toggleEditTitle = () => {
+    this.setState({
+      editTitle: true
+    });
+  }
   render() {
+    console.log('response', this.state.response);
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
     if (isAuthenticated === "false" || !isAuthenticated) {
@@ -141,19 +191,29 @@ class Summary extends Component {
     this.state.sentences.forEach(sentence => {
       sentences.push(<p>{sentence}</p>);
     });
+    // const dummyResponse = [
+    //   ["It wasn’t too long ago that Silicon Valley scoffed at cryptocurrencies.",2,0],
+    //   ["All over coffee shops in Mountain View and Menlo Park, you heard the same conversation: “Sure, it’s cool technology, but when are we going to see the killer app”?",3,1],
+    //   ["A few merchants dipped their toes into accepting Bitcoin in 2014.",4,2],
+    //   ["But adoption largely backed off.",5,3],
+    //   ["I remember seeing a few Bitcoin ATMs in Austin, and then they disappeared.",6,4],
+    //   ["Bitcoin reneged on its promise to replace cash, so most venture capitalists assumed it was dead on arrival.",7,5],
+    //   ["Without a killer app driving consumer adoption, cryptocurrencies seemed like they would be nothing more than a curiosity for cryptographers and paranoids.",8,6],
+    //   ["In the last year, interest in cryptocurrencies has skyrocketed.",0,7],
+    //   ["The public cryptocurrency market cap has surged to highs of over $170B.",9,8],
+    //   ["With over 1.5B raised through ICOs in 2017, over 70 crypto exchanges open for business, and crypto hedge funds and VCs popping up left and right, it seems that everyone is clambering to get a seat on the rocketship.",1,9]
+    // ];
     return (
       <div className="summary">
-      {this.state.isWaiting ? <Loader/> : null}
+      {this.state.wait ? <Loader/> : null}
       <form onSubmit={this.summarize}>
-        <h1>Title</h1>
-        <button className="icon orange"><img src={edit_icon_orange} alt="edit"/></button>
-        <div className = "errorClass">
-          {this.state.error ? `Error= ${this.state.error}` : null}
-        </div>
-        {this.state.toggleEdit ?
-          {sentences}
+        <textarea className="h1" name="textarea" placeholder="Enter a Title..." value={this.state.title} onChange={this.onEditTitle} onKeyUp={this.handleKeyUp} />
+        <button className="icon orange" onClick={this.toggleEditMode}><img src={edit_icon_orange} alt="edit"/></button>
+        {this.state.error ? <p>{this.state.error}</p> : null}
+        {this.state.editMode ?
+          <EditSummary brevity={this.state.brevity} response={this.state.response} updateResponse={this.updateResponse} setError={this.setError} />
           :
-          <textarea name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} value={this.state.text} onChange={this.onEdit} id="summary"/>
+          <textarea className="note" name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} value={this.state.text} onChange={this.onEdit} id="summary"/>
         }
         <button className="fixed" type="submit">Summarize</button>
         <button onClick={this.saveSummary} className="fixed save">Save</button>
