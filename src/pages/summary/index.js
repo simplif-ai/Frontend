@@ -48,30 +48,6 @@ class Summary extends Component {
       noteID: this.props.match.params.noteID,
       token: cookies.get('token')
     });
-    return apiFetch('listnotes', {
-      headers: {
-       'Content-Type': 'text/plain'
-      },
-      body: JSON.stringify({
-        email: email
-      }),
-      method: 'POST'
-    }).then(response => response.json()
-    ).then((json) => {
-      if (json.success === false) {
-          console.log('error', json.error);
-      }
-      else {
-        console.log('success',json);
-        json.forEach(note => {
-          if (note[0] === this.props.match.params.noteID) {
-            this.setState({
-              tite: note[1]
-            });
-          }
-        });
-      }
-    });
   }
   updateResponse = (index, priority) => {
     let newResponse = this.state.response;
@@ -318,6 +294,7 @@ class Summary extends Component {
     this.state.sentences.forEach(sentence => {
       sentences.push(<p>{sentence}</p>);
     });
+    console.log('params', this.props.match.params.noteID);
     return (
       <div className="summary">
       {this.state.wait ? <Loader/> : null}
