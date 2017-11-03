@@ -54,6 +54,7 @@ class Nav extends Component {
           (<div className="drop">
             <a href='/profile'>Profile</a>
             <a href='/' onClick={this.logout}>Logout</a>
+            <a href='/notes'>My Notes</a>
           </div>) : null
         }
       </div>
