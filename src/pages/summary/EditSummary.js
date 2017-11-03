@@ -10,7 +10,6 @@ const EditSummary = ({ response, updateResponse, setError, brevity }) => {
     updateResponse(index, -1);
   };
   const sentences = [];
-  console.log('response', response);
   if (response) {
     const summaryCount = Math.floor(brevity * (1/100) * response.length);
       response.forEach((sentence, index) => {
@@ -22,7 +21,7 @@ const EditSummary = ({ response, updateResponse, setError, brevity }) => {
       }
     });
   } else {
-    setError('You can only edit summarized text!');
+    () => setError('You can only edit summarized text!');
   }
   return <div className="marginBottom">{sentences}</div>;
 }
