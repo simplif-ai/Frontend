@@ -16,6 +16,8 @@ class Summary extends Component {
   };
   constructor(props) {
     super(props);
+    const { cookies } = this.props;
+    const googleToken = cookies.get('token');
     this.state = {
       redirectToReferrer: false,
       summary: {},
@@ -35,7 +37,8 @@ class Summary extends Component {
       wait: false,
       noteID: '',
       options: false,
-      token: ''
+      token: googleToken,
+      nightMode: false
     };
   }
   componentDidMount() {
@@ -261,8 +264,52 @@ class Summary extends Component {
     e.download = `${this.state.title} Simplifai Note.txt`;
     e.click();
   }
-  exportToGoogle = () => {
+  exportToGoogle = (e) => {
+    e.preventDefault();
+    if (this.state.toke === '') {
+      this.setError("You do have an account attached.");
+      return;
+    }
+    return apiFetch('exportToDrive', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        text: this.state.text,
+        title: this.state.title,
+        googleToken: this.state.token
+      }),
+      method: 'POST'
+    }).then(response =>
+      response.text()
+    ).then((json) => {
+        console.log('json', json);
+        json = JSON.parse(json);
+        if (json.success === false) {
+            this.setError("Your summary was successfully exported to Google Drive!");
+            window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+        }
+        else {
+          // call funtion to send data to page
+          console.log('success',json);
+          this.setError("Your summary was successfully exported!");
+          window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+          // this.updateSummary();
+        }
+      });
 
+  }
+  toggleNightMode = () => {
+    this.setState({
+      nightMode: !this.state.nightMode
+    });
+    const { cookies } = this.props;
+    if (this.state.nightMode === true) {
+      cookies.set('night', '');
+    } else {
+      cookies.set('night', 'night');
+    }
+    console.log('cookie', cookies.get('night'));
   }
   render() {
     const { cookies } = this.props;
@@ -301,7 +348,8 @@ class Summary extends Component {
           ?
           (<div className="options drop">
             <p onClick={this.exportToText}>Export to text File</p>
-            {this.state.token !== 'undefined' ? <p onClick={this.exportToGoogle}>Export to Google Drive</p> : null}
+            {this.state.token !== '' ? <p onClick={this.exportToGoogle}>Export to Google Drive</p> : null}
+            <p onClick={this.toggleNightMode}>Toggle Night Mode</p>
           </div>) : null
         }
       </div>
