@@ -30,6 +30,7 @@ class Profile extends Component {
     console.log('token', this.props.match.params.token);
     this.setState({
       token: this.props.match.params.token,
+      error: ''
     });
     return apiFetch('profile',{
         headers: {
@@ -146,27 +147,23 @@ class Profile extends Component {
           }
         });
   }
-  googleLogin = () => {
+  linkGoogleAccount = () => {
     return apiFetch('loginToGoogle',{
         headers: {
          'Content-Type': 'text/plain'
         },
         method: 'POST',
-    }).then((response) => response.json())
+    }).then((response) => response)
         .then((json) => {
           console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
-              const { cookies } = this.props;
-              cookies.set('isAuthenticated', false, { path: '/' });
           }
           else {
             console.log('json',json);
             const { cookies } = this.props;
-            cookies.set('isAuthenticated', true);
-            cookies.set('login', true);
-            cookies.set('jwt-google', json.token);
+            cookies.set('token', json.token);
           }
         });
   }
@@ -247,7 +244,7 @@ class Profile extends Component {
         ) : null
         }
         <button onClick={this.deleteAccount}>Delete Account</button>
-        <button onClick={this.googleLogin}>Login With Google</button>
+        <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
         <button onClick={this.toggleUpdatePassword}>Update Password</button>
         {this.state.editPassword ?
           (<form  className="form-width" onSubmit={this.updatePassword}>

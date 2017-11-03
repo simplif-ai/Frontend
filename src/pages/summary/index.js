@@ -4,6 +4,8 @@ import { instanceOf } from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import '../../css/summary.css';
+import '../../css/footer.css';
+import edit_icon_white from '../../assets/pencil-icon.svg';
 import edit_icon_orange from '../../assets/pencil-icon-orange.svg';
 import Loader from '../components/Loader';
 import EditSummary from './EditSummary';
@@ -31,7 +33,9 @@ class Summary extends Component {
       title: '',
       editTitle: false,
       wait: false,
-      noteID: ''
+      noteID: '',
+      options: false,
+      token: ''
     };
   }
   componentDidMount() {
@@ -39,6 +43,7 @@ class Summary extends Component {
     const email = cookies.get('email');
     this.setState({
       noteID: this.props.match.params.noteID,
+      token: cookies.get('token')
     });
     return apiFetch('listnotes', {
       headers: {
@@ -244,6 +249,21 @@ class Summary extends Component {
       editTitle: true
     });
   }
+  toggleOptions = () => {
+    this.setState({
+      options: !this.state.options
+    })
+  }
+  exportToText = () => {
+    var e = document.createElement("a");
+    var file = new Blob([this.state.text], {type: 'text/plain'}, "name");
+    e.href = URL.createObjectURL(file);
+    e.download = `${this.state.title} Simplifai Note.txt`;
+    e.click();
+  }
+  exportToGoogle = () => {
+
+  }
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -273,6 +293,17 @@ class Summary extends Component {
           <label>Brevity {this.state.brevity}%</label>
           <input type="range" min="1" max="100" className="slider" id="myRange" value={this.state.brevity} onChange={this.changeBrevity} />
         </div>
+        <div className="footer">
+          <button className="button" onClick={this.toggleEditMode}><img src={edit_icon_white} alt="edit_icon_white"/></button>
+          <button className="button" onClick={this.toggleOptions}>?</button>
+        </div>
+        {this.state.options
+          ?
+          (<div className="options drop">
+            <p onClick={this.exportToText}>Export to text File</p>
+            {this.state.token !== 'undefined' ? <p onClick={this.exportToGoogle}>Export to Google Drive</p> : null}
+          </div>) : null
+        }
       </div>
     );
   }

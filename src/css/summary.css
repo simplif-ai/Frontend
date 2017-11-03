@@ -241,3 +241,16 @@ errorClass {
 .title-icon .icon:hover {
   border: none;
 }
+.drop.options {
+  bottom: 91px;
+  top: auto;
+  right: 30px;
+  left: auto;
+  border-radius: 27px 27px 0px 27px;
+}
+.drop.options p {
+  cursor: pointer;
+}
+.drop.options p:hover {
+  opacity: .5;
+}
