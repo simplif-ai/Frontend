@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withCookies } from 'react-cookie';
 import { Redirect } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
+import FolderForm from './FolderForm';
 import '../../css/summary.css';
 
 class Summary extends Component {
@@ -10,7 +11,9 @@ class Summary extends Component {
     const { cookies } = this.props;
     this.state = {
       notes: [],
-      token: cookies.get('token')
+      token: cookies.get('token'),
+      error: null,
+      success: null
     };
   }
   componentDidMount() {
@@ -37,8 +40,36 @@ class Summary extends Component {
           });
         }
       });
-
   }
+  handleSubmit = (e) => { /*Sorry Audrey :< */
+    e.preventDefault();
+    e.persist();
+    const req = {
+      name: e.target.name.value/*,
+      googleToken: */
+    }
+    console.log('req', req);
+    return apiFetch('createFolder',{
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          name: e.target.name.value,
+        })
+    }).then((response) => response.json())
+        .then((json) => {
+          console.log('response', json);
+          if(json.success === false) {
+              console.log('error', json.error);
+              this.setState({ error: json.error });
+          }
+          else {
+            console.log('json',json);
+            this.setState('success',json.success);
+          }
+        });
+  };
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -54,12 +85,9 @@ class Summary extends Component {
           })
           : null
         }
-        <h2> Create a New Simplifai Folder </h2>
+        <h2> Create a New Simplif.ai Folder </h2>
         <div className="folderField">
-          <form>
-          <label type="text" name="title">Title </label>
-          <input type="submit" value="submit"/> 
-          </form>
+          <FolderForm folder={this.handleSubmit}/>
         </div>
       </div>
     );
