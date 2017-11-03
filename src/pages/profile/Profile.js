@@ -20,12 +20,17 @@ class Profile extends Component {
       redirect: false,
       editPassword: false,
       file: '',
-      imagePreviewUrl: ''
+      imagePreviewUrl: '',
+      token: ''
     };
   }
   componentDidMount() {
     const { cookies } = this.props;
     const email = cookies.get('email');
+    console.log('token', this.props.match.params.token);
+    this.setState({
+      token: this.props.match.params.token,
+    });
     return apiFetch('profile',{
         headers: {
          'Content-Type': 'text/plain'
