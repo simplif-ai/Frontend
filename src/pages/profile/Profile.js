@@ -18,13 +18,20 @@ class Profile extends Component {
       error: null,
       editMode: false,
       redirect: false,
-      editPassword: false
+      editPassword: false,
+      file: '',
+      imagePreviewUrl: '',
+      token: ''
     };
   }
   componentDidMount() {
     const { cookies } = this.props;
     const email = cookies.get('email');
-    console.log('email', email);
+    console.log('token', this.props.match.params.token);
+    this.setState({
+      token: this.props.match.params.token,
+      error: ''
+    });
     return apiFetch('profile',{
         headers: {
          'Content-Type': 'text/plain'
@@ -35,13 +42,11 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
           }
           else {
-            console.log('componentDidMount on load',json);
             this.setState({
               error: null,
               name: json.name,
@@ -54,12 +59,6 @@ class Profile extends Component {
   editProfile = (e) => {
     this.setState({ editMode: false });
     e.persist();
-    const req = {
-        email: this.state.email,
-        newEmail: e.target.email.value,
-        newName: e.target.name.value
-    }
-    console.log('req', req);
     return apiFetch('editProfile',{
         headers: {
          'Content-Type': 'text/plain'
@@ -72,7 +71,6 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
@@ -128,12 +126,6 @@ class Profile extends Component {
     this.setState({ editPassword: false})
     const { cookies } = this.props;
     const email = cookies.get('email');
-    const req = {
-        email: email,
-        password: e.target.password.value,
-        newPassword: e.target.npassword.value
-    }
-    console.log('req', req);
     return apiFetch('changePassword', {
         headers: {
          'Content-Type': 'text/plain'
@@ -146,41 +138,71 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
           }
           else {
-            console.log('json',json);
             console.log('password was updated');
           }
         });
   }
-  googleLogin = () => {
+  linkGoogleAccount = () => {
     return apiFetch('loginToGoogle',{
         headers: {
          'Content-Type': 'text/plain'
         },
         method: 'POST',
-    }).then((response) => response.json())
+    }).then((response) => response)
         .then((json) => {
           console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
-              const { cookies } = this.props;
-              cookies.set('isAuthenticated', false, { path: '/' });
-              console.log('cookie', cookies.get('isAuthenticated'));
           }
           else {
             console.log('json',json);
             const { cookies } = this.props;
-            cookies.set('isAuthenticated', true);
-            cookies.set('login', true);
-            cookies.set('jwt-google', json.token);
+            cookies.set('token', json.token);
           }
         });
+  }
+  savePicture = (e) => {
+    e.preventDefault();
+    const formData  = new FormData();
+    const { cookies } = this.props;
+    const email = cookies.get('email');
+    formData.append('file', this.state.file);
+    formData.append('email', email);
+    apiFetch('addpicture', {
+      body: formData,
+      method: 'POST'
+    }).then(response =>
+      response.text()
+    ).then((json) => {
+        json = JSON.parse(json);
+        if (json.success === false) {
+            console.log('error', json.error);
+        }
+        else {
+          console.log('success',json, 'The profile pic was saved!');
+        }
+      });
+  }
+
+  handleImageChange = (e) => {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        file: file,
+        imagePreviewUrl: reader.result
+      });
+    }
+    reader.readAsDataURL(file)
   }
   render() {
     const { cookies } = this.props;
@@ -188,44 +210,22 @@ class Profile extends Component {
     if (isAuthenticated === "false" || !isAuthenticated || this.state.redirect === true) {
       return (<Redirect to="/"/>);
     }
+    let {imagePreviewUrl} = this.state;
     return (
       <div className="page bgorange inline-block">
         <div className="profileCard">
-          <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png" alt="cute prof pic"/>
+          <img src={imagePreviewUrl} alt="cute prof pic"/>
           <h2 className="topSpacing questrial">{this.state.name}</h2>
           <p className="title">{this.state.email}</p>
         </div>
-        <label style={{"marginBottom": "15px"}}><h2>Summaries<span/> </h2></label>
-        <div className="col-3 col-m-3">
-          <table>
-            <tbody>
-              <tr className="card">
-                  <th className="header">
-                    <b>Example Summary 1</b>
-                  </th>
-                  <th className="profile-container">
-                    Example Summary 1 lorem ipsum woooo look at all the text that has been summarized here
-                  </th>
-              </tr>
-              <tr className="card">
-                  <th className="header">
-                    <b>Example Summary 2</b>
-                  </th>
-                  <th className="profile-container">
-                    Example Summary 2 lorem ipsum woooo look at all the text that has been summarized here
-                  </th>
-              </tr>
-              <tr className="card">
-                  <th className="header">
-                    <b>Example Summary 3</b>
-                  </th>
-                  <th className="profile-container">
-                    Example Summary 3 lorem ipsum woooo look at all the text that has been summarized here
-                  </th>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <form className="image-upload" onSubmit={this.savePicture}>
+          <input className="fileInput"
+            type="file"
+            onChange={this.handleImageChange} />
+          <button className="submitButton"
+            type="submit"
+            onClick={this.handleSubmit}>Upload Image</button>
+        </form>
         <button onClick={this.toggleEditMode}>Edit Profile</button>
         <button /*onClick={change color scheme}*/>Toggle Scheme</button>
         {this.state.editMode ? (
@@ -244,7 +244,7 @@ class Profile extends Component {
         ) : null
         }
         <button onClick={this.deleteAccount}>Delete Account</button>
-        <button onClick={this.googleLogin}>Login With Google</button>
+        <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
         <button onClick={this.toggleUpdatePassword}>Update Password</button>
         {this.state.editPassword ?
           (<form  className="form-width" onSubmit={this.updatePassword}>
@@ -261,7 +261,6 @@ class Profile extends Component {
           </form>
           ) : null
         }
-        <div className="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
       </div>
     );
   }

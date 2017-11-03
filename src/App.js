@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 import Routes from './Routes';
 import Nav from './pages/components/Nav';
-import Footer from './pages/components/Footer';
+// import Footer from './pages/components/Footer';
 import './App.css';
 
 const App = () => (
@@ -12,7 +12,6 @@ const App = () => (
       <div>
         <Nav />
         <Routes/>
-        <Footer />
       </div>
     </BrowserRouter>
   </CookiesProvider>

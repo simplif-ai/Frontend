@@ -4,6 +4,8 @@ import { instanceOf } from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import '../../css/summary.css';
+import '../../css/footer.css';
+import edit_icon_white from '../../assets/pencil-icon.svg';
 import edit_icon_orange from '../../assets/pencil-icon-orange.svg';
 import Loader from '../components/Loader';
 import EditSummary from './EditSummary';
@@ -30,8 +32,43 @@ class Summary extends Component {
       error: null,
       title: '',
       editTitle: false,
-      wait: false
+      wait: false,
+      noteID: '',
+      options: false,
+      token: ''
     };
+  }
+  componentDidMount() {
+    const { cookies } = this.props;
+    const email = cookies.get('email');
+    this.setState({
+      noteID: this.props.match.params.noteID,
+      token: cookies.get('token')
+    });
+    return apiFetch('listnotes', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        email: email
+      }),
+      method: 'POST'
+    }).then(response => response.json()
+    ).then((json) => {
+      if (json.success === false) {
+          console.log('error', json.error);
+      }
+      else {
+        console.log('success',json);
+        json.forEach(note => {
+          if (note[0] === this.props.match.params.noteID) {
+            this.setState({
+              tite: note[1]
+            });
+          }
+        });
+      }
+    });
   }
   updateResponse = (index, priority) => {
     let newResponse = this.state.response;
@@ -130,14 +167,15 @@ class Summary extends Component {
       },
       body: JSON.stringify({
         text: this.state.text,
-        email
+        email,
+        name: this.state.title
       }),
       method: 'POST'
     }).then(response =>
-      response.json()
+      response.text()
     ).then((json) => {
+        console.log('json', json);
         if (json.success === false) {
-            console.log('error', json.error);
             this.setError("Your summary was not saved!");
             window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
         }
@@ -149,8 +187,39 @@ class Summary extends Component {
           });
           this.setError("Your summary was successfully saved!");
           window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
-
-          console.log('response', json);
+          // this.updateSummary();
+        }
+      });
+  }
+  updateNote = (e) => {
+    e.preventDefault();
+    return apiFetch('updateNote', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        text: this.state.text,
+        noteID: this.state.noteID,
+        name: this.state.title
+      }),
+      method: 'POST'
+    }).then(response =>
+      response.text()
+    ).then((json) => {
+        console.log('json', json);
+        json = JSON.parse(json);
+        if (json.success === false) {
+            this.setError("Your summary was not saved!");
+            window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+        }
+        else {
+          // call funtion to send data to page
+          console.log('success',json);
+          this.setState({
+            editMode: false
+          });
+          this.setError("Your summary was successfully saved!");
+          window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
           // this.updateSummary();
         }
       });
@@ -180,8 +249,22 @@ class Summary extends Component {
       editTitle: true
     });
   }
+  toggleOptions = () => {
+    this.setState({
+      options: !this.state.options
+    })
+  }
+  exportToText = () => {
+    var e = document.createElement("a");
+    var file = new Blob([this.state.text], {type: 'text/plain'}, "name");
+    e.href = URL.createObjectURL(file);
+    e.download = `${this.state.title} Simplifai Note.txt`;
+    e.click();
+  }
+  exportToGoogle = () => {
+
+  }
   render() {
-    console.log('response', this.state.response);
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
     if (isAuthenticated === "false" || !isAuthenticated) {
@@ -191,18 +274,6 @@ class Summary extends Component {
     this.state.sentences.forEach(sentence => {
       sentences.push(<p>{sentence}</p>);
     });
-    // const dummyResponse = [
-    //   ["It wasn’t too long ago that Silicon Valley scoffed at cryptocurrencies.",2,0],
-    //   ["All over coffee shops in Mountain View and Menlo Park, you heard the same conversation: “Sure, it’s cool technology, but when are we going to see the killer app”?",3,1],
-    //   ["A few merchants dipped their toes into accepting Bitcoin in 2014.",4,2],
-    //   ["But adoption largely backed off.",5,3],
-    //   ["I remember seeing a few Bitcoin ATMs in Austin, and then they disappeared.",6,4],
-    //   ["Bitcoin reneged on its promise to replace cash, so most venture capitalists assumed it was dead on arrival.",7,5],
-    //   ["Without a killer app driving consumer adoption, cryptocurrencies seemed like they would be nothing more than a curiosity for cryptographers and paranoids.",8,6],
-    //   ["In the last year, interest in cryptocurrencies has skyrocketed.",0,7],
-    //   ["The public cryptocurrency market cap has surged to highs of over $170B.",9,8],
-    //   ["With over 1.5B raised through ICOs in 2017, over 70 crypto exchanges open for business, and crypto hedge funds and VCs popping up left and right, it seems that everyone is clambering to get a seat on the rocketship.",1,9]
-    // ];
     return (
       <div className="summary">
       {this.state.wait ? <Loader/> : null}
@@ -216,12 +287,23 @@ class Summary extends Component {
           <textarea className="note" name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} value={this.state.text} onChange={this.onEdit} id="summary"/>
         }
         <button className="fixed" type="submit">Summarize</button>
-        <button onClick={this.saveSummary} className="fixed save">Save</button>
+        <button onClick={this.updateNote} className="fixed save">Save</button>
       </form>
         <div className="brevity fixed fixed-slider">
           <label>Brevity {this.state.brevity}%</label>
           <input type="range" min="1" max="100" className="slider" id="myRange" value={this.state.brevity} onChange={this.changeBrevity} />
         </div>
+        <div className="footer">
+          <button className="button" onClick={this.toggleEditMode}><img src={edit_icon_white} alt="edit_icon_white"/></button>
+          <button className="button" onClick={this.toggleOptions}>?</button>
+        </div>
+        {this.state.options
+          ?
+          (<div className="options drop">
+            <p onClick={this.exportToText}>Export to text File</p>
+            {this.state.token !== 'undefined' ? <p onClick={this.exportToGoogle}>Export to Google Drive</p> : null}
+          </div>) : null
+        }
       </div>
     );
   }
