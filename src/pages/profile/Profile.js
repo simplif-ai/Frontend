@@ -26,7 +26,6 @@ class Profile extends Component {
   componentDidMount() {
     const { cookies } = this.props;
     const email = cookies.get('email');
-    console.log('email', email);
     return apiFetch('profile',{
         headers: {
          'Content-Type': 'text/plain'
@@ -37,13 +36,11 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
           }
           else {
-            console.log('componentDidMount on load',json);
             this.setState({
               error: null,
               name: json.name,
@@ -56,12 +53,6 @@ class Profile extends Component {
   editProfile = (e) => {
     this.setState({ editMode: false });
     e.persist();
-    const req = {
-        email: this.state.email,
-        newEmail: e.target.email.value,
-        newName: e.target.name.value
-    }
-    console.log('req', req);
     return apiFetch('editProfile',{
         headers: {
          'Content-Type': 'text/plain'
@@ -74,7 +65,6 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
@@ -130,12 +120,6 @@ class Profile extends Component {
     this.setState({ editPassword: false})
     const { cookies } = this.props;
     const email = cookies.get('email');
-    const req = {
-        email: email,
-        password: e.target.password.value,
-        newPassword: e.target.npassword.value
-    }
-    console.log('req', req);
     return apiFetch('changePassword', {
         headers: {
          'Content-Type': 'text/plain'
@@ -148,13 +132,11 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
           }
           else {
-            console.log('json',json);
             console.log('password was updated');
           }
         });
@@ -173,7 +155,6 @@ class Profile extends Component {
               this.setState({ error: json.error });
               const { cookies } = this.props;
               cookies.set('isAuthenticated', false, { path: '/' });
-              console.log('cookie', cookies.get('isAuthenticated'));
           }
           else {
             console.log('json',json);
@@ -184,22 +165,21 @@ class Profile extends Component {
           }
         });
   }
-  handleSubmit = (e) => {
+  savePicture = (e) => {
     e.preventDefault();
     const formData  = new FormData();
     const { cookies } = this.props;
     const email = cookies.get('email');
     formData.append('file', this.state.file);
     formData.append('email', email);
-    console.log('formData', formData.get('email'));
-    console.log('formData', formData.get('file'));
     apiFetch('addpicture', {
       body: formData,
       method: 'POST'
     }).then(response =>
-      response
+      response.text()
     ).then((json) => {
-        if (json.ok === false) {
+        json = JSON.parse(json);
+        if (json.success === false) {
             console.log('error', json.error);
         }
         else {
@@ -224,7 +204,6 @@ class Profile extends Component {
   }
   render() {
     const { cookies } = this.props;
-    console.log('cookies', cookies);
     const isAuthenticated = cookies.get('isAuthenticated');
     if (isAuthenticated === "false" || !isAuthenticated || this.state.redirect === true) {
       return (<Redirect to="/"/>);
@@ -237,7 +216,7 @@ class Profile extends Component {
           <h2 className="topSpacing questrial">{this.state.name}</h2>
           <p className="title">{this.state.email}</p>
         </div>
-        <form className="image-upload" onSubmit={this.handleSubmit}>
+        <form className="image-upload" onSubmit={this.savePicture}>
           <input className="fileInput"
             type="file"
             onChange={this.handleImageChange} />
@@ -280,7 +259,6 @@ class Profile extends Component {
           </form>
           ) : null
         }
-        <div className="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
       </div>
     );
   }
