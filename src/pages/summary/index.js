@@ -23,7 +23,8 @@ class Summary extends Component {
       toggleEdit: false,
       sentenceCount: null,
       text: '',
-      receivedSummary: false
+      receivedSummary: false,
+      error: null
     };
   }
   updateSummary = () => {
@@ -146,6 +147,9 @@ class Summary extends Component {
       <form onSubmit={this.summarize}>
         <h1>Title</h1>
         <button className="icon orange"><img src={edit_icon_orange} alt="edit"/></button>
+        <div className = "errorClass">
+          {this.state.error ? `Error= ${this.state.error}` : null}
+        </div>
         {this.state.toggleEdit ?
           {sentences}
           :

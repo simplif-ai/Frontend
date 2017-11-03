@@ -1,5 +1,4 @@
 .profileCard {
-  float:left;
   background-color: white;
   width: 200px;
   padding: 3px 16px;
@@ -49,4 +48,10 @@
   width: 267px;
   margin: 0 auto;
   padding: 20px 0;
+}
+
+.schemeButton {
+  float:left;
+  padding: 20px 0;
+  
 }

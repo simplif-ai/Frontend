@@ -5,9 +5,6 @@ import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import apiFetch from '../../utils/api.js';
 
-//TODO: replace w/ <tr> props of summary stuff
-      //also profile stuff
-
 class Profile extends Component {
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired
@@ -230,6 +227,7 @@ class Profile extends Component {
           </table>
         </div>
         <button onClick={this.toggleEditMode}>Edit Profile</button>
+        <button /*onClick={change color scheme}*/>Toggle Scheme</button>
         {this.state.editMode ? (
           <form className="form-width" onSubmit={this.editProfile}>
             <h1>Edit Profile</h1>
