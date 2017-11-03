@@ -11,7 +11,7 @@ class App extends Component {
     const { cookies } = this.props;
     return(
       <BrowserRouter>
-        <div className={`${cookies.get('scheme')}`}>
+        <div className={`${cookies.get('scheme')} ${cookies.get('night')}`}>
           <Nav />
           <Routes/>
         </div>

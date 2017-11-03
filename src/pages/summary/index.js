@@ -43,7 +43,6 @@ class Summary extends Component {
   }
   componentDidMount() {
     const { cookies } = this.props;
-    const email = cookies.get('email');
     this.setState({
       noteID: this.props.match.params.noteID,
       token: cookies.get('token')
@@ -280,7 +279,8 @@ class Summary extends Component {
       nightMode: !this.state.nightMode
     });
     const { cookies } = this.props;
-    cookies.get('scheme') === 'bgnight' ? cookies.set('scheme','') : cookies.set('scheme','bgnight');
+    cookies.set('scheme','');
+    cookies.get('night') === 'bgnight' ? cookies.set('night','') : cookies.set('night','bgnight');
 
     window.location.reload();
   }

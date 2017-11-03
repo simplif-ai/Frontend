@@ -275,7 +275,7 @@ class Profile extends Component {
     const { cookies } = this.props;
     //cookies.set('scheme','bgnight');
 
-    cookies.get('scheme') === 'bgnight' ? cookies.set('scheme','bgorange') : cookies.set('scheme','bgnight');
+    cookies.get('scheme') === 'bgred' ? cookies.set('scheme','bgorange') : cookies.set('scheme','bgred');
 
     console.log('cookie', cookies.get('scheme'));
     window.location.reload();
