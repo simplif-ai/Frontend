@@ -43,34 +43,9 @@ class Summary extends Component {
   }
   componentDidMount() {
     const { cookies } = this.props;
-    const email = cookies.get('email');
     this.setState({
       noteID: this.props.match.params.noteID,
       token: cookies.get('token')
-    });
-    return apiFetch('listnotes', {
-      headers: {
-       'Content-Type': 'text/plain'
-      },
-      body: JSON.stringify({
-        email: email
-      }),
-      method: 'POST'
-    }).then(response => response.json()
-    ).then((json) => {
-      if (json.success === false) {
-          console.log('error', json.error);
-      }
-      else {
-        console.log('success',json);
-        json.forEach(note => {
-          if (note[0] === this.props.match.params.noteID) {
-            this.setState({
-              tite: note[1]
-            });
-          }
-        });
-      }
     });
   }
   updateResponse = (index, priority) => {
@@ -304,12 +279,10 @@ class Summary extends Component {
       nightMode: !this.state.nightMode
     });
     const { cookies } = this.props;
-    if (this.state.nightMode === true) {
-      cookies.set('night', '');
-    } else {
-      cookies.set('night', 'night');
-    }
-    console.log('cookie', cookies.get('night'));
+    cookies.set('scheme','');
+    cookies.get('night') === 'bgnight' ? cookies.set('night','') : cookies.set('night','bgnight');
+
+    window.location.reload();
   }
   render() {
     const { cookies } = this.props;
@@ -321,6 +294,7 @@ class Summary extends Component {
     this.state.sentences.forEach(sentence => {
       sentences.push(<p>{sentence}</p>);
     });
+    console.log('params', this.props.match.params.noteID);
     return (
       <div className="summary">
       {this.state.wait ? <Loader/> : null}

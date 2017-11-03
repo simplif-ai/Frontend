@@ -173,10 +173,12 @@ class Summary extends Component {
             }.bind(this), 2000);
         }
         else {
+          console.log('json', json);
           this.setState({
-            newNote: true,
-            noteID: json.nodeID
+            noteID: json.noteID,
+            newNote: true
           });
+          console.log("noteID", this.state.noteID);
         }
       });
   }
@@ -186,8 +188,9 @@ class Summary extends Component {
     if (isAuthenticated === "false" || !isAuthenticated) {
       return (<Redirect to="/login"/>);
     }
-    if (this.state.newNote === true) {
-      return <Redirect to={`/notes/${this.state.nodeID}`} />
+    if (this.state.newNote === true && this.state.nodeID !== 0) {
+      console.log('this.state.noteID', this.state.noteID);
+      return <Redirect to={`/notes/${this.state.noteID}`} />
     }
     let google = true;
     const token = cookies.get('token');
@@ -195,7 +198,7 @@ class Summary extends Component {
       google = true;
     }
     return (
-      <div className="summary">
+      <div className="summary page">
         <div className="title-icon">
           <h1>My Notes</h1>
           <button className="icon orange" onClick={this.createNote} onMouseOver={this.popUp}><img src={plusIcon} alt="edit"/></button>

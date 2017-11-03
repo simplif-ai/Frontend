@@ -46,7 +46,7 @@ p {
 }
 
 .bgnight {
-  background-color: #1A334F;
+  background-color: #395f89;
   color: #F9B045;
 }
 errorClass {
@@ -54,12 +54,23 @@ errorClass {
 }
 
 .bgnight .bgorange {
-  background-color: #1A334F;
+  background-color: #395f89;
+  color: #fb6969;
+}
+.bgred .bgorange, .bgred {
+  background-color: #fb6969;
   color: #F9B045;
 }
 
+.bgorange .bar1, .bgorange .bar2, .bgorange .bar3{
+  background: white;
+}
+
+.bgnight .orange, .bgorange .orange, .bgred .orange {
+  background: none;
+}
 .night {
-  background: #1A334F;
+  background: #3d6592;
 }
 
 .night p, .night h1 {
