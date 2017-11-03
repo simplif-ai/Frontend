@@ -30,7 +30,7 @@ class Summary extends Component {
       error: null,
       title: '',
       editTitle: false,
-      wait: false,
+      wait: false
     };
   }
   updateResponse = (index, priority) => {
@@ -134,7 +134,7 @@ class Summary extends Component {
       }),
       method: 'POST'
     }).then(response =>
-      response.json()
+      response
     ).then((json) => {
         if (json.success === false) {
             console.log('error', json.error);

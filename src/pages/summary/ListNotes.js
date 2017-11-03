@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withCookies } from 'react-cookie';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import '../../css/summary.css';
 
@@ -48,7 +48,11 @@ class Summary extends Component {
         <h1>My Notes</h1>
         {this.state.notes.length > 0 ?
           this.state.notes.map(note => {
-            return (<div><h2>{note.name}</h2><p>{note.noteId}</p></div>);
+            console.log('note', note);
+            if (note.name === '') {
+              note.name = 'Undefined Title';
+            }
+            return (<Link to={`/notes/${note.noteID}}`} key={`${note.name} ${note.noteID}`}><h2>{note.name}</h2><p>{note.noteID}</p></Link>);
           })
           : null
         }

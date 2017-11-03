@@ -18,7 +18,9 @@ class Profile extends Component {
       error: null,
       editMode: false,
       redirect: false,
-      editPassword: false
+      editPassword: false,
+      file: '',
+      imagePreviewUrl: ''
     };
   }
   componentDidMount() {
@@ -182,50 +184,67 @@ class Profile extends Component {
           }
         });
   }
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const formData  = new FormData();
+    const { cookies } = this.props;
+    const email = cookies.get('email');
+    formData.append('file', this.state.file);
+    formData.append('email', email);
+    console.log('formData', formData.get('email'));
+    console.log('formData', formData.get('file'));
+    apiFetch('addpicture', {
+      body: formData,
+      method: 'POST'
+    }).then(response =>
+      response
+    ).then((json) => {
+        if (json.ok === false) {
+            console.log('error', json.error);
+        }
+        else {
+          console.log('success',json, 'The profile pic was saved!');
+        }
+      });
+  }
+
+  handleImageChange = (e) => {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        file: file,
+        imagePreviewUrl: reader.result
+      });
+    }
+    reader.readAsDataURL(file)
+  }
   render() {
     const { cookies } = this.props;
+    console.log('cookies', cookies);
     const isAuthenticated = cookies.get('isAuthenticated');
     if (isAuthenticated === "false" || !isAuthenticated || this.state.redirect === true) {
       return (<Redirect to="/"/>);
     }
+    let {imagePreviewUrl} = this.state;
     return (
       <div className="page bgorange inline-block">
         <div className="profileCard">
-          <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png" alt="cute prof pic"/>
+          <img src={imagePreviewUrl} alt="cute prof pic"/>
           <h2 className="topSpacing questrial">{this.state.name}</h2>
           <p className="title">{this.state.email}</p>
         </div>
-        <label style={{"marginBottom": "15px"}}><h2>Summaries<span/> </h2></label>
-        <div className="col-3 col-m-3">
-          <table>
-            <tbody>
-              <tr className="card">
-                  <th className="header">
-                    <b>Example Summary 1</b>
-                  </th>
-                  <th className="profile-container">
-                    Example Summary 1 lorem ipsum woooo look at all the text that has been summarized here
-                  </th>
-              </tr>
-              <tr className="card">
-                  <th className="header">
-                    <b>Example Summary 2</b>
-                  </th>
-                  <th className="profile-container">
-                    Example Summary 2 lorem ipsum woooo look at all the text that has been summarized here
-                  </th>
-              </tr>
-              <tr className="card">
-                  <th className="header">
-                    <b>Example Summary 3</b>
-                  </th>
-                  <th className="profile-container">
-                    Example Summary 3 lorem ipsum woooo look at all the text that has been summarized here
-                  </th>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <form className="image-upload" onSubmit={this.handleSubmit}>
+          <input className="fileInput"
+            type="file"
+            onChange={this.handleImageChange} />
+          <button className="submitButton"
+            type="submit"
+            onClick={this.handleSubmit}>Upload Image</button>
+        </form>
         <button onClick={this.toggleEditMode}>Edit Profile</button>
         <button /*onClick={change color scheme}*/>Toggle Scheme</button>
         {this.state.editMode ? (

@@ -15,6 +15,13 @@
   display:inline-block;
   max-width:100%;
   margin-top: 10px;
+  width: 64px;
+  height: 64px;
+  background: #FCCD8C;
+}
+.image-upload {
+  width: 235px;
+  margin: 20px auto;
 }
 .card {
     padding: 20px;
@@ -53,5 +60,5 @@
 .schemeButton {
   float:left;
   padding: 20px 0;
-  
+
 }
