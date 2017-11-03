@@ -6,6 +6,12 @@ body {
   width: 100%;
   font-size: 15px;
 }
+.crimson {
+  font-family: 'Crimson Text', serif;
+}
+.questrial {
+  font-family: 'Questrial', sans-serif;
+}
 html, body, #root, .app-root {
   height: 100%;
   margin: 0;
@@ -33,41 +39,15 @@ p {
 .page {
   padding: 20px;
 }
-
 .bgorange {
   background-color: #F9B045;
   color: #1A334F;
 }
 
-/*Starting animation stuff! I guess*/
-.svg {
-  width: 10%;
-  height: auto;
+.bgnight {
+  background-color: #1A334F;
+  color: #F9B045;
 }
-
-@keyframes planeguy {
-  0%   {
-    transform: translateY(0);
-    opacity: .1;
-    }
-  25%  {
-    transform: translateY(-25px);
-    opacity: .1;
-    }
-  75%  {
-    transform: translateY(25px);
-    opacity: .1;
-    }
-  100% {
-    transform: translateY(0);
-    opacity: .1;
-    }
-}
-
-/*on load, fadeout.plane*/
-.plane {
-  animation: planeguy 8s linear infinite;
-  display:block;
-  position:absolute;
-  z-index: 4;
+errorClass {
+  display:inline-block;
 }

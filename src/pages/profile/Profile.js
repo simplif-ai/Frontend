@@ -5,9 +5,6 @@ import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import apiFetch from '../../utils/api.js';
 
-//TODO: replace w/ <tr> props of summary stuff
-      //also profile stuff
-
 class Profile extends Component {
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired
@@ -30,8 +27,7 @@ class Profile extends Component {
     console.log('email', email);
     return apiFetch('profile',{
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+         'Content-Type': 'text/plain'
         },
         method: 'POST',
         body: JSON.stringify({
@@ -66,8 +62,7 @@ class Profile extends Component {
     console.log('req', req);
     return apiFetch('editProfile',{
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+         'Content-Type': 'text/plain'
         },
         method: 'POST',
         body: JSON.stringify({
@@ -102,8 +97,7 @@ class Profile extends Component {
     const email = cookies.get('email');
     return apiFetch('deleteAccount',{
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+         'Content-Type': 'text/plain'
         },
         method: 'POST',
         body: JSON.stringify({
@@ -142,8 +136,7 @@ class Profile extends Component {
     console.log('req', req);
     return apiFetch('changePassword', {
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+         'Content-Type': 'text/plain'
         },
         method: 'POST',
         body: JSON.stringify({
@@ -167,8 +160,7 @@ class Profile extends Component {
   googleLogin = () => {
     return apiFetch('loginToGoogle',{
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+         'Content-Type': 'text/plain'
         },
         method: 'POST',
     }).then((response) => response.json())
@@ -200,57 +192,54 @@ class Profile extends Component {
       <div className="page bgorange inline-block">
         <div className="profileCard">
           <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png" alt="cute prof pic"/>
-          <div className="title">{this.state.name}</div>
+          <h2 className="topSpacing questrial">{this.state.name}</h2>
           <p className="title">{this.state.email}</p>
         </div>
-        <label style={{"margin-bottom": "15px"}}><b>Summaries<span/> </b></label>
+        <label style={{"marginBottom": "15px"}}><h2>Summaries<span/> </h2></label>
         <div className="col-3 col-m-3">
           <table>
-            <td>
-              <div className="card">
-                <div className="header">
-                  <b>Example Summary1</b>
-                </div>
-                <div className="profile-container">
-                  Example Summary 1 lorem ipsum woooo look at all the text that has been summarized here
-                  </div>
-              </div>
-            </td>
-            <td>
-              <div className="card">
-                <div className="header">
-                  <b>Example Summary2</b>
-                </div>
-                <div className="profile-container">
-                  Example Summary 2 lorem ipsum woooo look at all the text that has been summarized here
-                  </div>
-              </div>
-            </td>
-            <td>
-              <div className="card">
-                <div className="header">
-                  <b>Example Summary3</b>
-                </div>
-                <div className="profile-container">
-                  Example Summary 3 lorem ipsum woooo look at all the text that has been summarized here
-                  </div>
-              </div>
-            </td>
-
+            <tbody>
+              <tr className="card">
+                  <th className="header">
+                    <b>Example Summary 1</b>
+                  </th>
+                  <th className="profile-container">
+                    Example Summary 1 lorem ipsum woooo look at all the text that has been summarized here
+                  </th>
+              </tr>
+              <tr className="card">
+                  <th className="header">
+                    <b>Example Summary 2</b>
+                  </th>
+                  <th className="profile-container">
+                    Example Summary 2 lorem ipsum woooo look at all the text that has been summarized here
+                  </th>
+              </tr>
+              <tr className="card">
+                  <th className="header">
+                    <b>Example Summary 3</b>
+                  </th>
+                  <th className="profile-container">
+                    Example Summary 3 lorem ipsum woooo look at all the text that has been summarized here
+                  </th>
+              </tr>
+            </tbody>
           </table>
         </div>
         <button onClick={this.toggleEditMode}>Edit Profile</button>
+        <button /*onClick={change color scheme}*/>Toggle Scheme</button>
         {this.state.editMode ? (
-          <form onSubmit={this.editProfile}>
+          <form className="form-width" onSubmit={this.editProfile}>
+            <h1>Edit Profile</h1>
             <div className = "errorClass">
               {this.state.error ? `Error= ${this.state.error}` : null}
             </div>
             <label htmlFor="name">Name </label>
-            <input type="text" name="name" required />
+            <input type="text" name="name" />
             <label htmlFor="email">Email </label>
-            <input type="email" name="email" required />
+            <input type="email" name="email" />
             <br/>
-            <input className="btn" type="submit" name="submit" value="submit" />
+            <input className="btn" type="submit" name="submit" value="Save" />
           </form>
         ) : null
         }
@@ -258,21 +247,21 @@ class Profile extends Component {
         <button onClick={this.googleLogin}>Login With Google</button>
         <button onClick={this.toggleUpdatePassword}>Update Password</button>
         {this.state.editPassword ?
-          (<form onSubmit={this.updatePassword}>
+          (<form  className="form-width" onSubmit={this.updatePassword}>
+            <h1>Edit Password</h1>
             <div className = "errorClass">
               {this.state.error ? `Error= ${this.state.error}` : null}
             </div>
             <label htmlFor="password">Current Password </label>
-            <input type="password" name="password" required />
+            <input type="password" name="password" />
             <label htmlFor="npassword">New Password </label>
-            <input type="password" name="npassword" required />
+            <input type="password" name="npassword" />
             <br/>
-            <input className="btn" type="submit" name="submit" value="submit" />
+            <input className="btn" type="submit" name="submit" value="Save" />
           </form>
-        ) : null
+          ) : null
         }
-
-            <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+        <div className="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
       </div>
     );
   }

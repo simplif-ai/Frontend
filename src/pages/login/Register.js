@@ -5,19 +5,34 @@ import apiFetch from '../../utils/api.js';
 import '../../css/login.css';
 
 class Register extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      checked: false
+    }
+  }
+  toggleChecked = () => {
+    this.setState({
+      checked: !this.state.checked
+    });
+  }
   register = (e) => {
     e.preventDefault();
+    let checked = 0;
+    if (e.target.prefersEmailUpdates.value === true) {
+      checked = 1;
+    }
     return apiFetch('createAccount',{
       headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json'
+        'Content-Type': 'text/plain'
       },
       method: 'POST',
       body: JSON.stringify({
         name: e.target.fname.value,
         email: e.target.email.value,
         password: e.target.password.value,
-        prefersEmailUpdates: 0
+        phoneNumber: e.target.phone.value,
+        prefersEmailUpdates: checked
       })
     }).then((response) => response.json())
         .then((json) => {
@@ -29,7 +44,6 @@ class Register extends Component {
             console.log('register success json',json);
           }
         });
-
   }
   render() {
     const { error } = this.props;
@@ -49,6 +63,12 @@ class Register extends Component {
             <input type="text" name="fname" required />
             <label htmlFor="email" >Email</label>
             <input type="text" name="email" required />
+            <label htmlFor="phone" >Phone Number</label>
+            <input type="text" name="phone" required />
+            <div className="check-con">
+              <input type="checkbox" name="prefersEmailUpdates" onChange={this.toggleChecked} value={this.state.checked} />
+              <label htmlFor="prefersEmailUpdates">Prefer Email Updates</label>
+            </div>
             <label htmlFor="password">Password</label>
             <input type="password" name="password" required /><br/>
             <input className="btn" type="submit" value="Submit" />

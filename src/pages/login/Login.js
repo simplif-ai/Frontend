@@ -3,11 +3,10 @@ import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 import LoginForm from './LoginForm';
 import { Redirect } from 'react-router-dom';
-
+import Loader from '../components/Loader';
 import '../../css/login.css';
 import '../../css/register.css';
 import apiFetch from '../../utils/api.js';
-import plane from '../../assets/background/white-plane.svg';
 
 class Login extends Component {
   static propTypes = {
@@ -28,12 +27,9 @@ class Login extends Component {
       password: e.target.password.value,
     }
     console.log('req', req);
-
-
     return apiFetch('login',{
         headers: {
-         'Accept': 'application/json',
-         'Content-Type': 'application/json'
+          'Content-Type': 'text/plain'
         },
         method: 'POST',
         body: JSON.stringify({
@@ -68,11 +64,11 @@ class Login extends Component {
     }
     return (
       <div className="page bgorange">
-        <img src={plane} width="20%" className="plane" alt="plane"/>
+        <Loader/>
         <div className="logo">
           simplif.ai
         </div>
-        <h1>Create an account</h1>
+        <h1>Login</h1>
         <div className="registerbox">
             <LoginForm login={this.handleSubmit} error={this.state.error} googleLogin={this.googleLogin}/>
         </div>

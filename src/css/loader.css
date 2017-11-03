@@ -1,0 +1,39 @@
+.loading {
+  font-size: 30px;
+}
+
+.loading::after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;   
+  animation: ellipsis steps(4,end) 4000ms infinite;
+  content: "\2026"; /* ascii code for the ellipsis character */
+  width: 0px;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 1.25em;    
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 1.25em;    
+  }
+}
+
+@keyframes planeguy {
+   0% {transform: rotate(360deg) translateX(250px) translateY(10px);}
+   25% {transform: rotate(180deg) translate(125px) translateY(50px);}
+   40% { transform: rotate(0deg) translateX(250px) translateY(-25px);}
+   100% { transform: translateY(-1500px) translateX(1000px);}
+}
+
+.plane {
+  animation: planeguy 4s linear infinite;
+  display: block;
+  position: absolute;
+  opacity: .5;
+  z-index: 4;
+}

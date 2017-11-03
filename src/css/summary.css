@@ -13,7 +13,7 @@ button {
   padding: 10px 20px;
   color: white;
   border: none;
-  margin-top: 10px;
+  margin: 5px 10px;
 }
 
 button:focus {
@@ -129,8 +129,8 @@ textarea:focus {
   bottom: 20px;
   position: fixed;
 }
-.summarize {
-  margin-left: -60px;
+.save {
+  margin-left: -100px;
 }
 .fixed-slider {
   left: 20px;
@@ -140,4 +140,35 @@ textarea:focus {
   .summary {
     padding: 0 20%;
   }
+}
+errorClass {
+  display:inline-block;
+}
+/*plus/minus for modifying*/
+.modify-button {
+  z-index: 1;
+  opacity: .5;
+  border-radius: 50%; 
+  text-align: center;
+  background-color: #FFFFFF; 
+  color: #1A334F;
+
+}
+.modify-button.hover {
+  opacity: 1;
+}
+.modify-button.after {
+content: '';
+	position: absolute;
+  /*change position relative to sentence? always on side? dependent on cursor? will test*/
+	bottom: 50%;
+	left: 0;
+	width: 0;
+	height: 0;
+	border: 20px solid transparent;
+	border-top-color: #FFFFFF;
+	border-bottom: 0;
+	border-left: 0;
+	margin-left: -10px;
+	margin-bottom: -20px;
 }

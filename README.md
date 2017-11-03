@@ -1,5 +1,5 @@
 # Frontend
-
+[![Build Status](https://travis-ci.org/simplif-ai/Frontend.svg?branch=develop)](https://travis-ci.org/simplif-ai/Frontend)
 ## About
 This folder contains the frontend for our application
 
