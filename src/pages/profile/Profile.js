@@ -274,7 +274,9 @@ class Profile extends Component {
   toggleScheme = () => {
     const { cookies } = this.props;
     //cookies.set('scheme','bgnight');
+
     cookies.get('scheme') === 'bgnight' ? cookies.set('scheme','bgorange') : cookies.set('scheme','bgnight');
+
     console.log('cookie', cookies.get('scheme'));
     window.location.reload();
   }

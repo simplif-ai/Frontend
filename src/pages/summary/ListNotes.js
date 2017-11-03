@@ -195,7 +195,7 @@ class Summary extends Component {
       google = true;
     }
     return (
-      <div className="summary">
+      <div className="summary page">
         <div className="title-icon">
           <h1>My Notes</h1>
           <button className="icon orange" onClick={this.createNote} onMouseOver={this.popUp}><img src={plusIcon} alt="edit"/></button>

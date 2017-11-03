@@ -304,12 +304,9 @@ class Summary extends Component {
       nightMode: !this.state.nightMode
     });
     const { cookies } = this.props;
-    if (this.state.nightMode === true) {
-      cookies.set('night', '');
-    } else {
-      cookies.set('night', 'night');
-    }
-    console.log('cookie', cookies.get('night'));
+    cookies.get('scheme') === 'bgnight' ? cookies.set('scheme','') : cookies.set('scheme','bgnight');
+
+    window.location.reload();
   }
   render() {
     const { cookies } = this.props;
