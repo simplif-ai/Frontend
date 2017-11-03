@@ -3,6 +3,7 @@ import { withCookies } from 'react-cookie';
 import { Redirect } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import FolderForm from './FolderForm';
+import CollabForm from './CollabForm';
 import '../../css/summary.css';
 
 class Summary extends Component {
@@ -41,7 +42,7 @@ class Summary extends Component {
         }
       });
   }
-  handleSubmit = (e) => { /*Sorry Audrey :< */
+  handleFSubmit = (e) => { /*Sorry Audrey :< */
     e.preventDefault();
     e.persist();
     const req = {
@@ -56,6 +57,37 @@ class Summary extends Component {
         method: 'POST',
         body: JSON.stringify({
           name: e.target.name.value,
+        })
+    }).then((response) => response.json())
+        .then((json) => {
+          console.log('response', json);
+          if(json.success === false) {
+              console.log('error', json.error);
+              this.setState({ error: json.error });
+          }
+          else {
+            console.log('json',json);
+            this.setState('success',json.success);
+          }
+        });
+  };
+  handleCSubmit = (e) => { /*Double sorry, Audrey*/
+    e.preventDefault();
+    e.persist();
+    const req = {
+      collaboratorEmail: e.target.collabEmail.value,
+      fileID: e.target.fileId.value/*,
+      googleToken: */
+    }
+    console.log('req', req);
+    return apiFetch('addCollaborator',{
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          collaboratorEmail: e.target.collabEmail.value,
+          fileID: e.target.fileId.value
         })
     }).then((response) => response.json())
         .then((json) => {
@@ -85,11 +117,14 @@ class Summary extends Component {
           })
           : null
         }
-        <h2> Create a New Simplif.ai Folder </h2>
-        <div className="folderField">
-          <FolderForm folder={this.handleSubmit}/>
+        <div className="inputField">
+          <h2> Create a new Simplif.ai folder </h2>
+          <FolderForm folder={this.handleFSubmit}/>
+          <h2>Add collaborator to folder</h2>
+          <CollabForm collab={this.handleCSubmit}/>
         </div>
       </div>
+      
     );
   }
 }

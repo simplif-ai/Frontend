@@ -11,14 +11,6 @@
 }
 .container:hover{
   opacity:1;
-  /*border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  border: 1px solid #95989A;
-  transition: border-color .2s ease-in-out;
- -moz-transition: border-color .2s ease-in-out;
- -webkit-transition: border-color .2s ease-in-out;
- -o-transition: border-color .2s ease-in-out;*/
 }
 
 .bar1, .bar2, .bar3 {
