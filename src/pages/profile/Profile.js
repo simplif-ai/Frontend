@@ -271,6 +271,13 @@ class Profile extends Component {
     }
     reader.readAsDataURL(file)
   }
+  toggleScheme = () => {
+    const { cookies } = this.props;
+    //cookies.set('scheme','bgnight');
+    cookies.get('scheme') === 'bgnight' ? cookies.set('scheme','bgorange') : cookies.set('scheme','bgnight');
+    console.log('cookie', cookies.get('scheme'));
+    window.location.reload();
+  }
   render() {
     const { cookies } = this.props;
     console.log('render', cookies.get('token'), 'is empty', cookies.get('token') !== '');
@@ -296,7 +303,7 @@ class Profile extends Component {
             onClick={this.handleSubmit}>Upload Image</button>
         </form>
         <button onClick={this.toggleEditMode}>Edit Profile</button>
-        <button /*onClick={change color scheme}*/>Toggle Scheme</button>
+        <button onClick={this.toggleScheme}>Toggle Scheme</button>
         {this.state.editMode ? (
           <form className="form-width" onSubmit={this.editProfile}>
             <h1>Edit Profile</h1>
