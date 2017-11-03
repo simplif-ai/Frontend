@@ -41,7 +41,7 @@ class PasswordReset extends Component {
             </label>
             <input type="email" name="email" required />
             <input className="btn" type="submit" value="submit" style={{"color":"#1A334F"}}/>
-            <a href='/login' style={{"display":"block", "margin-bottom":"6px"}}>Already have an account? Sign In</a>
+            <a href='/login' style={{"display":"block", "marginBottom":"6px"}}>Already have an account? Sign In</a>
             <a href='/register' style={{"display":"block"}}>Or register for an account.</a>
           </form>
         </div>

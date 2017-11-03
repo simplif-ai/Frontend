@@ -6,7 +6,7 @@ import '../../css/nav.css';
 
 class Nav extends Component {
   static propTypes = {
-    cookies: instanceOf(Cookies).isRequired
+    cookies: instanceOf(Cookies)
   };
   constructor(props) {
     super(props);

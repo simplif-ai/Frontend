@@ -52,6 +52,7 @@ class Login extends Component {
             cookies.set('isAuthenticated', true);
             cookies.set('login', true);
             cookies.set('jwt', json.token);
+            cookies.set('token', '');
             this.setState({redirectToReferrer: true, error: null});
             cookies.set('email', e.target.email.value, { path: '/' });
           }

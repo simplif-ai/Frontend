@@ -3,14 +3,20 @@ import '../../css/profile.css';
 import { Redirect } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
+import {withRouter} from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 
 class Profile extends Component {
   static propTypes = {
-    cookies: instanceOf(Cookies).isRequired
+    cookies: instanceOf(Cookies)
   };
   constructor(props) {
     super(props);
+    const { cookies } = this.props;
+    let tokenFromCookie = '';
+    if (cookies.get('token') !== '') {
+      tokenFromCookie = cookies.get('token');
+    }
     this.state = {
       name: '',
       email: '',
@@ -18,13 +24,109 @@ class Profile extends Component {
       error: null,
       editMode: false,
       redirect: false,
-      editPassword: false
+      editPassword: false,
+      file: '',
+      imagePreviewUrl: '',
+      token: tokenFromCookie
     };
+  }
+  linkGoogleAccount = () => {
+    const { cookies } = this.props;
+    if (cookies.get('token') !== '') {
+      this.setState({
+        error: "You are already successfully linked to a google account!!"
+      });
+      return;
+    }
+
+    var e = document.createElement("a");
+    console.log('link google', this.state.token);
+    let token = this.state.token;
+    // let token = '';
+
+    if (typeof this.state.token === 'undefined') {
+      token = '';
+    }
+    console.log('token 2', token);
+    apiFetch('loginToGoogle',{
+        headers: {
+         'Content-Type': 'text/plain'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          googleCode: token
+        })
+    }).then((response) => response.json())
+        .then((json) => {
+          console.log('response', json);
+          if(json.success === false) {
+              console.log('error', json.error);
+              e.href = json.authorizeURL;
+              e.click();
+          }
+          else {
+            console.log('json',json);
+            const { cookies } = this.props;
+            cookies.set('token', JSON.stringify(json.googleToken));
+            console.log('saved token', cookies.get('token'));
+            this.setState({
+              token: json.googleToken,
+              error: "You successfully linked you're google account"
+            });
+            window.setTimeout(function() {
+              this.setState({
+                error: ''
+              });
+            }.bind(this), 4000);
+          }
+        });
+  }
+  componentWillMount() {
+    if (this.state.token === '') {
+      console.log('componentWillMount');
+      let url = this.props.location.search;
+      let parsedToken = '';
+      url = url.split('=');
+      if (url) {
+        parsedToken = url[1];
+      }
+      console.log('token', parsedToken);
+
+      this.setState({
+        token: parsedToken,
+        error: '',
+      });
+      console.log('state token', this.state.token);
+      if (this.state.token.length > 0) {
+        console.log('call link google');
+        this.linkGoogleAccount();
+      }
+    }
   }
   componentDidMount() {
     const { cookies } = this.props;
     const email = cookies.get('email');
-    console.log('email', email);
+    if (this.state.token === '') {
+      console.log('componentDidMount');
+      let url = this.props.location.search;
+      let parsedToken = '';
+      url = url.split('=');
+      if (url) {
+        parsedToken = url[1];
+      }
+      console.log('token', parsedToken);
+
+      this.setState({
+        token: parsedToken,
+        error: '',
+      });
+      console.log('state token', this.state.token);
+    }
+    if (this.state.token && this.state.token.length > 0) {
+      console.log('call link google');
+      this.linkGoogleAccount();
+    }
+
     return apiFetch('profile',{
         headers: {
          'Content-Type': 'text/plain'
@@ -35,13 +137,11 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
           }
           else {
-            console.log('componentDidMount on load',json);
             this.setState({
               error: null,
               name: json.name,
@@ -54,12 +154,6 @@ class Profile extends Component {
   editProfile = (e) => {
     this.setState({ editMode: false });
     e.persist();
-    const req = {
-        email: this.state.email,
-        newEmail: e.target.email.value,
-        newName: e.target.name.value
-    }
-    console.log('req', req);
     return apiFetch('editProfile',{
         headers: {
          'Content-Type': 'text/plain'
@@ -72,7 +166,6 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
@@ -128,12 +221,6 @@ class Profile extends Component {
     this.setState({ editPassword: false})
     const { cookies } = this.props;
     const email = cookies.get('email');
-    const req = {
-        email: email,
-        password: e.target.password.value,
-        newPassword: e.target.npassword.value
-    }
-    console.log('req', req);
     return apiFetch('changePassword', {
         headers: {
          'Content-Type': 'text/plain'
@@ -146,41 +233,52 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
           }
           else {
-            console.log('json',json);
             console.log('password was updated');
           }
         });
   }
-  googleLogin = () => {
-    return apiFetch('loginToGoogle',{
-        headers: {
-         'Content-Type': 'text/plain'
-        },
-        method: 'POST',
-    }).then((response) => response.json())
-        .then((json) => {
-          console.log('response', json);
-          if(json.success === false) {
-              console.log('error', json.error);
-              this.setState({ error: json.error });
-              const { cookies } = this.props;
-              cookies.set('isAuthenticated', false, { path: '/' });
-              console.log('cookie', cookies.get('isAuthenticated'));
-          }
-          else {
-            console.log('json',json);
-            const { cookies } = this.props;
-            cookies.set('isAuthenticated', true);
-            cookies.set('login', true);
-            cookies.set('jwt-google', json.token);
-          }
-        });
+  savePicture = (e) => {
+    e.preventDefault();
+    const formData  = new FormData();
+    const { cookies } = this.props;
+    const email = cookies.get('email');
+    formData.append('file', this.state.file);
+    formData.append('email', email);
+    apiFetch('addpicture', {
+      body: formData,
+      method: 'POST'
+    }).then(response =>
+      response.text()
+    ).then((json) => {
+        json = JSON.parse(json);
+        if (json.success === false) {
+            console.log('error', json.error);
+        }
+        else {
+          console.log('success',json, 'The profile pic was saved!');
+          window.location.reload();
+        }
+      });
+  }
+
+  handleImageChange = (e) => {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        file: file,
+        imagePreviewUrl: reader.result
+      });
+    }
+    reader.readAsDataURL(file)
   }
   toggleScheme = () => {
     const { cookies } = this.props;
@@ -191,48 +289,28 @@ class Profile extends Component {
   }
   render() {
     const { cookies } = this.props;
+    console.log('render', cookies.get('token'), 'is empty', cookies.get('token') !== '');
     const isAuthenticated = cookies.get('isAuthenticated');
     if (isAuthenticated === "false" || !isAuthenticated || this.state.redirect === true) {
       return (<Redirect to="/"/>);
     }
+    let {imagePreviewUrl} = this.state;
     return (
       <div className="page bgorange inline-block">
+        {this.state.error ? <p>{this.state.error}</p> : null}
         <div className="profileCard">
-          <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png" alt="cute prof pic"/>
+          <img src={imagePreviewUrl} alt="cute prof pic"/>
           <h2 className="topSpacing questrial">{this.state.name}</h2>
           <p className="title">{this.state.email}</p>
         </div>
-        <label style={{"marginBottom": "15px"}}><h2>Summaries<span/> </h2></label>
-        <div className="col-3 col-m-3">
-          <table>
-            <tbody>
-              <tr className="card">
-                  <th className="header">
-                    <b>Example Summary 1</b>
-                  </th>
-                  <th className="profile-container">
-                    Example Summary 1 lorem ipsum woooo look at all the text that has been summarized here
-                  </th>
-              </tr>
-              <tr className="card">
-                  <th className="header">
-                    <b>Example Summary 2</b>
-                  </th>
-                  <th className="profile-container">
-                    Example Summary 2 lorem ipsum woooo look at all the text that has been summarized here
-                  </th>
-              </tr>
-              <tr className="card">
-                  <th className="header">
-                    <b>Example Summary 3</b>
-                  </th>
-                  <th className="profile-container">
-                    Example Summary 3 lorem ipsum woooo look at all the text that has been summarized here
-                  </th>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <form className="image-upload" onSubmit={this.savePicture}>
+          <input className="fileInput"
+            type="file"
+            onChange={this.handleImageChange} />
+          <button className="submitButton"
+            type="submit"
+            onClick={this.handleSubmit}>Upload Image</button>
+        </form>
         <button onClick={this.toggleEditMode}>Edit Profile</button>
         <button onClick={this.toggleScheme}>Toggle Scheme</button>
         {this.state.editMode ? (
@@ -251,7 +329,7 @@ class Profile extends Component {
         ) : null
         }
         <button onClick={this.deleteAccount}>Delete Account</button>
-        <button onClick={this.googleLogin}>Login With Google</button>
+        <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
         <button onClick={this.toggleUpdatePassword}>Update Password</button>
         {this.state.editPassword ?
           (<form  className="form-width" onSubmit={this.updatePassword}>
@@ -268,10 +346,9 @@ class Profile extends Component {
           </form>
           ) : null
         }
-        <div className="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
       </div>
     );
   }
 }
 
-export default withCookies(Profile);
+export default withCookies(withRouter(Profile));

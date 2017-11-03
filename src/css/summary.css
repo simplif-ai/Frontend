@@ -45,7 +45,7 @@ button:hover {
   overflow: hidden;
 }
 .h1, .icon {
-    vertical-align: top;
+  vertical-align: top;
 }
 .h1::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: #1A334F;
@@ -200,9 +200,9 @@ errorClass {
 .modify-button {
   z-index: 1;
   opacity: .5;
-  border-radius: 50%; 
+  border-radius: 50%;
   text-align: center;
-  background-color: #FFFFFF; 
+  background-color: #FFFFFF;
   color: #1A334F;
 
 }
@@ -233,4 +233,32 @@ errorClass {
 .input {
   width:25%;
   text-align: center;
+}
+
+.title-icon {
+  display: inline;
+}
+.title-icon h1, .title-icon button {
+  display: inline;
+  vertical-align: middle;
+}
+.title-icon .icon:hover {
+  border: none;
+}
+.drop.options {
+  bottom: 91px;
+  top: auto;
+  right: 30px;
+  left: auto;
+  border-radius: 27px 27px 0px 27px;
+}
+.drop.options p {
+  cursor: pointer;
+}
+.drop.options p:hover {
+  opacity: .5;
+}
+
+textarea {
+  background: none;
 }
