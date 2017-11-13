@@ -280,6 +280,12 @@ class Profile extends Component {
     console.log('cookie', cookies.get('scheme'));
     window.location.reload();
   }
+  clearEditMode = (e) => {
+    e.preventDefault();
+    this.setState({
+      editMode: false
+    });
+  }
   render() {
     const { cookies } = this.props;
     console.log('render', cookies.get('token'), 'is empty', cookies.get('token') !== '');
@@ -318,6 +324,7 @@ class Profile extends Component {
             <input type="email" name="email" />
             <br/>
             <input className="btn" type="submit" name="submit" value="Save" />
+            <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
           </form>
         ) : null
         }
