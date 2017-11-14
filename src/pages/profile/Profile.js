@@ -32,7 +32,6 @@ class Profile extends Component {
       error: null,
       editMode: false,
       redirect: false,
-      editPassword: false,
       file: '',
       imagePreviewUrl: '',
       token: tokenFromCookie
@@ -205,35 +204,6 @@ class Profile extends Component {
           }
         });
   }
-  toggleUpdatePassword = (e) => {
-    this.setState({ editPassword: true });
-  }
-  updatePassword = (e) => {
-    e.preventDefault();
-    this.setState({ editPassword: false})
-    const { cookies } = this.props;
-    const email = cookies.get('email');
-    return apiFetch('changePassword', {
-        headers: {
-         'Content-Type': 'text/plain'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          email: email,
-          password: e.target.password.value,
-          newPassword: e.target.npassword.value
-        })
-    }).then((response) => response.json())
-        .then((json) => {
-          if(json.success === false) {
-              console.log('error', json.error);
-              this.setState({ error: json.error });
-          }
-          else {
-            console.log('password was updated');
-          }
-        });
-  }
   savePicture = (e) => {
     e.preventDefault();
     const formData  = new FormData();
@@ -330,22 +300,6 @@ class Profile extends Component {
         }
         <button onClick={this.deleteAccount}>Delete Account</button>
         <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
-        <button onClick={this.toggleUpdatePassword}>Update Password</button>
-        {this.state.editPassword ?
-          (<form  className="form-width" onSubmit={this.updatePassword}>
-            <h1>Edit Password</h1>
-            <div className = "errorClass">
-              {this.state.error ? `Error= ${this.state.error}` : null}
-            </div>
-            <label htmlFor="password">Current Password </label>
-            <input type="password" name="password" />
-            <label htmlFor="npassword">New Password </label>
-            <input type="password" name="npassword" />
-            <br/>
-            <input className="btn" type="submit" name="submit" value="Save" />
-          </form>
-          ) : null
-        }
       </div>
     );
   }
