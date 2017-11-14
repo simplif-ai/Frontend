@@ -100,35 +100,47 @@ class Summary extends Component {
   addCollaborator = (e) => {
     e.preventDefault();
     e.persist();
-    // const { cookies } = this.props;
-    // const token = cookies.get('token');
-    // const req = {
-    //   collaboratorEmail: e.target.collabEmail.value,
-    //   fileID: this.state.noteID,
-    //   googleToken: token
-    // }
-    // console.log('req', req);
-    // return apiFetch('addCollaborator',{
-    //     headers: {
-    //       'Content-Type': 'text/plain'
-    //     },
-    //     method: 'POST',
-    //     body: JSON.stringify({
-    //       collaboratorEmail: e.target.collabEmail.value,
-    //       fileID: e.target.fileId.value
-    //     })
-    // }).then((response) => response.json())
-    //     .then((json) => {
-    //       console.log('response', json);
-    //       if(json.success === false) {
-    //           console.log('error', json.error);
-    //           this.setState({ error: json.error });
-    //       }
-    //       else {
-    //         console.log('json',json);
-    //         this.setState('success',json.success);
-    //       }
-    //     });
+    const { cookies } = this.props;
+    const token = cookies.get('token');
+    if (token === '') {
+      this.setState({
+        popUp: "You need to authenticate with Google Drive!"
+      });
+      window.setTimeout(function() {
+        if (this.state.popUp) {
+          this.setState({ popUp: '' });
+        }
+      }.bind(this), 2000);
+      return;
+    }
+    const req = {
+      collaboratorEmail: e.target.collabEmail.value,
+      fileID: this.state.noteID,
+      googleToken: token
+    }
+    console.log('req', req);
+    return apiFetch('addCollaborator',{
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          collaboratorEmail: e.target.collabEmail.value,
+          fileID: e.target.fileId.value,
+          googleToken: token
+        })
+    }).then((response) => response.json())
+        .then((json) => {
+          if(json.success === false) {
+              console.log('error', json.error);
+              this.setState({ error: json.error });
+          }
+          else {
+            this.setState({ popUp: "You added a collaborator to your note!" });
+            window.setTimeout(function() {
+              this.setState({ popUp: '' });
+            }.bind(this), 2000);          }
+        });
   };
   popUp = () => {
     if (!this.state.popUp) {
