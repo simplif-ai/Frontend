@@ -13,7 +13,7 @@ import EditSummary from './EditSummary';
 class Summary extends Component {
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired
-  };
+  }; 
   constructor(props) {
     super(props);
     const { cookies } = this.props;
@@ -37,6 +37,7 @@ class Summary extends Component {
       wait: false,
       noteID: '',
       options: false,
+      linkOpen: false,
       token: googleToken,
       nightMode: false
     };
@@ -115,6 +116,9 @@ class Summary extends Component {
           this.updateSummary();
         }
       });
+  }
+  summarizeLink = (e) => {
+    //call function to grab text from article and pass it into summarize in request body?
   }
   handleKeyUp = (e) => {
     e.target.style.height = '1px';
@@ -232,6 +236,11 @@ class Summary extends Component {
       options: !this.state.options
     })
   }
+  toggleLinkOpen = () => {
+    this.setState({
+      linkOpen: !this.state.linkOpen
+    })
+  }
   exportToText = () => {
     var e = document.createElement("a");
     var file = new Blob([this.state.text], {type: 'text/plain'}, "name");
@@ -284,6 +293,11 @@ class Summary extends Component {
 
     window.location.reload();
   }
+
+  setReminder = ( )=> {
+    /* Google Calendar things */
+  }
+
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -309,6 +323,16 @@ class Summary extends Component {
         }
         <button className="fixed" type="submit">Summarize</button>
         <button onClick={this.updateNote} className="fixed save">Save</button>
+        <button onClick={this.toggleLinkOpen} className="fixed link">Summarize by URL</button>
+        {this.state.linkOpen
+          ?
+          (<div className="linkbox drop">
+            <p>Enter URL</p>
+            <input type = "text" className="linkbox" text="summarize"/>
+            <p onClick={this.summarizeLink}><u>Click here to summarize</u></p>
+          </div>) : null
+        }
+
       </form>
         <div className="brevity fixed fixed-slider">
           <label>Brevity {this.state.brevity}%</label>
@@ -324,6 +348,7 @@ class Summary extends Component {
             <p onClick={this.exportToText}>Export to text File</p>
             {this.state.token !== '' ? <p onClick={this.exportToGoogle}>Export to Google Drive</p> : null}
             <p onClick={this.toggleNightMode}>Toggle Night Mode</p>
+            <p /*onClick={this.setReminder}*/>Add to Google Calendar</p>
           </div>) : null
         }
       </div>
