@@ -79,7 +79,7 @@ class Profile extends Component {
             console.log('saved token', cookies.get('token'));
             this.setState({
               token: json.googleToken,
-              error: "You successfully linked you're google account"
+              error: "You successfully linked your Google account"
             });
             window.setTimeout(function() {
               this.setState({
