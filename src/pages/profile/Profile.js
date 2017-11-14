@@ -45,16 +45,11 @@ class Profile extends Component {
       });
       return;
     }
-
     var e = document.createElement("a");
-    console.log('link google', this.state.token);
     let token = this.state.token;
-    // let token = '';
-
     if (typeof this.state.token === 'undefined') {
       token = '';
     }
-    console.log('token 2', token);
     apiFetch('loginToGoogle',{
         headers: {
          'Content-Type': 'text/plain'
@@ -65,14 +60,12 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               e.href = json.authorizeURL;
               e.click();
           }
           else {
-            console.log('json',json);
             const { cookies } = this.props;
             cookies.set('token', JSON.stringify(json.googleToken));
             console.log('saved token', cookies.get('token'));
@@ -90,7 +83,6 @@ class Profile extends Component {
   }
   componentWillMount() {
     if (this.state.token && this.state.token.length > 0) {
-      console.log('call link google');
       this.linkGoogleAccount();
     }
   }
@@ -98,26 +90,20 @@ class Profile extends Component {
     const { cookies } = this.props;
     const email = cookies.get('email');
     if (this.state.token === '') {
-      console.log('componentDidMount');
       let url = this.props.location.search;
       let parsedToken = '';
       url = url.split('=');
       if (url) {
         parsedToken = url[1];
       }
-      console.log('token', parsedToken);
-
       this.setState({
         token: parsedToken,
         error: '',
       });
-      console.log('state token', this.state.token);
     }
     if (this.state.token && this.state.token.length > 0) {
-      console.log('call link google');
       this.linkGoogleAccount();
     }
-
     return apiFetch('profile',{
         headers: {
          'Content-Type': 'text/plain'
@@ -162,7 +148,6 @@ class Profile extends Component {
               this.setState({ error: json.error });
           }
           else {
-            console.log('json',json);
             const { cookies } = this.props;
             this.setState({
               error: null,
@@ -189,13 +174,11 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
           }
           else {
-            console.log('json',json);
             const { cookies } = this.props;
             cookies.set('isAuthenticated', false);
             cookies.remove('jwt');
@@ -243,11 +226,7 @@ class Profile extends Component {
   }
   toggleScheme = () => {
     const { cookies } = this.props;
-    //cookies.set('scheme','bgnight');
-
     cookies.get('scheme') === 'bgred' ? cookies.set('scheme','bgorange') : cookies.set('scheme','bgred');
-
-    console.log('cookie', cookies.get('scheme'));
     window.location.reload();
   }
   clearEditMode = (e) => {
@@ -258,7 +237,6 @@ class Profile extends Component {
   }
   render() {
     const { cookies } = this.props;
-    console.log('render', cookies.get('token'), 'is empty', cookies.get('token') !== '');
     const isAuthenticated = cookies.get('isAuthenticated');
     if (isAuthenticated === "false" || !isAuthenticated || this.state.redirect === true) {
       return (<Redirect to="/"/>);
