@@ -38,16 +38,13 @@ class Login extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
               const { cookies } = this.props;
               cookies.set('isAuthenticated', false, { path: '/' });
-              console.log('cookie', cookies.get('isAuthenticated'));
           }
           else {
-            console.log('json',json);
             const { cookies } = this.props;
             cookies.set('isAuthenticated', true);
             cookies.set('login', true);
@@ -60,7 +57,6 @@ class Login extends Component {
   };
   render() {
     if (this.state.redirectToReferrer === true) {
-      console.log('im now authenticated');
       return (<Redirect to="/profile"/>);
     }
     return (
