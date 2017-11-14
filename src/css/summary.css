@@ -131,6 +131,8 @@ button:hover {
   display: inline;
   border-radius: 50px;
   margin: 0px;
+  width: 50px;
+  height: 50px;
   padding: 13px;
 }
 
@@ -151,12 +153,6 @@ button:hover {
 }
 .save {
   margin-left: -100px;
-}
-.link {
-  margin-left: 175px;
-}
-.linkbox {
-  display: block;
 }
 .fixed-slider {
   left: 20px;
@@ -262,16 +258,6 @@ errorClass {
 .drop.options p:hover {
   opacity: .5;
 }
-.drop.linkbox {
-  bottom: 91px;
-  top: auto;
-  right: 250px;
-  left: auto;
-  border-radius: 27px 27px 0px 27px;
-}
-.drop.linkbox p {
-  cursor: pointer;
-}
 
 textarea {
   background: none;
@@ -279,4 +265,3 @@ textarea {
 .inputField input, .inputField label {
   color: black;
 }
-
