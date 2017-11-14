@@ -36,10 +36,9 @@ class Summary extends Component {
       response.json()
     ).then((json) => {
         if (json.success === false) {
-            console.log('error', json.error);
+          console.log('error', json.error);
         }
         else {
-          console.log('success',json);
           this.setState({
             notes: json,
             noteID: json[0][1]
@@ -64,11 +63,6 @@ class Summary extends Component {
       return;
     }
     e.persist();
-    const req = {
-      name: e.target.name.value,
-      googleToken: token
-    }
-    console.log('req', req);
     return apiFetch('createFolder',{
         headers: {
           'Content-Type': 'text/plain'
@@ -80,8 +74,7 @@ class Summary extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
-          if(json.success === false) {
+          if (json.success === false) {
               console.log('error', json.error);
               this.setState({
                 popUp: json.error
@@ -90,9 +83,9 @@ class Summary extends Component {
                 if (this.state.popUp) {
                   this.setState({ popUp: '' });
                 }
-              }.bind(this), 2000);          }
+              }.bind(this), 2000);
+          }
           else {
-            console.log('json',json);
             this.setState({
               popUp: "Your Folder was Added"
             });
@@ -165,7 +158,6 @@ class Summary extends Component {
       response.text()
     ).then((json) => {
         json = JSON.parse(json);
-        console.log('json after arse', json);
         if (!json.success === false) {
             this.setState({ popUp: "Your summary could not be created!" });
             window.setTimeout(function() {
@@ -173,12 +165,10 @@ class Summary extends Component {
             }.bind(this), 2000);
         }
         else {
-          console.log('json', json);
           this.setState({
             noteID: json.noteID,
             newNote: true
           });
-          console.log("noteID", this.state.noteID);
         }
       });
   }
@@ -189,7 +179,6 @@ class Summary extends Component {
       return (<Redirect to="/login"/>);
     }
     if (this.state.newNote === true && this.state.nodeID !== 0) {
-      console.log('this.state.noteID', this.state.noteID);
       return <Redirect to={`/notes/${this.state.noteID}`} />
     }
     let google = true;
@@ -223,7 +212,6 @@ class Summary extends Component {
           : null
         }
       </div>
-
     );
   }
 }
