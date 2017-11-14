@@ -22,11 +22,6 @@ class Login extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     e.persist();
-    const req = {
-      email: e.target.email.value,
-      password: e.target.password.value,
-    }
-    console.log('req', req);
     return apiFetch('login',{
         headers: {
           'Content-Type': 'text/plain'
