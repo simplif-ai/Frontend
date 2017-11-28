@@ -38,7 +38,8 @@ class Summary extends Component {
       noteID: '',
       options: false,
       token: googleToken,
-      nightMode: false
+      nightMode: false,
+      isOffline: false
     };
   }
   componentDidMount() {
@@ -284,6 +285,11 @@ class Summary extends Component {
 
     window.location.reload();
   }
+  toggleOfflineMode = () => {
+    this.setState({
+      isOffline: !this.state.isOffline
+    });
+  }
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -324,6 +330,7 @@ class Summary extends Component {
             <p onClick={this.exportToText}>Export to text File</p>
             {this.state.token !== '' ? <p onClick={this.exportToGoogle}>Export to Google Drive</p> : null}
             <p onClick={this.toggleNightMode}>Toggle Night Mode</p>
+            <p onClick={this.toggleOfflineMode}>Toggle Offline Mode</p>
           </div>) : null
         }
       </div>
