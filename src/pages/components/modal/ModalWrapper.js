@@ -1,5 +1,7 @@
 import React from 'react';
-const {PropTypes} = React;
+import PropTypes from 'prop-types';
+
+import '../../../css/modalWrapper.css';
 
 const ModalWrapper = props => {
   const handleBackgroundClick = e => {
@@ -26,9 +28,8 @@ const ModalWrapper = props => {
       <header>
         <h1>{props.title}</h1>
 
-        <button onClick={props.hideModal}>Close</button>
+        <span onClick={props.hideModal}>x</span>
       </header>
-
       {props.children}
 
       {okButton}
@@ -61,7 +62,8 @@ ModalWrapper.defaultProps = {
   okText: 'OK',
   okDisabled: false,
   width: 400,
-  onOk: () => {}
+  onOk: () => {},
+  hideModal: () => {}
 };
 
 export default ModalWrapper;

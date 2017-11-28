@@ -1,6 +1,6 @@
-import React from 'react';
-import {connect} from 'react-redux';
+/*Taken from https://codeburst.io/modals-in-react-f6c3ff9f4701*/
 
+import React from 'react';
 import TutorialModal from './TutorialModal';
 import FeedbackModal from './FeedbackModal';
 
@@ -16,4 +16,4 @@ const ModalConductor = props => {
             return null;
     }   
 }
-export default ModalConductor;
+export default (ModalConductor);

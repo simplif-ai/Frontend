@@ -1,0 +1,28 @@
+.container {
+  display: inline-block;
+  position: fixed;
+  left: 20px;
+  top: 20px;
+  cursor: pointer;
+  opacity: .5;
+}
+.slide {
+    margin: 0;
+    padding: 0;
+}
+.arrow {
+    border:#FFFFFF;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+    opacity: .5;
+}
+.leftArrow {
+    transform: rotate(-45deg);
+} 
+.rightArrow {
+    transform: rotate(135deg);
+}
+.arrow:hover {
+    opacity: 1;
+}

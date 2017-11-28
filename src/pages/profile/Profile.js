@@ -3,8 +3,9 @@ import '../../css/profile.css';
 import { Redirect } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
+import ModalConductor from '../components/modal/ModalConductor';
 
 class Profile extends Component {
   static propTypes = {
@@ -35,7 +36,9 @@ class Profile extends Component {
       editPassword: false,
       file: '',
       imagePreviewUrl: '',
-      token: tokenFromCookie
+      token: tokenFromCookie,
+      showTutorial: false,
+      showFeedback: false
     };
   }
   linkGoogleAccount = () => {
@@ -177,6 +180,12 @@ class Profile extends Component {
   toggleEditMode = (e) => {
     this.setState({ editMode: true });
   }
+  toggleTutorialModal = () => {
+    this.setState({showTutorial: true});
+  }
+  toggleFeedbackModal = () => {
+    this.setState({showFeedback: true});
+  }
   deleteAccount = (e) => {
     const { cookies } = this.props;
     const email = cookies.get('email');
@@ -280,6 +289,7 @@ class Profile extends Component {
     console.log('cookie', cookies.get('scheme'));
     window.location.reload();
   }
+
   render() {
     const { cookies } = this.props;
     console.log('render', cookies.get('token'), 'is empty', cookies.get('token') !== '');
@@ -324,6 +334,12 @@ class Profile extends Component {
         <button onClick={this.deleteAccount}>Delete Account</button>
         <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
         <button onClick={this.toggleUpdatePassword}>Update Password</button>
+        <button onClick={this.toggleTutorialModal}>Tutorial</button>
+        <button onClick={this.toggleFeedbackModal= true}>Send Feedback!</button>
+
+        {this.state.showTutorial ? <ModalConductor currentModal="TUTORIAL"/> : null }
+        {this.state.showFeedback ? <ModalConductor currentModal="FEEDBACK"/> : null }
+
         {this.state.editPassword ?
           (<form  className="form-width" onSubmit={this.updatePassword}>
             <h1>Edit Password</h1>

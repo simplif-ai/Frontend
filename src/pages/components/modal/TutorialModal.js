@@ -1,21 +1,31 @@
-import ModalWrapper from '../ModalWrapper.jsx';
+import React from 'react';
+import ModalWrapper from './ModalWrapper';
 
-const TutorialModal = props => {
-  const tutorialModal = provider => {
-    props.hideModal();
-    props.signIn(provider);
-  };
+import '../../../css/tutorial.css';
 
-  return (
-    <ModalWrapper
-      {...props}
-      title="Tutorial"
-      width={400}
-      showOk={false}
-    >
-    <p>test</p>
-    </ModalWrapper>
-  );
-};
+class TutorialModal extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        
+      }  
+      const feedback = provider => {
+          props.hideModal();
+          props.feedback(provider);
+      }
+    }
+
+    render() {
+      return (
+        <ModalWrapper
+          title="Tutorial"
+          width={800}
+          showOk={true}
+        >
+        <p>test</p>
+        </ModalWrapper>
+      );
+    };
+  }
 
 export default TutorialModal;
