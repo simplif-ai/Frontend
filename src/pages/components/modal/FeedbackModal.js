@@ -27,7 +27,7 @@ class FeedbackModal extends React.Component {
             name={this.props.name}
             okText="Submit"
             >
-            <textarea class="feedback" name="input" placeholder="How are you liking simplif.ai?" id="textInput"></textarea>
+            <textarea className="feedback" name="input" placeholder="How are you liking simplif.ai?" id="textInput"></textarea>
             </ModalWrapper>
         );
     };
