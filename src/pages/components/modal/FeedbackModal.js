@@ -7,33 +7,27 @@ class FeedbackModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: '',
-            isValid: false
+            text: ''
         };
         const feedback = provider => {
             props.hideModal();
-            props.feedback(provider);
         }
     }
     handleInput = (e) =>  {
       this.setState({ text: e.target.value });
-    }
-    handleSubmit = (e) => {
-        if(this.text.length > 0) {
-            this.isValid = true;
-        }
     }
     render() {
         return (
             <ModalWrapper
             title="Give us your feedback!"
             width={800}
-            okDisabled={!this.state.isValid}
+            showOk={true}
+            showModal={this.props.showModal}
+            toggleState={this.props.toggleState}
+            name={this.props.name}
+            okText="Submit"
             >
-            <input
-                value={this.props.text}
-                onChange={this.onIdChange.bind(this)}
-            />
+            <textarea class="feedback" name="input" placeholder="How are you liking simplif.ai?" id="textInput"></textarea>
             </ModalWrapper>
         );
     };

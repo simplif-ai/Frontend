@@ -1,0 +1,13 @@
+.feedback {
+  font-family: 'Crimson Text', serif;
+  width: 95%;
+  resize: none;
+  overflow: hidden;
+  min-height: 50vh;
+  margin-top: 10px;
+  border: solid 1px #F9B045;
+  border-radius: 10px;
+}
+.feedback:focus{
+    overflow:scroll;
+}

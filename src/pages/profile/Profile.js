@@ -180,10 +180,10 @@ class Profile extends Component {
   toggleEditMode = (e) => {
     this.setState({ editMode: true });
   }
-  toggleTutorialModal = () => {
-    this.setState({showTutorial: true});
+  clickTutorialModal = (e) => {
+      this.setState({showTutorial: true});
   }
-  toggleFeedbackModal = () => {
+  clickFeedbackModal = (e) => {
     this.setState({showFeedback: true});
   }
   deleteAccount = (e) => {
@@ -289,10 +289,24 @@ class Profile extends Component {
     console.log('cookie', cookies.get('scheme'));
     window.location.reload();
   }
+  toggleState = (state, val) => {
+    this.setState({
+      state: val
+    }); 
+    if (state === "showTutorial") {
+      this.setState({
+        showTutorial:false
+      });
+    }
+    else if (state === "showFeedback") {
+      this.setState({
+        showFeedback:false
+      }); 
+    }
+  }
 
   render() {
     const { cookies } = this.props;
-    console.log('render', cookies.get('token'), 'is empty', cookies.get('token') !== '');
     const isAuthenticated = cookies.get('isAuthenticated');
     if (isAuthenticated === "false" || !isAuthenticated || this.state.redirect === true) {
       return (<Redirect to="/"/>);
@@ -334,11 +348,12 @@ class Profile extends Component {
         <button onClick={this.deleteAccount}>Delete Account</button>
         <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
         <button onClick={this.toggleUpdatePassword}>Update Password</button>
-        <button onClick={this.toggleTutorialModal}>Tutorial</button>
-        <button onClick={this.toggleFeedbackModal= true}>Send Feedback!</button>
+        <button onClick={this.clickTutorialModal}>Tutorial</button>
+        <button onClick={this.clickFeedbackModal}>Send Feedback!</button>
 
-        {this.state.showTutorial ? <ModalConductor currentModal="TUTORIAL"/> : null }
-        {this.state.showFeedback ? <ModalConductor currentModal="FEEDBACK"/> : null }
+        {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
+
+        {this.state.showFeedback ? <ModalConductor name={'showFeedback'} showModal={this.state.showFeedback} toggleState = {this.toggleState} currentModal='FEEDBACK'/> : null }
 
         {this.state.editPassword ?
           (<form  className="form-width" onSubmit={this.updatePassword}>

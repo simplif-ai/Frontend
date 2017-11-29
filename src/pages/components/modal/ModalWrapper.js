@@ -4,37 +4,44 @@ import PropTypes from 'prop-types';
 import '../../../css/modalWrapper.css';
 
 const ModalWrapper = props => {
-  const handleBackgroundClick = e => {
-    if (e.target === e.currentTarget) props.hideModal();
-  };
+  var showModal = props.showModal;
+  var name = props.name;
+  console.log('showModal', showModal, props.showModal);
+  const toggleState = props.toggleState;
 
-  const onOk = () => {
-    props.onOk();
-    props.hideModal();
+  const handleBackgroundClick = e => {
+    if (e.target === e.currentTarget) props.toggleState(props.name,false);
+  };
+  
+  const hideModal = (state, val) => {
+    props.toggleState(state, val);
   };
 
   const okButton = props.showOk
     ? (
       <button
-        onClick={onOk}
+        onClick={() => props.toggleState(props.name, false)}
         disabled={props.okDisabled}
       >
         {props.okText}
       </button>
     ) : null;
 
-  return (
-    <div onClick={handleBackgroundClick}>
-      <header>
-        <h1>{props.title}</h1>
+if(showModal) {
+    return (
+      <div className="modal" onClick={handleBackgroundClick}>
+            <div className="modal-content">
+                <div className="modal-content modal-top">
+                  <h1>{props.title}</h1>
+                </div>
 
-        <span onClick={props.hideModal}>x</span>
-      </header>
-      {props.children}
-
-      {okButton}
-    </div>
-  );
+                {props.children}
+                
+                {okButton}
+            </div>
+          </div>
+    );
+  } else { return null }
 };
 
 ModalWrapper.propTypes = {
@@ -50,7 +57,6 @@ ModalWrapper.propTypes = {
     PropTypes.element,
     PropTypes.string,
   ]).isRequired,
-
   // methods
   hideModal: PropTypes.func,
   onOk: PropTypes.func,
@@ -61,9 +67,7 @@ ModalWrapper.defaultProps = {
   showOk: true,
   okText: 'OK',
   okDisabled: false,
-  width: 400,
-  onOk: () => {},
-  hideModal: () => {}
+  width: 400
 };
 
 export default ModalWrapper;
