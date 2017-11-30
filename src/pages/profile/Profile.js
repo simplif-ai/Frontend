@@ -104,7 +104,29 @@ class Profile extends Component {
     if (this.state.token && this.state.token.length > 0) {
       this.linkGoogleAccount();
     }
-    return apiFetch('profile',{
+    apiFetch('getPicture', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        email: email
+      })
+    }).then((response) => response.blob())
+        .then((json) => {
+          const url = window.URL.createObjectURL(json);
+              if(json.success === false) {
+                  console.log('error', json.error);
+                  this.setState({ error: json.error });
+              }
+              else {
+                this.setState({
+                  imagePreviewUrl: url
+                });
+              }
+            });
+
+    return apiFetch('profile', {
         headers: {
          'Content-Type': 'text/plain'
         },
@@ -206,6 +228,7 @@ class Profile extends Component {
         }
         else {
           console.log('success',json, 'The profile pic was saved!');
+          window.location.reload();
         }
       });
   }
