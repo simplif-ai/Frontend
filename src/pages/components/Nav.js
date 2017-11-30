@@ -135,8 +135,9 @@ class Nav extends Component {
           ?
           (<div className="drop">
             <Link to='/profile'>Profile</Link>
-            <Link to='/' onClick={this.logout}>Logout</Link>
             <Link to='/notes'>My Notes</Link>
+            <Link to='/send-feedback'>Send Feedback</Link>
+            <Link to='/' onClick={this.logout}>Logout</Link>
           </div>) : null
         }
         <div className="user">
