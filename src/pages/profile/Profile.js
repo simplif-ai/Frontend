@@ -98,6 +98,7 @@ class Profile extends Component {
   componentDidMount() {
     const { cookies } = this.props;
     const email = cookies.get('email');
+    console.log('email from cookie', email);
     if (this.state.token === '') {
       console.log('componentDidMount');
       let url = this.props.location.search;
@@ -119,7 +120,7 @@ class Profile extends Component {
       this.linkGoogleAccount();
     }
 
-    return apiFetch('profile',{
+    return apiFetch('profile', {
         headers: {
          'Content-Type': 'text/plain'
         },
@@ -282,7 +283,6 @@ class Profile extends Component {
   }
   render() {
     const { cookies } = this.props;
-    console.log('render', cookies.get('token'), 'is empty', cookies.get('token') !== '');
     const isAuthenticated = cookies.get('isAuthenticated');
     if (isAuthenticated === "false" || !isAuthenticated || this.state.redirect === true) {
       return (<Redirect to="/"/>);
