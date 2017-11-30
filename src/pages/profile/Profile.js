@@ -32,7 +32,6 @@ class Profile extends Component {
       error: null,
       editMode: false,
       redirect: false,
-      editPassword: false,
       file: '',
       imagePreviewUrl: '',
       token: tokenFromCookie
@@ -46,16 +45,11 @@ class Profile extends Component {
       });
       return;
     }
-
     var e = document.createElement("a");
-    console.log('link google', this.state.token);
     let token = this.state.token;
-    // let token = '';
-
     if (typeof this.state.token === 'undefined') {
       token = '';
     }
-    console.log('token 2', token);
     apiFetch('loginToGoogle',{
         headers: {
          'Content-Type': 'text/plain'
@@ -66,14 +60,12 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               e.href = json.authorizeURL;
               e.click();
           }
           else {
-            console.log('json',json);
             const { cookies } = this.props;
             cookies.set('token', JSON.stringify(json.googleToken));
             console.log('saved token', cookies.get('token'));
@@ -91,7 +83,6 @@ class Profile extends Component {
   }
   componentWillMount() {
     if (this.state.token && this.state.token.length > 0) {
-      console.log('call link google');
       this.linkGoogleAccount();
     }
   }
@@ -105,14 +96,12 @@ class Profile extends Component {
       if (url) {
         parsedToken = url[1];
       }
-
       this.setState({
         token: parsedToken,
         error: '',
       });
     }
     if (this.state.token && this.state.token.length > 0) {
-      console.log('call link google');
       this.linkGoogleAccount();
     }
     apiFetch('getPicture', {
@@ -181,7 +170,6 @@ class Profile extends Component {
               this.setState({ error: json.error });
           }
           else {
-            console.log('json',json);
             const { cookies } = this.props;
             this.setState({
               error: null,
@@ -208,47 +196,16 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
           }
           else {
-            console.log('json',json);
             const { cookies } = this.props;
             cookies.set('isAuthenticated', false);
             cookies.remove('jwt');
             cookies.remove('email');
             this.setState({ redirect: true });
-          }
-        });
-  }
-  toggleUpdatePassword = (e) => {
-    this.setState({ editPassword: true });
-  }
-  updatePassword = (e) => {
-    e.preventDefault();
-    this.setState({ editPassword: false})
-    const { cookies } = this.props;
-    const email = cookies.get('email');
-    return apiFetch('changePassword', {
-        headers: {
-         'Content-Type': 'text/plain'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          email: email,
-          password: e.target.password.value,
-          newPassword: e.target.npassword.value
-        })
-    }).then((response) => response.json())
-        .then((json) => {
-          if(json.success === false) {
-              console.log('error', json.error);
-              this.setState({ error: json.error });
-          }
-          else {
-            console.log('password was updated');
           }
         });
   }
@@ -292,12 +249,14 @@ class Profile extends Component {
   }
   toggleScheme = () => {
     const { cookies } = this.props;
-    //cookies.set('scheme','bgnight');
-
     cookies.get('scheme') === 'bgred' ? cookies.set('scheme','bgorange') : cookies.set('scheme','bgred');
-
-    console.log('cookie', cookies.get('scheme'));
     window.location.reload();
+  }
+  clearEditMode = (e) => {
+    e.preventDefault();
+    this.setState({
+      editMode: false
+    });
   }
   render() {
     const { cookies } = this.props;
@@ -316,11 +275,10 @@ class Profile extends Component {
         </div>
         <div className="profile-info">
           <form className="image-upload" onSubmit={this.savePicture}>
-            <h1>Upload an Image</h1>
             <input className="fileInput"
               type="file"
               onChange={this.handleImageChange} required />
-            <button className="submitButton" type="submit">Upload Image</button>
+            <button className="submitButton" type="submit" >Upload Image</button>
           </form>
           <button onClick={this.toggleEditMode}>Edit Profile</button>
           <button onClick={this.toggleScheme}>Toggle Scheme</button>
@@ -336,27 +294,12 @@ class Profile extends Component {
               <input type="email" name="email" />
               <br/>
               <input className="btn" type="submit" name="submit" value="Save" />
+              <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
             </form>
           ) : null
           }
           <button onClick={this.deleteAccount}>Delete Account</button>
           <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
-          <button onClick={this.toggleUpdatePassword}>Update Password</button>
-          {this.state.editPassword ?
-            (<form  className="form-width" onSubmit={this.updatePassword}>
-              <h1>Edit Password</h1>
-              <div className = "errorClass">
-                {this.state.error ? `Error= ${this.state.error}` : null}
-              </div>
-              <label htmlFor="password">Current Password </label>
-              <input type="password" name="password" />
-              <label htmlFor="npassword">New Password </label>
-              <input type="password" name="npassword" />
-              <br/>
-              <input className="btn" type="submit" name="submit" value="Save" />
-            </form>
-            ) : null
-          }
         </div>
       </div>
     );

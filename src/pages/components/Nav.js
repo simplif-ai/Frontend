@@ -147,7 +147,6 @@ class Nav extends Component {
             null
           }
         </div>
-
       </div>
     );
   }
