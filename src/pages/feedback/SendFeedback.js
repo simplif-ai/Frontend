@@ -14,11 +14,12 @@ class SendFeedback extends Component {
     super(props);
     this.state = {
       redirect: false,
-      error: 'lol'
+      error: null
     };
   }
   sendFeedback = (e) => {
     e.preventDefault();
+    e.persist();
     const { cookies } = this.props;
     const email = cookies.get('email');
     return apiFetch('addfeedback',{
@@ -39,11 +40,11 @@ class SendFeedback extends Component {
           }
           else {
             console.log('json',json);
-            const { cookies } = this.props;
-            cookies.set('isAuthenticated', false);
-            cookies.remove('jwt');
-            cookies.remove('email');
-            this.setState({ redirect: true });
+            this.setState({ error: "Your feedback was successfully sent!" });
+            window.setTimeout(function() {
+              this.setState({ error: '' });
+            }.bind(this), 2000);
+            e.target.feedback.value = '';
           }
         });
   }
@@ -61,7 +62,7 @@ class SendFeedback extends Component {
             <label htmlFor="feedback">Let us know what you think about Simplif.ai!</label>
             <textarea className="feedback-input" type="text" name="feedback" required />
             <br/>
-            {this.state.error ? <p className>Error: {this.state.error}</p> : null}
+            {this.state.error ? <p className="left">{this.state.error}</p> : null}
             <input className="btn f" type="submit" name="submit" value="Submit" />
             <br/>
           </form>
