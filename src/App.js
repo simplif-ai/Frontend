@@ -9,10 +9,11 @@ import './App.css';
 class App extends Component {
   render() {
     const { cookies } = this.props;
+    const isAuthenticated = cookies.get("isAuthenticated");
     return(
       <BrowserRouter>
         <div className={`${cookies.get('scheme')} ${cookies.get('night')}`}>
-          <Nav />
+          <Nav isAuthenticated={isAuthenticated}/>
           <Routes/>
         </div>
       </BrowserRouter>

@@ -98,27 +98,44 @@ class Profile extends Component {
   componentDidMount() {
     const { cookies } = this.props;
     const email = cookies.get('email');
-    console.log('email from cookie', email);
     if (this.state.token === '') {
-      console.log('componentDidMount');
       let url = this.props.location.search;
       let parsedToken = '';
       url = url.split('=');
       if (url) {
         parsedToken = url[1];
       }
-      console.log('token', parsedToken);
 
       this.setState({
         token: parsedToken,
         error: '',
       });
-      console.log('state token', this.state.token);
     }
     if (this.state.token && this.state.token.length > 0) {
       console.log('call link google');
       this.linkGoogleAccount();
     }
+    apiFetch('getPicture', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        email: email
+      })
+    }).then((response) => response.blob())
+        .then((json) => {
+          const url = window.URL.createObjectURL(json);
+              if(json.success === false) {
+                  console.log('error', json.error);
+                  this.setState({ error: json.error });
+              }
+              else {
+                this.setState({
+                  imagePreviewUrl: url
+                });
+              }
+            });
 
     return apiFetch('profile', {
         headers: {

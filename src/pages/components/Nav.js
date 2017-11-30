@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
+import apiFetch from '../../utils/api.js';
 import '../../css/nav.css';
 
 class Nav extends Component {
@@ -11,8 +12,91 @@ class Nav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: false,
+      imagePreviewUrl: null
     };
+  }
+  componentDidMount() {
+    const { cookies } = this.props;
+    const email = cookies.get('email');
+
+    return apiFetch('getPicture', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        email: email
+      })
+    }).then((response) => response.blob())
+        .then((json) => {
+          const url = window.URL.createObjectURL(json);
+              if(json.success === false) {
+                  console.log('error', json.error);
+                  this.setState({ error: json.error });
+              }
+              else {
+                this.setState({
+                  imagePreviewUrl: url
+                });
+              }
+            });
+  }
+  shouldComponentUpdate() {
+    return true;
+  }
+  componentWillReceiveProps(nextProps) {
+      const { cookies } = this.props;
+      const email = cookies.get('email');
+      apiFetch('getPicture', {
+        headers: {
+         'Content-Type': 'text/plain'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          email: email
+        })
+      }).then((response) => response.blob())
+          .then((json) => {
+            const url = window.URL.createObjectURL(json);
+                if(json.success === false) {
+                    console.log('error', json.error);
+                    this.setState({ error: json.error });
+                }
+                else {
+                  this.setState({
+                    imagePreviewUrl: url
+                  });
+                }
+              });
+      this.setState({
+        open: false
+      });
+  }
+  getUrl = () => {
+    let imageURL;
+    const { cookies } = this.props;
+    const email = cookies.get('email');
+    apiFetch('getPicture', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        email: email
+      })
+    }).then((response) => response.blob())
+        .then((json) => {
+          const url = window.URL.createObjectURL(json);
+              if(json.success === false) {
+                console.log('error', json.error);
+                this.setState({ error: json.error });
+              }
+              else {
+                imageURL = url;
+              }
+            });
+    return imageURL;
   }
   onOpen = (e) => {
     this.setState({
@@ -23,6 +107,7 @@ class Nav extends Component {
     const { cookies } = this.props;
     cookies.set('isAuthenticated', false);
     cookies.remove('jwt');
+    cookies.remove('email');
   }
   render() {
     const { cookies } = this.props;
@@ -34,22 +119,19 @@ class Nav extends Component {
     return (
       <div className="nav">
         <div onClick={this.onOpen} className="container">
-          {this.state.open
+          {isAuthenticated === "true"
             ?
-            (<div>
-              <div className="bar1 change"/>
-              <div className="bar3 change"/>
-              </div>
-            ) : (
+            (
               <div>
                 <div className="bar1"></div>
                 <div className="bar2"></div>
                 <div className="bar3"></div>
-            </div>
-            )
+                </div>
+            ) :
+            null
           }
         </div>
-        {this.state.open
+        {this.state.open && isAuthenticated === "true"
           ?
           (<div className="drop">
             <Link to='/profile'>Profile</Link>
@@ -57,10 +139,14 @@ class Nav extends Component {
             <Link to='/notes'>My Notes</Link>
           </div>) : null
         }
-        <div className="user"> 
-          <img src="https://cdn4.iconfinder.com/data/icons/superheroes/512/batman-512.png" alt="cute prof pic"/>
+        <div className="user">
+          {isAuthenticated === "true" && this.state.imagePreviewUrl ?
+            <img src={this.state.imagePreviewUrl} alt="cute prof pic"/>
+            :
+            null
+          }
         </div>
-        
+
       </div>
     );
   }
