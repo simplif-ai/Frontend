@@ -117,7 +117,7 @@ class Nav extends Component {
       return (<Redirect to="/login"/>);
     }
     return (
-      <div className="nav">
+      <div className="nav left">
         <div onClick={this.onOpen} className="container">
           {isAuthenticated === "true"
             ?
