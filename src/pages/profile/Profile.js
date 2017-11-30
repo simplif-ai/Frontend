@@ -271,6 +271,7 @@ class Profile extends Component {
         }
         else {
           console.log('success',json, 'The profile pic was saved!');
+          window.location.reload();
         }
       });
   }
