@@ -3,6 +3,7 @@ import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
+import { saveToLocalStorage, getFromLocalStorage } from '../../utils/localstorage.js';
 import '../../css/summary.css';
 import '../../css/footer.css';
 import edit_icon_white from '../../assets/pencil-icon.svg';
@@ -38,7 +39,8 @@ class Summary extends Component {
       noteID: '',
       options: false,
       token: googleToken,
-      nightMode: false
+      nightMode: false,
+      isOffline: false
     };
   }
   componentDidMount() {
@@ -131,6 +133,14 @@ class Summary extends Component {
   }
   saveSummary = (e) => {
     e.preventDefault();
+    if (this.state.isOffline === true) {
+      console.log('true');
+      saveToLocalStorage({ text: this.state.text, title: this.state.title });
+      this.setError("This summary will be synced when you go back online!");
+      console.log('This summary will be synced when you go back online');
+      window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+      return;
+    }
     const { cookies } = this.props;
     const email = cookies.get('email');
     return apiFetch('savesummary', {
@@ -163,6 +173,16 @@ class Summary extends Component {
   }
   updateNote = (e) => {
     e.preventDefault();
+    if (this.state.isOffline === true) {
+      saveToLocalStorage({
+        text: this.state.text,
+        title: this.state.title
+      });
+      console.log('in update note this.state.isOffline', this.state.isOffline);
+      this.setError("This summary will be synced when you go back online!");
+      window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+      return;
+    }
     return apiFetch('updateNote', {
       headers: {
        'Content-Type': 'text/plain'
@@ -270,6 +290,34 @@ class Summary extends Component {
 
     window.location.reload();
   }
+  toggleOfflineMode = (e) => {
+    e.persist();
+    let offline = this.state.isOffline;
+    this.setState({
+      isOffline: !this.state.isOffline
+    });
+    console.log('before this.state.isOffline', this.state.isOffline);
+    if (offline === true) {
+      if (getFromLocalStorage('text') !== null || getFromLocalStorage('title')) {
+        console.log('before set state');
+        this.setState({
+          text: getFromLocalStorage('text'),
+          title: getFromLocalStorage('title'),
+          isOffline: false
+        }, () => {
+          this.updateNote(e);
+        });
+      }
+      else {
+        this.setError("Your summary saved in offline mode was not saved correctly!");
+        window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+      }
+    }
+    else {
+      this.setError("You are now in offline mode!");
+      window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+    }
+  }
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -309,6 +357,7 @@ class Summary extends Component {
             <p onClick={this.exportToText}>Export to text File</p>
             {this.state.token !== '' ? <p onClick={this.exportToGoogle}>Export to Google Drive</p> : null}
             <p onClick={this.toggleNightMode}>Toggle Night Mode</p>
+            <p onClick={this.toggleOfflineMode}>Toggle Offline Mode</p>
           </div>) : null
         }
       </div>
