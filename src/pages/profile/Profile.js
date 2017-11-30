@@ -307,56 +307,57 @@ class Profile extends Component {
     }
     let {imagePreviewUrl} = this.state;
     return (
-      <div className="page bgorange inline-block">
+      <div className="page bgorange profile-page">
         {this.state.error ? <p>{this.state.error}</p> : null}
         <div className="profileCard">
           <img src={imagePreviewUrl} alt="cute prof pic"/>
           <h2 className="topSpacing questrial">{this.state.name}</h2>
           <p className="title">{this.state.email}</p>
         </div>
-        <form className="image-upload" onSubmit={this.savePicture}>
-          <input className="fileInput"
-            type="file"
-            onChange={this.handleImageChange} />
-          <button className="submitButton"
-            type="submit"
-            onClick={this.handleSubmit}>Upload Image</button>
-        </form>
-        <button onClick={this.toggleEditMode}>Edit Profile</button>
-        <button onClick={this.toggleScheme}>Toggle Scheme</button>
-        {this.state.editMode ? (
-          <form className="form-width" onSubmit={this.editProfile}>
-            <h1>Edit Profile</h1>
-            <div className = "errorClass">
-              {this.state.error ? `Error= ${this.state.error}` : null}
-            </div>
-            <label htmlFor="name">Name </label>
-            <input type="text" name="name" />
-            <label htmlFor="email">Email </label>
-            <input type="email" name="email" />
-            <br/>
-            <input className="btn" type="submit" name="submit" value="Save" />
+        <div className="profile-info">
+          <form className="image-upload" onSubmit={this.savePicture}>
+            <h1>Upload an Image</h1>
+            <input className="fileInput"
+              type="file"
+              onChange={this.handleImageChange} required />
+            <button className="submitButton" type="submit">Upload Image</button>
           </form>
-        ) : null
-        }
-        <button onClick={this.deleteAccount}>Delete Account</button>
-        <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
-        <button onClick={this.toggleUpdatePassword}>Update Password</button>
-        {this.state.editPassword ?
-          (<form  className="form-width" onSubmit={this.updatePassword}>
-            <h1>Edit Password</h1>
-            <div className = "errorClass">
-              {this.state.error ? `Error= ${this.state.error}` : null}
-            </div>
-            <label htmlFor="password">Current Password </label>
-            <input type="password" name="password" />
-            <label htmlFor="npassword">New Password </label>
-            <input type="password" name="npassword" />
-            <br/>
-            <input className="btn" type="submit" name="submit" value="Save" />
-          </form>
+          <button onClick={this.toggleEditMode}>Edit Profile</button>
+          <button onClick={this.toggleScheme}>Toggle Scheme</button>
+          {this.state.editMode ? (
+            <form className="form-width" onSubmit={this.editProfile}>
+              <h1>Edit Profile</h1>
+              <div className = "errorClass">
+                {this.state.error ? `Error= ${this.state.error}` : null}
+              </div>
+              <label htmlFor="name">Name </label>
+              <input type="text" name="name" />
+              <label htmlFor="email">Email </label>
+              <input type="email" name="email" />
+              <br/>
+              <input className="btn" type="submit" name="submit" value="Save" />
+            </form>
           ) : null
-        }
+          }
+          <button onClick={this.deleteAccount}>Delete Account</button>
+          <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
+          <button onClick={this.toggleUpdatePassword}>Update Password</button>
+          {this.state.editPassword ?
+            (<form  className="form-width" onSubmit={this.updatePassword}>
+              <h1>Edit Password</h1>
+              <div className = "errorClass">
+                {this.state.error ? `Error= ${this.state.error}` : null}
+              </div>
+              <label htmlFor="password">Current Password </label>
+              <input type="password" name="password" />
+              <label htmlFor="npassword">New Password </label>
+              <input type="password" name="npassword" />
+              <br/>
+              <input className="btn" type="submit" name="submit" value="Save" />
+            </form>
+            ) : null
+          }
+        </div>
       </div>
     );
   }
