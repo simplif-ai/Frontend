@@ -50,9 +50,7 @@ class Summary extends Component {
   }
   updateResponse = (index, priority) => {
     let newResponse = this.state.response;
-    console.log('newResponse', newResponse, 'index', index, 'priority', priority);
     newResponse[index][1] = priority;
-    console.log('newResponse after', newResponse);
     this.setState({
       response: newResponse
     });
@@ -71,7 +69,6 @@ class Summary extends Component {
       }
       sentences.push(sentence[0]);
     });
-    console.log('text', summary.join(' '));
     this.setState({
       summary: summary.join(' '),
       summaryArray: summary,
@@ -84,7 +81,6 @@ class Summary extends Component {
     this.setState({
       wait: true
     });
-    console.log('e', this.state.text);
     return apiFetch('summarizertext', {
       headers: {
        'Content-Type': 'text/plain'
@@ -105,13 +101,11 @@ class Summary extends Component {
         }
         else {
           // call funtion to send data to page
-          console.log('success',json);
           this.setState({
             response: json.text,
             receivedSummary: true,
             wait: false
           });
-          console.log('response', json);
           this.updateSummary();
         }
       });
@@ -152,14 +146,12 @@ class Summary extends Component {
     }).then(response =>
       response.text()
     ).then((json) => {
-        console.log('json', json);
         if (json.success === false) {
             this.setError("Your summary was not saved!");
             window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
         }
         else {
           // call funtion to send data to page
-          console.log('success',json);
           this.setState({
             editMode: false
           });
@@ -184,7 +176,6 @@ class Summary extends Component {
     }).then(response =>
       response.text()
     ).then((json) => {
-        console.log('json', json);
         json = JSON.parse(json);
         if (json.success === false) {
             this.setError("Your summary was not saved!");
@@ -192,13 +183,11 @@ class Summary extends Component {
         }
         else {
           // call funtion to send data to page
-          console.log('success',json);
           this.setState({
             editMode: false
           });
           this.setError("Your summary was successfully saved!");
           window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
-          // this.updateSummary();
         }
       });
   }
@@ -258,7 +247,6 @@ class Summary extends Component {
     }).then(response =>
       response.text()
     ).then((json) => {
-        console.log('json', json);
         json = JSON.parse(json);
         if (json.success === false) {
             this.setError("Your summary was successfully exported to Google Drive!");
@@ -266,10 +254,8 @@ class Summary extends Component {
         }
         else {
           // call funtion to send data to page
-          console.log('success',json);
           this.setError("Your summary was successfully exported!");
           window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
-          // this.updateSummary();
         }
       });
 
@@ -294,7 +280,6 @@ class Summary extends Component {
     this.state.sentences.forEach(sentence => {
       sentences.push(<p>{sentence}</p>);
     });
-    console.log('params', this.props.match.params.noteID);
     return (
       <div className="summary">
       {this.state.wait ? <Loader/> : null}

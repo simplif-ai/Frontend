@@ -20,12 +20,6 @@ class PasswordReset extends Component {
     e.preventDefault();
     const { cookies } = this.props;
     const email = cookies.get('email');
-    const req = {
-        email: email,
-        password: e.target.password.value,
-        newPassword: e.target.npassword.value
-    }
-    console.log('req', req);
     return apiFetch('changePassword', {
         headers: {
          'Content-Type': 'text/plain'
@@ -38,14 +32,12 @@ class PasswordReset extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
           }
           else {
-            console.log('json',json);
-            console.log('password was updated');
+            this.setState({ error: "Your password was updated!" });
           }
         });
   }
