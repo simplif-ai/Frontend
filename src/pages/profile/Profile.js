@@ -275,6 +275,7 @@ class Profile extends Component {
         </div>
         <div className="profile-info">
           <form className="image-upload" onSubmit={this.savePicture}>
+            <h1>Upload a Picture</h1>
             <input className="fileInput"
               type="file"
               onChange={this.handleImageChange} required />
