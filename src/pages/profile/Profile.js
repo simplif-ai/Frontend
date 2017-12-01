@@ -232,6 +232,9 @@ class Profile extends Component {
     formData.append('file', this.state.file);
     formData.append('email', email);
     apiFetch('addpicture', {
+      headers: {
+       'Content-Type':'multipart/form-data'
+      },
       body: formData,
       method: 'POST'
     }).then(response =>

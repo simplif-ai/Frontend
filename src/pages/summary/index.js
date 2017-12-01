@@ -269,7 +269,9 @@ class Summary extends Component {
     this.setState({ showViewCollab: true })
   }
   viewSendReminder = () => {
-    this.setState({ showSendReminder: true })
+    this.setState({ showSendReminder: true });
+    // TODO: add search for reg x and push props to modal component
+
   }
   exportToText = () => {
     var e = document.createElement("a");
