@@ -149,9 +149,11 @@ class Profile extends Component {
           }
           else {
             let preferEmailUpdates = false;
-            if (json.preferEmailUpdates === 1) {
+            console.log('json.preferEmailUpdates',json.prefersEmailUpdates);
+            if (json.prefersEmailUpdates === 1) {
               preferEmailUpdates = true;
             }
+            console.log('preferEmailUpdates', preferEmailUpdates);
             this.setState({
               error: null,
               name: json.name,
@@ -234,6 +236,9 @@ class Profile extends Component {
     formData.append('file', this.state.file);
     formData.append('email', email);
     apiFetch('addpicture', {
+      headers: {
+       'Content-Type':'multipart/form-data'
+      },
       body: formData,
       method: 'POST'
     }).then(response =>
@@ -272,7 +277,7 @@ class Profile extends Component {
   toggleState = (state, val) => {
     this.setState({
       state: val
-    }); 
+    });
     if (state === "showTutorial") {
       this.setState({
         showTutorial:false
@@ -281,7 +286,7 @@ class Profile extends Component {
     else if (state === "showFeedback") {
       this.setState({
         showFeedback:false
-      }); 
+      });
     }
   }
   clearEditMode = (e) => {
@@ -297,26 +302,31 @@ class Profile extends Component {
   }
   updateEmailPreference = (e) => {
     e.preventDefault();
+    const { cookies } = this.props;
+    const email = cookies.get('email');
     let checked = 0;
     if (this.state.preferEmailUpdates === true) {
       checked = 1;
     }
-    return apiFetch('?',{
+    return apiFetch('preferEmailUpdates',{
       headers: {
         'Content-Type': 'text/plain'
       },
       method: 'POST',
       body: JSON.stringify({
+        email,
         prefersEmailUpdates: checked
       })
     }).then((response) => response.json())
         .then((json) => {
-          if(json.success === false) {
-              this.setState({ error: json.error });
+          console.log('json after /preferEmailUpdates', json);
+          if(json.success === true) {
+            this.setState({ error: 'You were able to update preferEmailUpdates' });
+            window.setTimeout(function() { this.setState({ error: null }); }.bind(this), 4000);
           }
           else {
-            this.setError("You have successfully updated your email preference");
-            window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+            this.setState({ error: json.error });
+            window.setTimeout(function() { this.setState({ error: null }); }.bind(this), 4000);
           }
         });
   }
@@ -331,7 +341,7 @@ class Profile extends Component {
        return (<Redirect to="/view-feedback"/>);
     }
     return (
-      <div className="page bgorange profile-page">
+      <div className="page bgorange">
         {this.state.error ? <p>{this.state.error}</p> : null}
         <div className="profileCard">
           <img src={imagePreviewUrl} alt="cute prof pic"/>
@@ -364,15 +374,19 @@ class Profile extends Component {
         ) : null
         }
         <button onClick={this.clickTutorialModal}>Tutorial</button>
+          {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
 
-        {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
+          {this.state.showFeedback ? <ModalConductor name={'showFeedback'} showModal={this.state.showFeedback} toggleState = {this.toggleState} currentModal='FEEDBACK'/> : null }
 
-        {this.state.showFeedback ? <ModalConductor name={'showFeedback'} showModal={this.state.showFeedback} toggleState = {this.toggleState} currentModal='FEEDBACK'/> : null }
-
-          <h1>Prefer Email Updates</h1>
-          <div className="check-con">
-            <input type="checkbox" name="preferEmailUpdates" onChange={this.togglepreferEmailUpdates} value={this.state.preferEmailUpdates} />
-            <label htmlFor="preferEmailUpdates">Prefer Email Updates</label>
+            <h1>Prefer Email Updates</h1>
+            <div className="check-con">
+              <input type="checkbox" name="preferEmailUpdates" onChange={this.togglepreferEmailUpdates} checked={this.state.preferEmailUpdates} />
+              <label htmlFor="preferEmailUpdates">Prefer Email Updates</label>
+            </div>
+            <button onClick={this.updateEmailPreference}>Save Email Preference</button>
+            <button onClick={this.toggleScheme}>Toggle Scheme</button>
+            <button onClick={this.deleteAccount}>Delete Account</button>
+            <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
           </div>
           <button onClick={this.updateEmailPreference}>Save Email Preference</button>
           <button onClick={this.toggleScheme}>Toggle Scheme</button>

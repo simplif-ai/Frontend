@@ -3,7 +3,6 @@ import { withCookies } from 'react-cookie';
 import { Redirect, Link } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import FolderForm from './FolderForm';
-import CollabForm from './CollabForm';
 import SummarizeUrl from './SummarizeUrl';
 import '../../css/summary.css';
 import plusIcon from '../../assets/plus-icon.svg';
@@ -20,7 +19,8 @@ class Summary extends Component {
       popUp: false,
       noteID: 0,
       newNote: false,
-      text: ''
+      text: '',
+      file: ''
     };
   }
   componentDidMount() {
@@ -96,51 +96,6 @@ class Summary extends Component {
               }
             }.bind(this), 2000);
           }
-        });
-  };
-  addCollaborator = (e) => {
-    e.preventDefault();
-    e.persist();
-    const { cookies } = this.props;
-    const token = cookies.get('token');
-    if (token === '') {
-      this.setState({
-        popUp: "You need to authenticate with Google Drive!"
-      });
-      window.setTimeout(function() {
-        if (this.state.popUp) {
-          this.setState({ popUp: '' });
-        }
-      }.bind(this), 2000);
-      return;
-    }
-    const req = {
-      collaboratorEmail: e.target.collabEmail.value,
-      fileID: this.state.noteID,
-      googleToken: token
-    }
-    console.log('req', req);
-    return apiFetch('addCollaborator',{
-        headers: {
-          'Content-Type': 'text/plain'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          collaboratorEmail: e.target.collabEmail.value,
-          fileID: e.target.fileId.value,
-          googleToken: token
-        })
-    }).then((response) => response.json())
-        .then((json) => {
-          if(json.success === false) {
-              console.log('error', json.error);
-              this.setState({ error: json.error });
-          }
-          else {
-            this.setState({ popUp: "You added a collaborator to your note!" });
-            window.setTimeout(function() {
-              this.setState({ popUp: '' });
-            }.bind(this), 2000);          }
         });
   };
   popUp = () => {
@@ -222,7 +177,6 @@ class Summary extends Component {
           }.bind(this), 2000);
         }
       });
-      // this.createNote();
   }
   addDate = (e) => {
     e.preventDefault();
@@ -276,6 +230,51 @@ class Summary extends Component {
   deleteNote= () => {
     //TODO: delete life and maybe one day my student loans
   }
+  uploadfile = (e) => {
+    e.preventDefault();
+    const formData  = new FormData();
+    console.log('file', this.state.file);
+    formData.append('file', this.state.file);
+    apiFetch('uploadfile', {
+      body: formData,
+      method: 'POST'
+    }).then(response =>
+      response.text()
+    ).then((json) => {
+        json = JSON.parse(json);
+        console.log('json', json);
+        if (json.success === true) {
+            const sentences = [];
+            json.text.forEach(sentence => {
+              sentences.push(sentence[0]);
+            });
+            console.log('sentences.join', sentences.join(' '));
+            this.setState({
+              text: sentences.join(' ')
+            });
+            this.createNote();
+        }
+        else {
+          this.setState({ popUp: "Your summary could not be created from this pptx or pdf!" });
+          window.setTimeout(function() {
+            this.setState({ popUp: '' });
+          }.bind(this), 2000);
+        }
+      });
+  }
+  handleChange = (e) => {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        file: file
+      });
+    }
+    reader.readAsDataURL(file)
+  }
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -310,11 +309,11 @@ class Summary extends Component {
           <div className="inputField">
             <h2> Create a new Simplif.ai folder </h2>
             <FolderForm createFolder={this.createFolder}/>
-            <h2>Add collaborator to folder</h2>
-            <CollabForm addCollaborator={this.addCollaborator}/>
             <h2>Summarize from Article Url</h2>
-            <SummarizeUrl summarizeFromUrl={this.summarizeFromUrl} />
-            <h2>Schedule Email Reminder</h2>
+            <SummarizeUrl summarize={this.summarizeFromUrl} name="url" label="Summarize from URL" type="text" />
+            <h2>Summarize from pptx or pdf</h2>
+            <SummarizeUrl summarize={this.uploadfile} name="file" label="Upload a pptx or pdf" type="file" handleChange={this.handleChange}/>
+            <h2>Schdedule Email Reminder</h2>
             <form onSubmit={this.addDate}>
               <label htmlFor="message">Reminder Message</label>
               <input type="text" name="message" required />
