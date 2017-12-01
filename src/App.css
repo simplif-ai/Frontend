@@ -6,6 +6,10 @@ body {
   width: 100%;
   font-size: 15px;
 }
+textarea {
+  font-family: 'Questrial', sans-serif;
+  font-size: 12px;
+}
 .crimson {
   font-family: 'Crimson Text', serif;
 }
@@ -87,4 +91,8 @@ errorClass {
 }
 .night .h1:-moz-placeholder { /* Firefox 18- */
   color: #BCBDBE;
+}
+
+.left {
+  text-align: left;
 }
