@@ -16,9 +16,6 @@ class TutorialModal extends React.Component {
           "explanatory text1","text2","text3!"
         ]
     };
-      const tutorial = provider => {
-        props.hideModal();
-      } 
   }
       clickPrev = (e) => {
         this.setState({ slideIndex: this.state.slideIndex+1 });

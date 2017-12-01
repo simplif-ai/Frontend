@@ -9,9 +9,6 @@ class FeedbackModal extends React.Component {
         this.state = {
             text: ''
         };
-        const feedback = provider => {
-            props.hideModal();
-        }
     }
     handleInput = (e) =>  {
       this.setState({ text: e.target.value });

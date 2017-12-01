@@ -5,18 +5,11 @@ import '../../../css/modalWrapper.css';
 
 const ModalWrapper = props => {
   var showModal = props.showModal;
-  var name = props.name;
   console.log('showModal', showModal, props.showModal);
-  const toggleState = props.toggleState;
 
   const handleBackgroundClick = e => {
     if (e.target === e.currentTarget) props.toggleState(props.name,false);
   };
-  
-  const hideModal = (state, val) => {
-    props.toggleState(state, val);
-  };
-
   const okButton = props.showOk
     ? (
       <button
