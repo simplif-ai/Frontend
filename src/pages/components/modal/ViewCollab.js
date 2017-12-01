@@ -46,8 +46,8 @@ class ViewCollabModal extends React.Component {
         .then((json) => {
             console.log('json',json);
             if (json.success === false) {
-            this.setState({error: json.error});
-                } else {
+                this.setState({error: json.error});
+            } else {
                     this.setState({
                         collabs: json   
                 });
