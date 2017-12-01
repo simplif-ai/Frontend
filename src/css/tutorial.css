@@ -17,13 +17,11 @@ i:hover {
     transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
     float:right;
-    position: absolute;
     bottom: 40px;
 }
 .leftArrow {
     transform: rotate(135deg);
     -webkit-transform: rotate(135deg);
     float:left;
-    position: absolute;
     bottom: 40px;
 }

@@ -290,8 +290,38 @@ class Summary extends Component {
           window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
         }
       });
-
   }
+
+  deleteNote = (e)=> {
+    e.preventDefault();
+    const { cookies } = this.props;
+    const email = cookies.get('email');
+    return apiFetch('deletenote', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        email: email,
+        noteID: this.state.noteID
+
+      }),
+      method: 'POST'
+      }).then(response =>
+        response.text()
+      ).then((json) => {
+        json = JSON.parse(json);
+        if (json.success === false) {
+            this.setError("Error deleting note!");
+            window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+        }
+        else {
+          this.setError("Your note was successfully deleted!");
+          window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+          return (<Redirect to="/notes"/>);
+        }
+      });
+  }
+
   toggleNightMode = () => {
     this.setState({
       nightMode: !this.state.nightMode
@@ -386,16 +416,17 @@ class Summary extends Component {
             <p onClick={this.viewAddCollab}> Add Collaborator </p>
             <p onClick={this.viewViewCollab}> View Collaborator </p>
             <p onClick={this.viewDelCollab}> Delete Collaborator </p>
+            <p onClick={this.deleteNote}> Delete This Note </p>
           </div>) : null
         }
         {this.state.showAddCollab ?
-        <ModalConductor name={'showAddCollab'} showModal= {this.state.showAddCollab} toggleState = {this.toggleState} noteID = {this.noteID} currentModal='ADDCOLLAB'/>: null}
+        <ModalConductor name={'showAddCollab'} showModal= {this.state.showAddCollab} toggleState = {this.toggleState} noteID = {this.state.noteID} currentModal='ADDCOLLAB'/>: null}
         
         {this.state.showViewCollab ?
-        <ModalConductor name={'showViewCollab'} showModal= {this.state.showViewCollab} toggleState = {this.toggleState} cookies = {this.cookies} noteID = {this.noteID} currentModal='VIEWCOLLAB'/>: null}
+        <ModalConductor name={'showViewCollab'} showModal= {this.state.showViewCollab} toggleState = {this.toggleState}  noteID = {this.state.noteID} currentModal='VIEWCOLLAB'/>: null}
 
         {this.state.showDelCollab ?
-        <ModalConductor name={'showDelCollab'} showModal= {this.state.showDelCollab} toggleState = {this.toggleState} currentModal='DELCOLLAB' noteID={this.noteID} />: null}
+        <ModalConductor name={'showDelCollab'} showModal= {this.state.showDelCollab} toggleState = {this.toggleState} currentModal='DELCOLLAB' noteID={this.state.noteID} />: null}
 
         {this.state.showSendReminder ?
         <ModalConductor name={'showSendReminder'} showModal= {this.state.showSendReminder} toggleState = {this.toggleState} currentModal='SENDREMINDER'/>: null}

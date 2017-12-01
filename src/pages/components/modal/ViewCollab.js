@@ -1,22 +1,21 @@
 import React from 'react';
-import { Cookies } from 'react-cookie';
-import { instanceOf } from 'prop-types';
+import { withCookies } from 'react-cookie';
 import apiFetch from '../../../utils/api.js';
 import ModalWrapper from './ModalWrapper';
 
 class ViewCollabModal extends React.Component {
-    static propTypes = {
-        cookies: instanceOf(Cookies).isRequired
-    }; 
     constructor(props) {
+        const { cookies } = props;
         super(props);
-        const { cookies } = this.props;
         this.state = {
-            userEmail:'',
-            noteID:'',
+            userEmail:cookies.get('email'),
+            noteID:props.noteID,
             popUp: false,
             collabs: []
         };
+    }
+    componentDidMount() {
+        this.getCollaborator();
     }
     popUp = () => {
         if (!this.state.popUp) {
@@ -30,9 +29,10 @@ class ViewCollabModal extends React.Component {
         }.bind(this), 2000);
         }
     }
-    getCollaborator = (e) => {
-        const { cookies } = this.props;
-        this.setState({userEmail: cookies.get('email')});
+    getCollaborator() {
+        console.log("im in here");
+        console.log('userEmail:',this.state.userEmail);
+        console.log('noteID:',this.state.noteID);
         apiFetch('getcollaborators', {
         headers: {
             'Content-Type': 'text/plain'
@@ -40,24 +40,32 @@ class ViewCollabModal extends React.Component {
         method: 'POST',
         body: JSON.stringify( {
             userEmail: this.state.userEmail,
-            noteId: this.state.noteID
+            noteID: this.state.noteID
         })
-        }).then((response) => response.blob())
+        }).then((response) => response.json())
         .then((json) => {
+            console.log('json',json);
             if (json.success === false) {
             this.setState({error: json.error});
                 } else {
                     this.setState({
-                        collabs: json
+                        collabs: json   
                 });
             }
         });
+       if (!this.state.collabs) {
+           this.setState({popUp: 'No collaborators!'});
+       } 
    }
     render() {
         const collabo = [];
-        this.state.collabs.forEach(collab => {
-            collabo.push(<p>{collab.name} : {collab.colabEmail}</p>);
-        }) 
+        if (this.state.collabs.length > 0){
+            this.state.collabs.forEach(collab => {
+                collabo.push(<p>{collab.name} : {collab.colabEmail}</p>);
+                collabo.push(<br/>);
+            })
+            console.log(this.state.collabs);
+        }
         return (
             <ModalWrapper
             title="Current Collaborators"
@@ -69,10 +77,12 @@ class ViewCollabModal extends React.Component {
             okText="OK"
             >
             {this.state.popUp ? <p>{this.state.popUp}</p> : null}
+            
             {collabo}
+
             </ModalWrapper>
         );
     };
 }
 
-export default ViewCollabModal;
+export default withCookies(ViewCollabModal);

@@ -1,12 +1,13 @@
 import React from 'react';
 import apiFetch from '../../../utils/api.js';
+import { withCookies } from 'react-cookie';
 import ModalWrapper from './ModalWrapper';
 
 class DelCollabModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            noteID: '',
+            noteID: props.noteID,
             colabEmail: '',
             popUp: false
         };
@@ -14,7 +15,7 @@ class DelCollabModal extends React.Component {
     popUp = () => {
         if (!this.state.popUp) {
         this.setState({
-            popUp: "Enter an email!"
+            popUp: ''
         });
         window.setTimeout(function() {
             if (this.state.popUp) {
@@ -24,41 +25,52 @@ class DelCollabModal extends React.Component {
         }
     }
     deleteCollaborator = (e) => {
-     e.preventDefault(); 
-     e.persist();
-     this.setState({colabEmail: e.target.email.value});
-     if (this.state.colabEmail==='') {
-            this.setState({ popUp: "You must enter an email!" });
-            window.setTimeout(function() {
-              this.setState({ popUp: '' });
-            }.bind(this), 2000);         
-        return;
-     }
-     apiFetch('deleteCollaborators', {
-       headers: {
-         'Content-Type': 'text/plain'
-       },
-       method: 'POST',
-       body: JSON.stringify( {
-         colabEmail: this.state.colabEmail,
-         noteId: this.state.noteID
-       })
-     }).then((response) => response.json())
-      .then((json) => {
-        if (json.success === false) {
-          this.setState({error: json.error});
-        } else {
+        e.preventDefault(); 
+        e.persist();
+        apiFetch('deleteCollaborators', {
+        headers: {
+            'Content-Type': 'text/plain'
+        },
+        method: 'POST',
+        body: JSON.stringify( {
+            colabEmail: e.target.email.value,
+            noteID: this.state.noteID
+        })
+        }).then((response) => response.json())
+        .then((json) => {
+            console.log("json",json);
+            console.log("json.success",json.success);
+            if (json.success === false) {
+                this.setState({error: json.error});
+                if (this.state.colabEmail==='') {
+                        this.setState({ popUp: "You must enter an email!" });
+                        window.setTimeout(function() {
+                            this.setState({ popUp: '' });
+                        }.bind(this), 2000);       
+                }
             this.setState({
-                popUp: "Collaborator successfully deleted"
-            });
-            window.setTimeout(function() {
-            if (this.state.popUp) {
-                this.setState({ popUp: '' });
-            }
-            }.bind(this), 2000);
+                popUp: '',
+                colabEmail: ''
+            }); 
+            return;
         }
-      });
-   }
+        else {
+                this.setState({
+                    popUp: "Collaborator successfully deleted"
+                });
+                
+                window.setTimeout(function() {
+                    if (this.state.popUp) {
+                        this.setState({ popUp: '' });
+                    }
+                 }.bind(this), 2000);
+            
+                this.setState({
+                    colabEmail: ''
+                });
+            }
+        });
+   };
     render() {
         return (
             <ModalWrapper
@@ -81,4 +93,4 @@ class DelCollabModal extends React.Component {
     };
 }
 
-export default DelCollabModal;
+export default withCookies(DelCollabModal);
