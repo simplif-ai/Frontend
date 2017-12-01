@@ -227,9 +227,6 @@ class Summary extends Component {
         }
       });
   }
-  deleteNote= () => {
-    //TODO: delete life and maybe one day my student loans
-  }
   uploadfile = (e) => {
     e.preventDefault();
     const formData  = new FormData();
