@@ -37,7 +37,8 @@ class Profile extends Component {
       imagePreviewUrl: '',
       token: tokenFromCookie,
       showTutorial: false,
-      showFeedback: false
+      showFeedback: false,
+      toFeedback: false
     };
   }
   linkGoogleAccount = () => {
@@ -83,6 +84,9 @@ class Profile extends Component {
             }.bind(this), 4000);
           }
         });
+  }
+  seeFeedback = () => {
+      this.setState({toFeedback: true});
   }
   componentWillMount() {
     if (this.state.token && this.state.token.length > 0) {
@@ -323,6 +327,9 @@ class Profile extends Component {
       return (<Redirect to="/"/>);
     }
     let {imagePreviewUrl} = this.state;
+    if (this.state.toFeedback === true) {
+       return (<Redirect to="/view-feedback"/>);
+    }
     return (
       <div className="page bgorange profile-page">
         {this.state.error ? <p>{this.state.error}</p> : null}
@@ -356,8 +363,6 @@ class Profile extends Component {
           </form>
         ) : null
         }
-        <button onClick={this.deleteAccount}>Delete Account</button>
-        <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
         <button onClick={this.clickTutorialModal}>Tutorial</button>
 
         {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
@@ -373,6 +378,7 @@ class Profile extends Component {
           <button onClick={this.toggleScheme}>Toggle Scheme</button>
           <button onClick={this.deleteAccount}>Delete Account</button>
           <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
+          <button onClick={this.seeFeedback}>View Submitted Feedback</button>
         </div>
       </div>
     );

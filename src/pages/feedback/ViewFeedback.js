@@ -17,34 +17,36 @@ class ViewFeedback extends Component {
       error: null,
       feederbackers:[],
       popUp:false,
-      gotFeedback:false
+      gotFeedback:false,
+      goBack:false
     };
+  }
+  componentDidMount() {
+        this.viewFeedback();
   }
   popUp = () => {
         if (!this.state.popUp) {
-        this.setState({
-            popUp: ""
-        });
-        window.setTimeout(function() {
-            if (this.state.popUp) {
-            this.setState({ popUp: '' });
-            }
-        }.bind(this), 2000);
+          this.setState({
+              popUp: ""
+          });
+          window.setTimeout(function() {
+              if (this.state.popUp) {
+              this.setState({ popUp: '' });
+              }
+          }.bind(this), 2000);
         }
-    }
-  sendFeedback = (e) => {
-      e.preventDefault();
-      e.persist();
-      const { cookies } = this.props;
-      const email = cookies.get('email');
-      return apiFetch('addfeedback',{
+  }
+  weOutie = () => {
+    this.setState({goBack: true});
+  }
+  viewFeedback = (e) => {
+    
+      console.log("viewing");
+      return apiFetch('viewfeedback',{
           headers: {
           'Content-Type': 'text/plain'
           },
-          method: 'POST',
-          body: JSON.stringify({
-            email: email
-          })
+          method: 'POST'
       }).then((response) => response.json())
           .then((json) => {
             console.log('response', json);
@@ -62,10 +64,11 @@ class ViewFeedback extends Component {
                         feederbackers: json   
                 });
             }
-          });
           if(!this.state.feederbackers){
               this.setState({popUp: 'No feedback!'});
           }
+          });
+         
   }
   render() {
     const { cookies } = this.props;
@@ -73,27 +76,25 @@ class ViewFeedback extends Component {
     if (isAuthenticated === "false" || !isAuthenticated || this.state.redirect === true) {
       return (<Redirect to="/"/>);
     }
+    if(this.state.goBack === true) {
+      return (<Redirect to="/profile"/>);
+    }
     const fback = [];
-    if (this.state.collabs.length > 0){
-            this.state.fback.forEach(feederbackers => {
-                fback.push(<p>{collab.feedback}</p>);
-                collabo.push(<br/>);
+    if (this.state.feederbackers.length > 0){
+            this.state.feederbackers.forEach(feedback => {
+                fback.push(<p>{feedback.name}: {feedback.feedback}</p>);
+                fback.push(<hr/>);
             })
-            console.log(this.state.collabs);
     }
     return (
       <div className="page bgorange">
         <div className="feedback">
-          <form onSubmit={this.sendFeedback}>
             <h1 className="left">Previously Sent Feedback...</h1>
-            <label htmlFor="feedback">Let us know what you think about Simplif.ai!</label>
-            <textarea className="feedback-input" type="text" name="feedback" required />
-            <br/>
-            {this.state.error ? <p className="left">{this.state.error}</p> : null}
-            <input className="btn f" type="submit" name="submit" value="Submit" />
-            <br/>
-          </form>
+
+            {fback}
+
         </div>
+        <button onClick={this.weOutie}>back</button>
       </div>
     );
   }

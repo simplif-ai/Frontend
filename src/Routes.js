@@ -8,6 +8,7 @@ import ProfileParent from './pages/profile/ProfileParent';
 import Summary from './pages/summary/index';
 import Notes from './pages/summary/Notes';
 import SendFeedback from './pages/feedback/SendFeedback';
+import ViewFeedback from './pages/feedback/ViewFeedback';
 
 const Routes = () => (
   <Switch>
@@ -20,6 +21,8 @@ const Routes = () => (
     <Route path="/summary" component={Summary}/>
     <Route path="/notes" component={Notes}/>
     <Route path="/send-feedback" component={SendFeedback}/>
+    <Route path="/view-feedback" component={ViewFeedback}
+    />
   </Switch>
 );
 
