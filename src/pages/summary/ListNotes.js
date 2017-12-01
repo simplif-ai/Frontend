@@ -225,8 +225,57 @@ class Summary extends Component {
       });
       // this.createNote();
   }
+  addDate = (e) => {
+    e.preventDefault();
+    const { cookies } = this.props;
+    const email = cookies.get('email');
+
+    var d = new Date(e.target.date.value);
+    var dateString =
+        ("00" + (d.getMonth() + 1)).slice(-2) + "/" +
+        ("00" + d.getDate()).slice(-2) + "/" +
+        d.getFullYear() + " " +
+        ("00" + d.getHours()).slice(-2) + ":" +
+        ("00" + d.getMinutes()).slice(-2) + ":" +
+        ("00" + d.getSeconds()).slice(-2);
+
+    const req = {
+      email,
+      dateString,
+      message: e.target.message.value
+    };
+    console.log('date from datestring', dateString, 'req', req);
+    apiFetch('emailReminder', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        email,
+        dateString,
+        message: e.target.message.value
+      }),
+      method: 'POST'
+    }).then(response =>
+      response.text()
+    ).then((json) => {
+        json = JSON.parse(json);
+        console.log('json', json);
+        if (json.success === true) {
+          this.setState({ popUp: "You were reminded by email!" });
+          window.setTimeout(function() {
+            this.setState({ popUp: '' });
+          }.bind(this), 2000);
+        }
+        else {
+          this.setState({ popUp: "You were unable schedule an email!" });
+          window.setTimeout(function() {
+            this.setState({ popUp: '' });
+          }.bind(this), 2000);
+        }
+      });
+  }
   deleteNote= () => {
-  //TODO: delete life and maybe one day my student loans
+    //TODO: delete life and maybe one day my student loans
   }
   render() {
     const { cookies } = this.props;
@@ -247,7 +296,7 @@ class Summary extends Component {
         <div className="title-icon">
           <h1>My Notes</h1>
           <button className="icon orange" onClick={this.createNote} onMouseOver={this.popUp}><img src={plusIcon} alt="edit"/></button>
-          <button className="icon orange" onClick={this.deleteNote}><img src={xIcon} alt="delete"/></button>    
+          <button className="icon orange" onClick={this.deleteNote}><img src={xIcon} alt="delete"/></button>
         </div>
         {this.state.popUp ? <p>{this.state.popUp}</p> : null}
         {this.state.notes.length > 0 ?
@@ -267,6 +316,14 @@ class Summary extends Component {
             <CollabForm addCollaborator={this.addCollaborator}/>
             <h2>Summarize from Article Url</h2>
             <SummarizeUrl summarizeFromUrl={this.summarizeFromUrl} />
+            <h2>Schdedule Email Reminder</h2>
+            <form onSubmit={this.addDate}>
+              <label htmlFor="message">Reminder Message</label>
+              <input type="text" name="message" required />
+              <label htmlFor="date">Schdedule Date</label>
+              <input type="datetime-local" name="date" required />
+              <input className="btn" type="submit" name="submit" value="submit" />
+            </form>
           </div>
           : null
         }
