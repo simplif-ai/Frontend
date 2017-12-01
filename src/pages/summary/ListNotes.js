@@ -320,7 +320,7 @@ class Summary extends Component {
             <form onSubmit={this.addDate}>
               <label htmlFor="message">Reminder Message</label>
               <input type="text" name="message" required />
-              <label htmlFor="date">Schdedule Date</label>
+              <label htmlFor="date">Schedule Date</label>
               <input type="datetime-local" name="date" required />
               <input className="btn" type="submit" name="submit" value="submit" />
             </form>

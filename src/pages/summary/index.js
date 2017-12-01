@@ -46,7 +46,8 @@ class Summary extends Component {
       showAddCollab: false,
       showViewCollab: false,
       showDelCollab: false,
-      showSendReminder: false
+      showSendReminder: false,
+      redirect: false
     };
   }
   componentDidMount() {
@@ -317,7 +318,10 @@ class Summary extends Component {
         else {
           this.setError("Your note was successfully deleted!");
           window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
-          return (<Redirect to="/notes"/>);
+
+          this.setState({
+            redirect: true
+          });
         }
       });
   }
@@ -366,6 +370,9 @@ class Summary extends Component {
     const isAuthenticated = cookies.get('isAuthenticated');
     if (isAuthenticated === "false" || !isAuthenticated) {
       return (<Redirect to="/login"/>);
+    }
+    if (this.state.redirect === true) {
+       return (<Redirect to="/notes"/>);
     }
     const sentences = [];
     this.state.sentences.forEach(sentence => {
@@ -416,7 +423,7 @@ class Summary extends Component {
             <p onClick={this.viewAddCollab}> Add Collaborator </p>
             <p onClick={this.viewViewCollab}> View Collaborator </p>
             <p onClick={this.viewDelCollab}> Delete Collaborator </p>
-            <p onClick={this.deleteNote}> Delete This Note </p>
+            <p onClick={this.deleteNote}> Delete this Note </p>
           </div>) : null
         }
         {this.state.showAddCollab ?
