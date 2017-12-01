@@ -7,6 +7,7 @@ import Register from './pages/login/Register';
 import ProfileParent from './pages/profile/ProfileParent';
 import Summary from './pages/summary/index';
 import Notes from './pages/summary/Notes';
+import SendFeedback from './pages/feedback/SendFeedback';
 
 const Routes = () => (
   <Switch>
@@ -18,6 +19,7 @@ const Routes = () => (
     <Route path="/profile" component={ProfileParent}/>
     <Route path="/summary" component={Summary}/>
     <Route path="/notes" component={Notes}/>
+    <Route path="/send-feedback" component={SendFeedback}/>
   </Switch>
 );
 

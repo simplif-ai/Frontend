@@ -3,6 +3,7 @@ import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
+import { saveToLocalStorage, getFromLocalStorage } from '../../utils/localstorage.js';
 import '../../css/summary.css';
 import '../../css/footer.css';
 import edit_icon_white from '../../assets/pencil-icon.svg';
@@ -39,7 +40,8 @@ class Summary extends Component {
       options: false,
       linkOpen: false,
       token: googleToken,
-      nightMode: false
+      nightMode: false,
+      isOffline: false
     };
   }
   componentDidMount() {
@@ -51,9 +53,7 @@ class Summary extends Component {
   }
   updateResponse = (index, priority) => {
     let newResponse = this.state.response;
-    console.log('newResponse', newResponse, 'index', index, 'priority', priority);
     newResponse[index][1] = priority;
-    console.log('newResponse after', newResponse);
     this.setState({
       response: newResponse
     });
@@ -72,7 +72,6 @@ class Summary extends Component {
       }
       sentences.push(sentence[0]);
     });
-    console.log('text', summary.join(' '));
     this.setState({
       summary: summary.join(' '),
       summaryArray: summary,
@@ -85,7 +84,6 @@ class Summary extends Component {
     this.setState({
       wait: true
     });
-    console.log('e', this.state.text);
     return apiFetch('summarizertext', {
       headers: {
        'Content-Type': 'text/plain'
@@ -106,13 +104,11 @@ class Summary extends Component {
         }
         else {
           // call funtion to send data to page
-          console.log('success',json);
           this.setState({
             response: json.text,
             receivedSummary: true,
             wait: false
           });
-          console.log('response', json);
           this.updateSummary();
         }
       });
@@ -141,6 +137,14 @@ class Summary extends Component {
   }
   saveSummary = (e) => {
     e.preventDefault();
+    if (this.state.isOffline === true) {
+      console.log('true');
+      saveToLocalStorage({ text: this.state.text, title: this.state.title });
+      this.setError("This summary will be synced when you go back online!");
+      console.log('This summary will be synced when you go back online');
+      window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+      return;
+    }
     const { cookies } = this.props;
     const email = cookies.get('email');
     return apiFetch('savesummary', {
@@ -156,14 +160,12 @@ class Summary extends Component {
     }).then(response =>
       response.text()
     ).then((json) => {
-        console.log('json', json);
         if (json.success === false) {
             this.setError("Your summary was not saved!");
             window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
         }
         else {
           // call funtion to send data to page
-          console.log('success',json);
           this.setState({
             editMode: false
           });
@@ -175,6 +177,16 @@ class Summary extends Component {
   }
   updateNote = (e) => {
     e.preventDefault();
+    if (this.state.isOffline === true) {
+      saveToLocalStorage({
+        text: this.state.text,
+        title: this.state.title
+      });
+      console.log('in update note this.state.isOffline', this.state.isOffline);
+      this.setError("This summary will be synced when you go back online!");
+      window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+      return;
+    }
     return apiFetch('updateNote', {
       headers: {
        'Content-Type': 'text/plain'
@@ -188,7 +200,6 @@ class Summary extends Component {
     }).then(response =>
       response.text()
     ).then((json) => {
-        console.log('json', json);
         json = JSON.parse(json);
         if (json.success === false) {
             this.setError("Your summary was not saved!");
@@ -196,13 +207,11 @@ class Summary extends Component {
         }
         else {
           // call funtion to send data to page
-          console.log('success',json);
           this.setState({
             editMode: false
           });
           this.setError("Your summary was successfully saved!");
           window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
-          // this.updateSummary();
         }
       });
   }
@@ -267,7 +276,6 @@ class Summary extends Component {
     }).then(response =>
       response.text()
     ).then((json) => {
-        console.log('json', json);
         json = JSON.parse(json);
         if (json.success === false) {
             this.setError("Your summary was successfully exported to Google Drive!");
@@ -275,10 +283,8 @@ class Summary extends Component {
         }
         else {
           // call funtion to send data to page
-          console.log('success',json);
           this.setError("Your summary was successfully exported!");
           window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
-          // this.updateSummary();
         }
       });
 
@@ -293,11 +299,37 @@ class Summary extends Component {
 
     window.location.reload();
   }
-
   setReminder = ( )=> {
     /* Google Calendar things */
   }
-
+  toggleOfflineMode = (e) => {
+    e.persist();
+    let offline = this.state.isOffline;
+    this.setState({
+      isOffline: !this.state.isOffline
+    });
+    console.log('before this.state.isOffline', this.state.isOffline);
+    if (offline === true) {
+      if (getFromLocalStorage('text') !== null || getFromLocalStorage('title')) {
+        console.log('before set state');
+        this.setState({
+          text: getFromLocalStorage('text'),
+          title: getFromLocalStorage('title'),
+          isOffline: false
+        }, () => {
+          this.updateNote(e);
+        });
+      }
+      else {
+        this.setError("Your summary saved in offline mode was not saved correctly!");
+        window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+      }
+    }
+    else {
+      this.setError("You are now in offline mode!");
+      window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+    }
+  }
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -308,7 +340,6 @@ class Summary extends Component {
     this.state.sentences.forEach(sentence => {
       sentences.push(<p>{sentence}</p>);
     });
-    console.log('params', this.props.match.params.noteID);
     return (
       <div className="summary">
       {this.state.wait ? <Loader/> : null}
@@ -349,6 +380,7 @@ class Summary extends Component {
             {this.state.token !== '' ? <p onClick={this.exportToGoogle}>Export to Google Drive</p> : null}
             <p onClick={this.toggleNightMode}>Toggle Night Mode</p>
             <p /*onClick={this.setReminder}*/>Add to Google Calendar</p>
+            <p onClick={this.toggleOfflineMode}>Toggle Offline Mode</p>
           </div>) : null
         }
       </div>

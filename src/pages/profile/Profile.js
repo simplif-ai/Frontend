@@ -33,7 +33,6 @@ class Profile extends Component {
       error: null,
       editMode: false,
       redirect: false,
-      editPassword: false,
       file: '',
       imagePreviewUrl: '',
       token: tokenFromCookie,
@@ -49,16 +48,11 @@ class Profile extends Component {
       });
       return;
     }
-
     var e = document.createElement("a");
-    console.log('link google', this.state.token);
     let token = this.state.token;
-    // let token = '';
-
     if (typeof this.state.token === 'undefined') {
       token = '';
     }
-    console.log('token 2', token);
     apiFetch('loginToGoogle',{
         headers: {
          'Content-Type': 'text/plain'
@@ -69,14 +63,12 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               e.href = json.authorizeURL;
               e.click();
           }
           else {
-            console.log('json',json);
             const { cookies } = this.props;
             cookies.set('token', JSON.stringify(json.googleToken));
             console.log('saved token', cookies.get('token'));
@@ -94,7 +86,6 @@ class Profile extends Component {
   }
   componentWillMount() {
     if (this.state.token && this.state.token.length > 0) {
-      console.log('call link google');
       this.linkGoogleAccount();
     }
   }
@@ -102,27 +93,43 @@ class Profile extends Component {
     const { cookies } = this.props;
     const email = cookies.get('email');
     if (this.state.token === '') {
-      console.log('componentDidMount');
       let url = this.props.location.search;
       let parsedToken = '';
       url = url.split('=');
       if (url) {
         parsedToken = url[1];
       }
-      console.log('token', parsedToken);
-
       this.setState({
         token: parsedToken,
         error: '',
       });
-      console.log('state token', this.state.token);
     }
     if (this.state.token && this.state.token.length > 0) {
-      console.log('call link google');
       this.linkGoogleAccount();
     }
+    apiFetch('getPicture', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        email: email
+      })
+    }).then((response) => response.blob())
+        .then((json) => {
+          const url = window.URL.createObjectURL(json);
+              if(json.success === false) {
+                  console.log('error', json.error);
+                  this.setState({ error: json.error });
+              }
+              else {
+                this.setState({
+                  imagePreviewUrl: url
+                });
+              }
+            });
 
-    return apiFetch('profile',{
+    return apiFetch('profile', {
         headers: {
          'Content-Type': 'text/plain'
         },
@@ -137,11 +144,15 @@ class Profile extends Component {
               this.setState({ error: json.error });
           }
           else {
+            let preferEmailUpdates = false;
+            if (json.preferEmailUpdates === 1) {
+              preferEmailUpdates = true;
+            }
             this.setState({
               error: null,
               name: json.name,
               email: json.email,
-              preferEmailUpdates: json.preferEmailUpdates
+              preferEmailUpdates
             });
           }
         });
@@ -166,7 +177,6 @@ class Profile extends Component {
               this.setState({ error: json.error });
           }
           else {
-            console.log('json',json);
             const { cookies } = this.props;
             this.setState({
               error: null,
@@ -199,47 +209,16 @@ class Profile extends Component {
         })
     }).then((response) => response.json())
         .then((json) => {
-          console.log('response', json);
           if(json.success === false) {
               console.log('error', json.error);
               this.setState({ error: json.error });
           }
           else {
-            console.log('json',json);
             const { cookies } = this.props;
             cookies.set('isAuthenticated', false);
             cookies.remove('jwt');
             cookies.remove('email');
             this.setState({ redirect: true });
-          }
-        });
-  }
-  toggleUpdatePassword = (e) => {
-    this.setState({ editPassword: true });
-  }
-  updatePassword = (e) => {
-    e.preventDefault();
-    this.setState({ editPassword: false})
-    const { cookies } = this.props;
-    const email = cookies.get('email');
-    return apiFetch('changePassword', {
-        headers: {
-         'Content-Type': 'text/plain'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          email: email,
-          password: e.target.password.value,
-          newPassword: e.target.npassword.value
-        })
-    }).then((response) => response.json())
-        .then((json) => {
-          if(json.success === false) {
-              console.log('error', json.error);
-              this.setState({ error: json.error });
-          }
-          else {
-            console.log('password was updated');
           }
         });
   }
@@ -262,6 +241,7 @@ class Profile extends Component {
         }
         else {
           console.log('success',json, 'The profile pic was saved!');
+          window.location.reload();
         }
       });
   }
@@ -282,11 +262,7 @@ class Profile extends Component {
   }
   toggleScheme = () => {
     const { cookies } = this.props;
-    //cookies.set('scheme','bgnight');
-
-    cookies.get('scheme') === 'bgred' ? cookies.set('scheme','bgorange') : cookies.set('scheme','bgred');
-
-    console.log('cookie', cookies.get('scheme'));
+    cookies.get('scheme') === 'bgred' ? cookies.set('scheme','') : cookies.set('scheme','bgred');
     window.location.reload();
   }
   toggleState = (state, val) => {
@@ -304,7 +280,42 @@ class Profile extends Component {
       }); 
     }
   }
-
+  clearEditMode = (e) => {
+    e.preventDefault();
+    this.setState({
+      editMode: false
+    });
+  }
+  togglepreferEmailUpdates = () => {
+    this.setState({
+      preferEmailUpdates: !this.state.preferEmailUpdates
+    });
+  }
+  updateEmailPreference = (e) => {
+    e.preventDefault();
+    let checked = 0;
+    if (this.state.preferEmailUpdates === true) {
+      checked = 1;
+    }
+    return apiFetch('?',{
+      headers: {
+        'Content-Type': 'text/plain'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        prefersEmailUpdates: checked
+      })
+    }).then((response) => response.json())
+        .then((json) => {
+          if(json.success === false) {
+              this.setState({ error: json.error });
+          }
+          else {
+            this.setError("You have successfully updated your email preference");
+            window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+          }
+        });
+  }
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -313,28 +324,27 @@ class Profile extends Component {
     }
     let {imagePreviewUrl} = this.state;
     return (
-      <div className="page bgorange inline-block">
+      <div className="page bgorange profile-page">
         {this.state.error ? <p>{this.state.error}</p> : null}
         <div className="profileCard">
           <img src={imagePreviewUrl} alt="cute prof pic"/>
           <h2 className="topSpacing questrial">{this.state.name}</h2>
           <p className="title">{this.state.email}</p>
         </div>
-        <form className="image-upload" onSubmit={this.savePicture}>
-          <input className="fileInput"
-            type="file"
-            onChange={this.handleImageChange} />
-          <button className="submitButton"
-            type="submit"
-            onClick={this.handleSubmit}>Upload Image</button>
-        </form>
-        <button onClick={this.toggleEditMode}>Edit Profile</button>
-        <button onClick={this.toggleScheme}>Toggle Scheme</button>
-        {this.state.editMode ? (
-          <form className="form-width" onSubmit={this.editProfile}>
+        <div className="profile-info">
+          <form className="image-upload" onSubmit={this.savePicture}>
+            <h1>Upload a Picture</h1>
+            <input className="fileInput"
+              type="file"
+              onChange={this.handleImageChange} required />
+            <button className="submitButton" type="submit" >Upload Image</button>
+          </form>
+          <button onClick={this.toggleEditMode}>Edit Profile</button>
+          {this.state.editMode ? (
+            <form className="form-width" onSubmit={this.editProfile}>
             <h1>Edit Profile</h1>
             <div className = "errorClass">
-              {this.state.error ? `Error= ${this.state.error}` : null}
+            {this.state.error ? `Error= ${this.state.error}` : null}
             </div>
             <label htmlFor="name">Name </label>
             <input type="text" name="name" />
@@ -366,9 +376,20 @@ class Profile extends Component {
             <input type="password" name="npassword" />
             <br/>
             <input className="btn" type="submit" name="submit" value="Save" />
+            <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
           </form>
           ) : null
-        }
+          }
+          <h1>Prefer Email Updates</h1>
+          <div className="check-con">
+            <input type="checkbox" name="preferEmailUpdates" onChange={this.togglepreferEmailUpdates} value={this.state.preferEmailUpdates} />
+            <label htmlFor="preferEmailUpdates">Prefer Email Updates</label>
+          </div>
+          <button onClick={this.updateEmailPreference}>Save Email Preference</button>
+          <button onClick={this.toggleScheme}>Toggle Scheme</button>
+          <button onClick={this.deleteAccount}>Delete Account</button>
+          <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
+        </div>
       </div>
     );
   }

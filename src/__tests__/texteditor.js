@@ -16,6 +16,6 @@ test('text area is editable', ()=> {
     expect(p).to.have.length(1);*/
 });
 test("can create div", ()=> {
-    
+
     const div = document.createElement('div');
   });
