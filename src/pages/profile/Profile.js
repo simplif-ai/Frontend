@@ -253,7 +253,7 @@ class Profile extends Component {
   }
   toggleScheme = () => {
     const { cookies } = this.props;
-    cookies.get('scheme') === 'bgred' ? cookies.set('scheme','bgorange') : cookies.set('scheme','bgred');
+    cookies.get('scheme') === 'bgred' ? cookies.set('scheme','') : cookies.set('scheme','bgred');
     window.location.reload();
   }
   clearEditMode = (e) => {
