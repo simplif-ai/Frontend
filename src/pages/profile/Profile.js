@@ -141,11 +141,15 @@ class Profile extends Component {
               this.setState({ error: json.error });
           }
           else {
+            let preferEmailUpdates = false;
+            if (json.preferEmailUpdates === 1) {
+              preferEmailUpdates = true;
+            }
             this.setState({
               error: null,
               name: json.name,
               email: json.email,
-              preferEmailUpdates: json.preferEmailUpdates
+              preferEmailUpdates
             });
           }
         });
@@ -258,6 +262,36 @@ class Profile extends Component {
       editMode: false
     });
   }
+  togglepreferEmailUpdates = () => {
+    this.setState({
+      preferEmailUpdates: !this.state.preferEmailUpdates
+    });
+  }
+  updateEmailPreference = (e) => {
+    e.preventDefault();
+    let checked = 0;
+    if (this.state.preferEmailUpdates === true) {
+      checked = 1;
+    }
+    return apiFetch('?',{
+      headers: {
+        'Content-Type': 'text/plain'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        prefersEmailUpdates: checked
+      })
+    }).then((response) => response.json())
+        .then((json) => {
+          if(json.success === false) {
+              this.setState({ error: json.error });
+          }
+          else {
+            this.setError("You have successfully updated your email preference");
+            window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+          }
+        });
+  }
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -282,6 +316,12 @@ class Profile extends Component {
             <button className="submitButton" type="submit" >Upload Image</button>
           </form>
           <button onClick={this.toggleEditMode}>Edit Profile</button>
+          <h1>Prefer Email Updates</h1>
+          <div className="check-con">
+            <input type="checkbox" name="preferEmailUpdates" onChange={this.togglepreferEmailUpdates} value={this.state.preferEmailUpdates} />
+            <label htmlFor="preferEmailUpdates">Prefer Email Updates</label>
+          </div>
+          <button onClick={this.updateEmailPreference}>Save Email Preference</button>
           <button onClick={this.toggleScheme}>Toggle Scheme</button>
           {this.state.editMode ? (
             <form className="form-width" onSubmit={this.editProfile}>

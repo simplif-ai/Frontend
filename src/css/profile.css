@@ -73,3 +73,7 @@
   text-align: left;
   display: block;
 }
+
+.profile-info button {
+  display: block
+}

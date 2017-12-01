@@ -22,7 +22,7 @@ class Register extends Component {
   register = (e) => {
     e.preventDefault();
     let checked = 0;
-    if (e.target.prefersEmailUpdates.value === true) {
+    if (this.state.checked === true) {
       checked = 1;
     }
     return apiFetch('createAccount',{
