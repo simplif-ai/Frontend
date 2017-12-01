@@ -230,8 +230,6 @@ class Summary extends Component {
     const { cookies } = this.props;
     const email = cookies.get('email');
 
-    var date = new Date(e.target.date.value);
-
     var d = new Date(e.target.date.value);
     var dateString =
         ("00" + (d.getMonth() + 1)).slice(-2) + "/" +
