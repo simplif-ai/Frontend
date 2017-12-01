@@ -3,7 +3,6 @@ import { withCookies } from 'react-cookie';
 import { Redirect, Link } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import FolderForm from './FolderForm';
-import CollabForm from './CollabForm';
 import '../../css/summary.css';
 import plusIcon from '../../assets/plus-icon.svg';
 import xIcon from '../../assets/x-icon.svg';
@@ -224,8 +223,6 @@ class Summary extends Component {
           <div className="inputField">
             <h2> Create a new Simplif.ai folder </h2>
             <FolderForm createFolder={this.createFolder}/>
-            <h2>Add collaborator to folder</h2>
-            <CollabForm addCollaborator={this.addCollaborator}/>
           </div>
           : null
         }

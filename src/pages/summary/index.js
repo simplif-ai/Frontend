@@ -9,7 +9,9 @@ import '../../css/footer.css';
 import edit_icon_white from '../../assets/pencil-icon.svg';
 import edit_icon_orange from '../../assets/pencil-icon-orange.svg';
 import Loader from '../components/Loader';
+import CollabForm from './CollabForm';
 import EditSummary from './EditSummary';
+import ModalConductor from '../components/modal/ModalConductor';
 
 class Summary extends Component {
   static propTypes = {
@@ -41,7 +43,10 @@ class Summary extends Component {
       linkOpen: false,
       token: googleToken,
       nightMode: false,
-      isOffline: false
+      isOffline: false,
+      showAddCollab: false,
+      showViewCollab: false,
+      showSendReminder: false
     };
   }
   componentDidMount() {
@@ -250,6 +255,35 @@ class Summary extends Component {
       linkOpen: !this.state.linkOpen
     })
   }
+  toggleState = (state, val) => {
+    this.setState({
+      state: val
+    }); 
+    if (state === "showAddCollab") {
+      this.setState({
+        showAddCollab:false
+      });
+    }
+    else if (state === "showViewCollab") {
+      this.setState({
+        showViewCollab:false
+      }); 
+    }
+    else if (state === "showSendReminder") {
+      this.setState( {
+        showSendReminder:false
+      })
+    }
+  }
+  viewAddCollab = () => {
+    this.setState({ showAddCollab: true })
+  }
+  viewViewCollab = () => {
+    this.setState({ showViewCollab: true })
+  }
+  viewSendReminder = () => {
+    this.setState({ showSendReminder: true })
+  }
   exportToText = () => {
     var e = document.createElement("a");
     var file = new Blob([this.state.text], {type: 'text/plain'}, "name");
@@ -299,9 +333,7 @@ class Summary extends Component {
 
     window.location.reload();
   }
-  setReminder = ( )=> {
-    /* Google Calendar things */
-  }
+
   toggleOfflineMode = (e) => {
     e.persist();
     let offline = this.state.isOffline;
@@ -379,10 +411,22 @@ class Summary extends Component {
             <p onClick={this.exportToText}>Export to text File</p>
             {this.state.token !== '' ? <p onClick={this.exportToGoogle}>Export to Google Drive</p> : null}
             <p onClick={this.toggleNightMode}>Toggle Night Mode</p>
-            <p /*onClick={this.setReminder}*/>Add to Google Calendar</p>
+            <p onClick={this.viewSendReminder}>Search for Dates</p>
             <p onClick={this.toggleOfflineMode}>Toggle Offline Mode</p>
+            <p onClick={this.viewAddCollab}> Add Collaborator </p>
+            <p onClick={this.viewViewCollab}> View Collaborators </p>
           </div>) : null
         }
+        {this.state.showAddCollab ?
+        <ModalConductor name={'showAddCollab'} showModal= {this.state.showAddCollab} toggleState = {this.toggleState} currentModal='ADDCOLLAB'/>: null}
+        
+        {this.state.showViewCollab ?
+        <ModalConductor name={'showViewCollab'} showModal= {this.state.showViewCollab} toggleState = {this.toggleState} currentModal='VIEWCOLLAB'/>: null}
+
+        {this.state.showSendReminder ?
+        <ModalConductor name={'showSendReminder'} showModal= {this.state.showSendReminder} toggleState = {this.toggleState} currentModal='SENDREMINDER'/>: null}
+
+
       </div>
     );
   }
