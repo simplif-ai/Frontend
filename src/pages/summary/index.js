@@ -76,7 +76,7 @@ class Summary extends Component {
         else {
           // call funtion to send data to page
           this.setState({
-            text: json[0].summary,
+            text: json[0].noteText,
             title: json[0].name
           });
         }
