@@ -6,6 +6,7 @@ import FeedbackModal from './FeedbackModal';
 import ViewCollabModal from './ViewCollab';
 import AddCollabModal from './AddCollab';
 import ReminderModal from './SendReminder';
+import DelCollabModal from './DelCollab';
 
 const ModalConductor = props => {
     switch (props.currentModal) {
@@ -20,6 +21,9 @@ const ModalConductor = props => {
         
         case 'VIEWCOLLAB':
             return <ViewCollabModal {...props}/>;
+
+        case 'DELCOLLAB':
+            return <DelCollabModal {...props}/>;
 
         case 'SENDREMINDER':
             return <ReminderModal {...props}/>;

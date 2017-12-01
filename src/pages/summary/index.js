@@ -45,6 +45,7 @@ class Summary extends Component {
       isOffline: false,
       showAddCollab: false,
       showViewCollab: false,
+      showDelCollab: false,
       showSendReminder: false
     };
   }
@@ -273,12 +274,20 @@ class Summary extends Component {
         showSendReminder:false
       })
     }
+    else if (state === "showDelCollab") {
+      this.setState( {
+        showDelCollab: false
+      })
+    }
   }
   viewAddCollab = () => {
     this.setState({ showAddCollab: true })
   }
   viewViewCollab = () => {
     this.setState({ showViewCollab: true })
+  }
+  viewDelCollab = () => {
+    this.setState({ showDelCollab: true})
   }
   viewSendReminder = () => {
     this.setState({ showSendReminder: true })
@@ -414,6 +423,7 @@ class Summary extends Component {
             <p onClick={this.toggleOfflineMode}>Toggle Offline Mode</p>
             <p onClick={this.viewAddCollab}> Add Collaborator </p>
             <p onClick={this.viewViewCollab}> View Collaborator </p>
+            <p onClick={this.viewDelCollab}> Delete Collaborator </p>
           </div>) : null
         }
         {this.state.showAddCollab ?
@@ -422,9 +432,11 @@ class Summary extends Component {
         {this.state.showViewCollab ?
         <ModalConductor name={'showViewCollab'} showModal= {this.state.showViewCollab} toggleState = {this.toggleState} currentModal='VIEWCOLLAB'/>: null}
 
+        {this.state.showDelCollab ?
+        <ModalConductor name={'showDelCollab'} showModal= {this.state.showDelCollab} toggleState = {this.toggleState} currentModal='DELCOLLAB'/>: null}
+
         {this.state.showSendReminder ?
         <ModalConductor name={'showSendReminder'} showModal= {this.state.showSendReminder} toggleState = {this.toggleState} currentModal='SENDREMINDER'/>: null}
-
 
       </div>
     );
