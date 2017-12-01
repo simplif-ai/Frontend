@@ -145,9 +145,11 @@ class Profile extends Component {
           }
           else {
             let preferEmailUpdates = false;
-            if (json.preferEmailUpdates === 1) {
+            console.log('json.preferEmailUpdates',json.prefersEmailUpdates);
+            if (json.prefersEmailUpdates === 1) {
               preferEmailUpdates = true;
             }
+            console.log('preferEmailUpdates', preferEmailUpdates);
             this.setState({
               error: null,
               name: json.name,
@@ -268,7 +270,7 @@ class Profile extends Component {
   toggleState = (state, val) => {
     this.setState({
       state: val
-    }); 
+    });
     if (state === "showTutorial") {
       this.setState({
         showTutorial:false
@@ -277,7 +279,7 @@ class Profile extends Component {
     else if (state === "showFeedback") {
       this.setState({
         showFeedback:false
-      }); 
+      });
     }
   }
   clearEditMode = (e) => {
@@ -293,26 +295,31 @@ class Profile extends Component {
   }
   updateEmailPreference = (e) => {
     e.preventDefault();
+    const { cookies } = this.props;
+    const email = cookies.get('email');
     let checked = 0;
     if (this.state.preferEmailUpdates === true) {
       checked = 1;
     }
-    return apiFetch('?',{
+    return apiFetch('preferEmailUpdates',{
       headers: {
         'Content-Type': 'text/plain'
       },
       method: 'POST',
       body: JSON.stringify({
+        email,
         prefersEmailUpdates: checked
       })
     }).then((response) => response.json())
         .then((json) => {
-          if(json.success === false) {
-              this.setState({ error: json.error });
+          console.log('json after /preferEmailUpdates', json);
+          if(json.success === true) {
+            this.setState({ error: 'You were able to update preferEmailUpdates' });
+            window.setTimeout(function() { this.setState({ error: null }); }.bind(this), 4000);
           }
           else {
-            this.setError("You have successfully updated your email preference");
-            window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+            this.setState({ error: json.error });
+            window.setTimeout(function() { this.setState({ error: null }); }.bind(this), 4000);
           }
         });
   }
@@ -324,55 +331,57 @@ class Profile extends Component {
     }
     let {imagePreviewUrl} = this.state;
     return (
-      <div className="page bgorange profile-page">
+      <div className="page bgorange">
         {this.state.error ? <p>{this.state.error}</p> : null}
-        <div className="profileCard">
-          <img src={imagePreviewUrl} alt="cute prof pic"/>
-          <h2 className="topSpacing questrial">{this.state.name}</h2>
-          <p className="title">{this.state.email}</p>
-        </div>
-        <div className="profile-info">
-          <form className="image-upload" onSubmit={this.savePicture}>
-            <h1>Upload a Picture</h1>
-            <input className="fileInput"
-              type="file"
-              onChange={this.handleImageChange} required />
-            <button className="submitButton" type="submit" >Upload Image</button>
-          </form>
-          <button onClick={this.toggleEditMode}>Edit Profile</button>
-          {this.state.editMode ? (
-            <form className="form-width" onSubmit={this.editProfile}>
-            <h1>Edit Profile</h1>
-            <div className = "errorClass">
-            {this.state.error ? `Error= ${this.state.error}` : null}
-            </div>
-            <label htmlFor="name">Name </label>
-            <input type="text" name="name" />
-            <label htmlFor="email">Email </label>
-            <input type="email" name="email" />
-            <br/>
-            <input className="btn" type="submit" name="submit" value="Save" />
-            <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
-          </form>
-        ) : null
-        }
-        <button onClick={this.deleteAccount}>Delete Account</button>
-        <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
-        <button onClick={this.clickTutorialModal}>Tutorial</button>
-
-        {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
-
-        {this.state.showFeedback ? <ModalConductor name={'showFeedback'} showModal={this.state.showFeedback} toggleState = {this.toggleState} currentModal='FEEDBACK'/> : null }
-
-          <h1>Prefer Email Updates</h1>
-          <div className="check-con">
-            <input type="checkbox" name="preferEmailUpdates" onChange={this.togglepreferEmailUpdates} value={this.state.preferEmailUpdates} />
-            <label htmlFor="preferEmailUpdates">Prefer Email Updates</label>
+        <div className="profile-page">
+          <div className="profileCard">
+            <img src={imagePreviewUrl} alt="cute prof pic"/>
+            <h2 className="topSpacing questrial">{this.state.name}</h2>
+            <p className="title">{this.state.email}</p>
           </div>
-          <button onClick={this.updateEmailPreference}>Save Email Preference</button>
-          <button onClick={this.toggleScheme}>Toggle Scheme</button>
+          <div className="profile-info">
+            <form className="image-upload" onSubmit={this.savePicture}>
+              <h1>Upload a Picture</h1>
+              <input className="fileInput"
+                type="file"
+                onChange={this.handleImageChange} required />
+              <button className="submitButton" type="submit" >Upload Image</button>
+            </form>
+            <button onClick={this.toggleEditMode}>Edit Profile</button>
+            {this.state.editMode ? (
+              <form className="form-width" onSubmit={this.editProfile}>
+              <h1>Edit Profile</h1>
+              <div className = "errorClass">
+              {this.state.error ? `Error= ${this.state.error}` : null}
+              </div>
+              <label htmlFor="name">Name </label>
+              <input type="text" name="name" />
+              <label htmlFor="email">Email </label>
+              <input type="email" name="email" />
+              <br/>
+              <input className="btn" type="submit" name="submit" value="Save" />
+              <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
+            </form>
+          ) : null
+          }
           <button onClick={this.deleteAccount}>Delete Account</button>
           <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
+          <button onClick={this.clickTutorialModal}>Tutorial</button>
+
+          {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
+
+          {this.state.showFeedback ? <ModalConductor name={'showFeedback'} showModal={this.state.showFeedback} toggleState = {this.toggleState} currentModal='FEEDBACK'/> : null }
+
+            <h1>Prefer Email Updates</h1>
+            <div className="check-con">
+              <input type="checkbox" name="preferEmailUpdates" onChange={this.togglepreferEmailUpdates} checked={this.state.preferEmailUpdates} />
+              <label htmlFor="preferEmailUpdates">Prefer Email Updates</label>
+            </div>
+            <button onClick={this.updateEmailPreference}>Save Email Preference</button>
+            <button onClick={this.toggleScheme}>Toggle Scheme</button>
+            <button onClick={this.deleteAccount}>Delete Account</button>
+            <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
+          </div>
         </div>
       </div>
     );
