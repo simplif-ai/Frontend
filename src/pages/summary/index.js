@@ -131,46 +131,6 @@ class Summary extends Component {
       this.updateSummary();
     }
   }
-  saveSummary = (e) => {
-    e.preventDefault();
-    if (this.state.isOffline === true) {
-      console.log('true');
-      saveToLocalStorage({ text: this.state.text, title: this.state.title });
-      this.setError("This summary will be synced when you go back online!");
-      console.log('This summary will be synced when you go back online');
-      window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
-      return;
-    }
-    const { cookies } = this.props;
-    const email = cookies.get('email');
-    return apiFetch('savesummary', {
-      headers: {
-       'Content-Type': 'text/plain'
-      },
-      body: JSON.stringify({
-        text: this.state.text,
-        email,
-        name: this.state.title
-      }),
-      method: 'POST'
-    }).then(response =>
-      response.text()
-    ).then((json) => {
-        if (json.success === false) {
-            this.setError("Your summary was not saved!");
-            window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
-        }
-        else {
-          // call funtion to send data to page
-          this.setState({
-            editMode: false
-          });
-          this.setError("Your summary was successfully saved!");
-          window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
-          // this.updateSummary();
-        }
-      });
-  }
   updateNote = (e) => {
     e.preventDefault();
     if (this.state.isOffline === true) {
@@ -330,27 +290,31 @@ class Summary extends Component {
     });
     return (
       <div className="summary">
-      {this.state.wait ? <Loader/> : null}
-      <form onSubmit={this.summarize}>
-        <textarea className="h1" name="textarea" placeholder="Enter a Title..." value={this.state.title} onChange={this.onEditTitle} onKeyUp={this.handleKeyUp} />
-        <button className="icon orange" onClick={this.toggleEditMode}><img src={edit_icon_orange} alt="edit"/></button>
-        {this.state.error ? <p>{this.state.error}</p> : null}
-        {this.state.editMode ?
-          <EditSummary brevity={this.state.brevity} response={this.state.response} updateResponse={this.updateResponse} setError={this.setError} />
-          :
-          <textarea className="note" name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} value={this.state.text} onChange={this.onEdit} id="summary"/>
-        }
-        <button className="fixed" type="submit">Summarize</button>
-        <button onClick={this.updateNote} className="fixed save">Save</button>
-      </form>
+        {this.state.wait ? <Loader/> : null}
+        <form onSubmit={this.summarize}>
+          <textarea className="h1" name="textarea" placeholder="Enter a Title..." value={this.state.title} onChange={this.onEditTitle} onKeyUp={this.handleKeyUp} />
+
+          <button className="icon orange" onClick={this.toggleEditMode}><img src={edit_icon_orange} alt="edit"/></button>
+          {this.state.error ? <p>{this.state.error}</p> : null}
+          {this.state.editMode ?
+            <EditSummary brevity={this.state.brevity} response={this.state.response} updateResponse={this.updateResponse} setError={this.setError} />
+            :
+            <textarea className="note" name="textarea" placeholder="Start taking notes..." onKeyUp={this.handleKeyUp} value={this.state.text} onChange={this.onEdit} id="summary"/>
+          }
+          <button className="fixed" type="submit">Summarize</button>
+          <button onClick={this.updateNote} className="fixed save">Save</button>
+        </form>
+
         <div className="brevity fixed fixed-slider">
           <label>Brevity {this.state.brevity}%</label>
           <input type="range" min="1" max="100" className="slider" id="myRange" value={this.state.brevity} onChange={this.changeBrevity} />
         </div>
+
         <div className="footer">
           <button className="button" onClick={this.toggleEditMode}><img src={edit_icon_white} alt="edit_icon_white"/></button>
           <button className="button" onClick={this.toggleOptions}>?</button>
         </div>
+
         {this.state.options
           ?
           (<div className="options drop">
@@ -360,6 +324,7 @@ class Summary extends Component {
             <p onClick={this.toggleOfflineMode}>Toggle Offline Mode</p>
           </div>) : null
         }
+
       </div>
     );
   }
