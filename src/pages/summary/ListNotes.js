@@ -316,7 +316,7 @@ class Summary extends Component {
             <CollabForm addCollaborator={this.addCollaborator}/>
             <h2>Summarize from Article Url</h2>
             <SummarizeUrl summarizeFromUrl={this.summarizeFromUrl} />
-            <h2>Schdedule Email Reminder</h2>
+            <h2>Schedule Email Reminder</h2>
             <form onSubmit={this.addDate}>
               <label htmlFor="message">Reminder Message</label>
               <input type="text" name="message" required />
