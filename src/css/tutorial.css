@@ -1,0 +1,28 @@
+.carousel {
+    position: relative;
+    display:inline-block;
+    margin-top: 10px;
+}
+i {
+    position:fixed;
+    border: solid black;
+    display: inline-block;
+    padding: 3px;
+    opacity: .6;
+}
+i:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.rightArrow{
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    float:right;
+
+}
+.leftArrow {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+    float:left;
+}
