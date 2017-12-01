@@ -8,6 +8,3 @@
   border: solid 1px #F9B045;
   border-radius: 10px;
 }
-.feedback:focus{
-    overflow:scroll;
-}

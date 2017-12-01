@@ -22,7 +22,7 @@
 }
 .modal-top {
     display: block;
-    margin: auto;
+    margin: 0px 10px 0px 0px;
     width: 95%;
     height: 60px;
     background-color: #f9b045;

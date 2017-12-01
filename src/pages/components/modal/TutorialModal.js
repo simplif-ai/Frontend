@@ -2,15 +2,31 @@ import React from 'react';
 import ModalWrapper from './ModalWrapper';
 
 import '../../../css/tutorial.css';
+import img1 from '../../../assets/profile_ss.png';
+import img2 from '../../../assets/folders_ss.png';
+import img3 from '../../../assets/notes_ss.png';
 
 class TutorialModal extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {};
+      this.state = {
+        slideIndex: 1,
+        slides: [img1,img2,img3],
+        tutText:[
+          "explanatory text1","text2","text3!"
+        ]
+    };
       const tutorial = provider => {
         props.hideModal();
-      }  
+      } 
+  }
+      clickPrev = (e) => {
+        this.setState({ slideIndex: this.state.slideIndex+1 });
     }
+      clickNext = (e) => {
+        this.setState({ slideIndex: this.state.slideIndex-1 });
+    }
+      
     render() {
         return (
           <ModalWrapper
@@ -21,15 +37,12 @@ class TutorialModal extends React.Component {
             name={this.props.name}
             toggleState={this.props.toggleState}
           >
-          <div id="slideshow">
-            <div class="slide-wrapper">
-              <div class="slide"><h1 class="slide-number">1</h1></div>
-              <div class="slide"><h1 class="slide-number">2</h1></div>
-              <div class="slide"><h1 class="slide-number">3</h1></div>
-              <div class="slide"><h1 class="slide-number">4</h1></div>
-              <div class="slide"><h1 class="slide-number">5</h1></div>
-            </div>
+          <div className="carousel">
+            <img src= {this.state.slides[(this.state.slideIndex%3)]} style={{'width':'60%'}}alt = "slide"/>
+            <p>{this.state.tutText[this.state.slideIndex%3]}</p>
           </div>
+           <i className="arrow left" onClick={this.clickPrev}></i>
+           <i className="arrow right" onClick={this.clickNext}></i>
           </ModalWrapper>
         );
       }
