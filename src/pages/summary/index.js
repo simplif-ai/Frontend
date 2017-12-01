@@ -445,7 +445,7 @@ class Summary extends Component {
         {this.state.options
           ?
           (<div className="options drop">
-            <p onClick={this.exportToText}>Export to text File</p>
+            <p onClick={this.exportToText}>Export to text file</p>
             {this.state.token !== '' ? <p onClick={this.exportToGoogle}>Export to Google Drive</p> : null}
             <p onClick={this.toggleNightMode}>Toggle Night Mode</p>
             <p onClick={this.viewSendReminder}>Search for Dates</p>

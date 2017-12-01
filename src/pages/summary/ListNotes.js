@@ -321,10 +321,6 @@ class Summary extends Component {
           </div>
           : null
         }
-        <div className="inputField">
-            <h2> Create a new Simplif.ai folder </h2>
-            <FolderForm createFolder={this.createFolder}/>
-        </div>
       </div>
     );
   }

@@ -11,11 +11,36 @@ class Nav extends Component {
   };
   constructor(props) {
     super(props);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleOutsideClick = this.handleOutsideClick.bind(this);
+
     this.state = {
       open: false,
       imagePreviewUrl: null
     };
   }
+
+  handleClick() {
+    if (!this.state.open) {
+      // attach/remove event handler
+      document.addEventListener('click', this.handleOutsideClick, false);
+    } else {
+      document.removeEventListener('click', this.handleOutsideClick, false);
+    }
+
+    this.setState(prevState => ({
+       open: !prevState.open,
+    }));
+  }
+  
+  handleOutsideClick(e) {
+    // ignore clicks on the component itself
+    if (this.node.contains(e.target)) {
+      return;
+    }
+    this.handleClick();
+  }
+
   componentDidMount() {
     const { cookies } = this.props;
     const email = cookies.get('email');
@@ -117,8 +142,8 @@ class Nav extends Component {
       return (<Redirect to="/login"/>);
     }
     return (
-      <div className="nav left">
-        <div onClick={this.onOpen} className="container">
+      <div className="nav left" ref={node => { this.node = node; }}>
+        <div onClick={this.handleClick} className="container">
           {isAuthenticated === "true"
             ?
             (
@@ -133,10 +158,10 @@ class Nav extends Component {
         </div>
         {this.state.open && isAuthenticated === "true"
           ?
-          (<div className="drop">
-            <Link to='/profile'>Profile</Link>
-            <Link to='/notes'>My Notes</Link>
-            <Link to='/send-feedback'>Send Feedback</Link>
+          (<div className="drop" >
+            <Link to='/profile' onClick={this.handleClick}>Profile</Link>
+            <Link to='/notes' onClick={this.handleClick}>My Notes</Link>
+            <Link to='/send-feedback' onClick={this.handleClick}>Send Feedback</Link>
             <Link to='/' onClick={this.logout}>Logout</Link>
           </div>) : null
         }
