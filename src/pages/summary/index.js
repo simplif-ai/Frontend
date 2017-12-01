@@ -15,7 +15,7 @@ import ModalConductor from '../components/modal/ModalConductor';
 class Summary extends Component {
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired
-  }; 
+  };
   constructor(props) {
     super(props);
     const { cookies } = this.props;
@@ -50,10 +50,38 @@ class Summary extends Component {
   }
   componentDidMount() {
     const { cookies } = this.props;
+    const email = cookies.get('email');
     this.setState({
       noteID: this.props.match.params.noteID,
       token: cookies.get('token')
     });
+    return apiFetch('getsumandnote', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        email,
+        noteID: this.props.match.params.noteID,
+      }),
+      method: 'POST'
+    }).then(response =>
+      response.json()
+    ).then((json) => {
+        console.log('json', json[0]);
+        if (json.success === false) {
+          console.log('error', json.error);
+          this.setError("we could not pull a summary from this noteID");
+          window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+        }
+        else {
+          // call funtion to send data to page
+          this.setState({
+            text: json[0].summary,
+            title: json[0].name
+          });
+        }
+      });
+
   }
   updateResponse = (index, priority) => {
     let newResponse = this.state.response;
@@ -217,7 +245,7 @@ class Summary extends Component {
   toggleState = (state, val) => {
     this.setState({
       state: val
-    }); 
+    });
     if (state === "showAddCollab") {
       this.setState({
         showAddCollab:false
@@ -226,7 +254,7 @@ class Summary extends Component {
     else if (state === "showViewCollab") {
       this.setState({
         showViewCollab:false
-      }); 
+      });
     }
     else if (state === "showSendReminder") {
       this.setState( {
@@ -241,7 +269,9 @@ class Summary extends Component {
     this.setState({ showViewCollab: true })
   }
   viewSendReminder = () => {
-    this.setState({ showSendReminder: true })
+    this.setState({ showSendReminder: true });
+    // TODO: add search for reg x and push props to modal component
+
   }
   exportToText = () => {
     var e = document.createElement("a");
@@ -379,7 +409,7 @@ class Summary extends Component {
         }
         {this.state.showAddCollab ?
         <ModalConductor name={'showAddCollab'} showModal= {this.state.showAddCollab} toggleState = {this.toggleState} currentModal='ADDCOLLAB'/>: null}
-        
+
         {this.state.showViewCollab ?
         <ModalConductor name={'showViewCollab'} showModal= {this.state.showViewCollab} toggleState = {this.toggleState} currentModal='VIEWCOLLAB'/>: null}
 
