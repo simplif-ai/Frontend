@@ -44,7 +44,7 @@ class Profile extends Component {
     const { cookies } = this.props;
     if (cookies.get('token') !== '') {
       this.setState({
-        error: "You are already successfully linked to a google account!!"
+        error: "You are already successfully linked to a Google account!!"
       });
       return;
     }

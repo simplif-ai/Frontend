@@ -1,17 +1,63 @@
 import React from 'react';
+import { Cookies } from 'react-cookie';
+import { instanceOf } from 'prop-types';
+import apiFetch from '../../../utils/api.js';
 import ModalWrapper from './ModalWrapper';
 
 class ViewCollabModal extends React.Component {
+    static propTypes = {
+        cookies: instanceOf(Cookies).isRequired
+    }; 
     constructor(props) {
         super(props);
+        const { cookies } = this.props;
         this.state = {
-            text: ''
+            userEmail:'',
+            noteID:'',
+            popUp: false,
+            collabs: []
         };
     }
-    handleInput = (e) =>  {
-      this.setState({ text: e.target.value });
+    popUp = () => {
+        if (!this.state.popUp) {
+        this.setState({
+            popUp: "Enter some emails!"
+        });
+        window.setTimeout(function() {
+            if (this.state.popUp) {
+            this.setState({ popUp: '' });
+            }
+        }.bind(this), 2000);
+        }
     }
+    getCollaborator = (e) => {
+        const { cookies } = this.props;
+        this.setState({userEmail: cookies.get('email')});
+        apiFetch('getcollaborators', {
+        headers: {
+            'Content-Type': 'text/plain'
+        },
+        method: 'POST',
+        body: JSON.stringify( {
+            userEmail: this.state.userEmail,
+            noteId: this.state.noteID
+        })
+        }).then((response) => response.blob())
+        .then((json) => {
+            if (json.success === false) {
+            this.setState({error: json.error});
+                } else {
+                    this.setState({
+                        collabs: json
+                });
+            }
+        });
+   }
     render() {
+        const collabo = [];
+        this.state.collabs.forEach(collab => {
+            collabo.push(<p>{collab.name} : {collab.colabEmail}</p>);
+        }) 
         return (
             <ModalWrapper
             title="Current Collaborators"
@@ -22,10 +68,8 @@ class ViewCollabModal extends React.Component {
             name={this.props.name}
             okText="OK"
             >
-            <p> collaborator1 </p>
-            <p> collaborator2 </p>
-            <p> collaborator3 </p>
-            <p> collaborator4 </p>
+            {this.state.popUp ? <p>{this.state.popUp}</p> : null}
+            {collabo}
             </ModalWrapper>
         );
     };

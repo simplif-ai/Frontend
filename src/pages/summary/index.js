@@ -220,6 +220,7 @@ class Summary extends Component {
         }
       });
   }
+
   setError = (error) => {
     this.setState({
       error
@@ -427,13 +428,13 @@ class Summary extends Component {
           </div>) : null
         }
         {this.state.showAddCollab ?
-        <ModalConductor name={'showAddCollab'} showModal= {this.state.showAddCollab} toggleState = {this.toggleState} currentModal='ADDCOLLAB'/>: null}
+        <ModalConductor name={'showAddCollab'} showModal= {this.state.showAddCollab} toggleState = {this.toggleState} noteID = {this.noteID} currentModal='ADDCOLLAB'/>: null}
         
         {this.state.showViewCollab ?
-        <ModalConductor name={'showViewCollab'} showModal= {this.state.showViewCollab} toggleState = {this.toggleState} currentModal='VIEWCOLLAB'/>: null}
+        <ModalConductor name={'showViewCollab'} showModal= {this.state.showViewCollab} toggleState = {this.toggleState} cookies = {this.cookies} noteID = {this.noteID} currentModal='VIEWCOLLAB'/>: null}
 
         {this.state.showDelCollab ?
-        <ModalConductor name={'showDelCollab'} showModal= {this.state.showDelCollab} toggleState = {this.toggleState} currentModal='DELCOLLAB'/>: null}
+        <ModalConductor name={'showDelCollab'} showModal= {this.state.showDelCollab} toggleState = {this.toggleState} currentModal='DELCOLLAB' noteID={this.noteID} />: null}
 
         {this.state.showSendReminder ?
         <ModalConductor name={'showSendReminder'} showModal= {this.state.showSendReminder} toggleState = {this.toggleState} currentModal='SENDREMINDER'/>: null}
