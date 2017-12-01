@@ -1,9 +1,8 @@
 .profileCard {
   background-color: white;
-  width: 200px;
   padding: 3px 16px;
   border-radius:4px;
-  display: inline-block;
+  flex-basis: 200px;
 }
 .profileCard .title{
   font-size: 20px;
@@ -21,7 +20,7 @@
 }
 .image-upload {
   width: 235px;
-  margin: 20px auto;
+  margin: 20px;
 }
 .card {
     padding: 20px;
@@ -61,4 +60,20 @@
   float:left;
   padding: 20px 0;
 
+}
+
+.profile-page {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.profile-info {
+  flex-basis: auto;
+  text-align: left;
+  display: block;
+}
+
+.profile-info button {
+  display: block;
 }
