@@ -236,15 +236,13 @@ class Profile extends Component {
     formData.append('file', this.state.file);
     formData.append('email', email);
     apiFetch('addpicture', {
-      headers: {
-       'Content-Type':'multipart/form-data'
-      },
       body: formData,
       method: 'POST'
     }).then(response =>
       response.text()
     ).then((json) => {
         json = JSON.parse(json);
+        console.log('json', json);
         if (json.success === false) {
             console.log('error', json.error);
         }
@@ -343,40 +341,41 @@ class Profile extends Component {
     return (
       <div className="page bgorange">
         {this.state.error ? <p>{this.state.error}</p> : null}
-        <div className="profileCard">
-          <img src={imagePreviewUrl} alt="cute prof pic"/>
-          <h2 className="topSpacing questrial">{this.state.name}</h2>
-          <p className="title">{this.state.email}</p>
-        </div>
-        <div className="profile-info">
-          <form className="image-upload" onSubmit={this.savePicture}>
-            <h1>Upload a Picture</h1>
-            <input className="fileInput"
-              type="file"
-              onChange={this.handleImageChange} required />
-            <button className="submitButton" type="submit" >Upload Image</button>
-          </form>
-          <button onClick={this.toggleEditMode}>Edit Profile</button>
-          {this.state.editMode ? (
-            <form className="form-width" onSubmit={this.editProfile}>
-            <h1>Edit Profile</h1>
-            <div className = "errorClass">
-            {this.state.error ? `Error= ${this.state.error}` : null}
-            </div>
-            <label htmlFor="name">Name </label>
-            <input type="text" name="name" />
-            <label htmlFor="email">Email </label>
-            <input type="email" name="email" />
-            <br/>
-            <input className="btn" type="submit" name="submit" value="Save" />
-            <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
-          </form>
-        ) : null
-        }
-        <button onClick={this.clickTutorialModal}>Tutorial</button>
-          {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
+        <div className="profile-page">
+          <div className="profileCard">
+            <img src={imagePreviewUrl} alt="cute prof pic"/>
+            <h2 className="topSpacing questrial">{this.state.name}</h2>
+            <p className="title">{this.state.email}</p>
+          </div>
+          <div className="profile-info">
+            <form className="image-upload" onSubmit={this.savePicture}>
+              <h1>Upload a Picture</h1>
+              <input className="fileInput"
+                type="file"
+                onChange={this.handleImageChange} required />
+              <button className="submitButton" type="submit" >Upload Image</button>
+            </form>
+            <button onClick={this.toggleEditMode}>Edit Profile</button>
+            {this.state.editMode ? (
+              <form className="form-width" onSubmit={this.editProfile}>
+              <h1>Edit Profile</h1>
+              <div className = "errorClass">
+              {this.state.error ? `Error= ${this.state.error}` : null}
+              </div>
+              <label htmlFor="name">Name </label>
+              <input type="text" name="name" />
+              <label htmlFor="email">Email </label>
+              <input type="email" name="email" />
+              <br/>
+              <input className="btn" type="submit" name="submit" value="Save" />
+              <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
+            </form>
+              ) : null
+            }
+            <button onClick={this.clickTutorialModal}>Tutorial</button>
+            {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
 
-          {this.state.showFeedback ? <ModalConductor name={'showFeedback'} showModal={this.state.showFeedback} toggleState = {this.toggleState} currentModal='FEEDBACK'/> : null }
+            {this.state.showFeedback ? <ModalConductor name={'showFeedback'} showModal={this.state.showFeedback} toggleState = {this.toggleState} currentModal='FEEDBACK'/> : null }
 
             <h1>Prefer Email Updates</h1>
             <div className="check-con">
@@ -387,12 +386,8 @@ class Profile extends Component {
             <button onClick={this.toggleScheme}>Toggle Scheme</button>
             <button onClick={this.deleteAccount}>Delete Account</button>
             <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
+            <button onClick={this.seeFeedback}>View Submitted Feedback</button>
           </div>
-          <button onClick={this.updateEmailPreference}>Save Email Preference</button>
-          <button onClick={this.toggleScheme}>Toggle Scheme</button>
-          <button onClick={this.deleteAccount}>Delete Account</button>
-          <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
-          <button onClick={this.seeFeedback}>View Submitted Feedback</button>
         </div>
       </div>
     );
