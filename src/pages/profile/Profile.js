@@ -352,34 +352,18 @@ class Profile extends Component {
             <input type="email" name="email" />
             <br/>
             <input className="btn" type="submit" name="submit" value="Save" />
+            <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
           </form>
         ) : null
         }
         <button onClick={this.deleteAccount}>Delete Account</button>
         <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
-        <button onClick={this.toggleUpdatePassword}>Update Password</button>
         <button onClick={this.clickTutorialModal}>Tutorial</button>
 
         {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
 
         {this.state.showFeedback ? <ModalConductor name={'showFeedback'} showModal={this.state.showFeedback} toggleState = {this.toggleState} currentModal='FEEDBACK'/> : null }
 
-        {this.state.editPassword ?
-          (<form  className="form-width" onSubmit={this.updatePassword}>
-            <h1>Edit Password</h1>
-            <div className = "errorClass">
-              {this.state.error ? `Error= ${this.state.error}` : null}
-            </div>
-            <label htmlFor="password">Current Password </label>
-            <input type="password" name="password" />
-            <label htmlFor="npassword">New Password </label>
-            <input type="password" name="npassword" />
-            <br/>
-            <input className="btn" type="submit" name="submit" value="Save" />
-            <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
-          </form>
-          ) : null
-          }
           <h1>Prefer Email Updates</h1>
           <div className="check-con">
             <input type="checkbox" name="preferEmailUpdates" onChange={this.togglepreferEmailUpdates} value={this.state.preferEmailUpdates} />

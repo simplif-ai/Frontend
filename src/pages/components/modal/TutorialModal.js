@@ -18,10 +18,10 @@ class TutorialModal extends React.Component {
     };
   }
       clickPrev = (e) => {
-        this.setState({ slideIndex: this.state.slideIndex+1 });
+        this.setState({ slideIndex: this.state.slideIndex-1 });
     }
       clickNext = (e) => {
-        this.setState({ slideIndex: this.state.slideIndex-1 });
+        this.setState({ slideIndex: this.state.slideIndex+1 });
     }
       
     render() {
@@ -38,8 +38,8 @@ class TutorialModal extends React.Component {
             <img src= {this.state.slides[(this.state.slideIndex%3)]} style={{'width':'60%'}}alt = "slide"/>
             <p>{this.state.tutText[this.state.slideIndex%3]}</p>
           </div>
-           <i className="arrow left" onClick={this.clickPrev}></i>
-           <i className="arrow right" onClick={this.clickNext}></i>
+           <i className="arrow leftArrow" onClick={this.clickPrev}></i>
+           <i className="arrow rightArrow" onClick={this.clickNext}></i>
           </ModalWrapper>
         );
       }
