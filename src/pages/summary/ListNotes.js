@@ -3,6 +3,8 @@ import { withCookies } from 'react-cookie';
 import { Redirect, Link } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import FolderForm from './FolderForm';
+import CollabForm from './CollabForm';
+import SummarizeUrl from './SummarizeUrl';
 import '../../css/summary.css';
 import plusIcon from '../../assets/plus-icon.svg';
 import xIcon from '../../assets/x-icon.svg';
@@ -18,7 +20,8 @@ class Summary extends Component {
       success: null,
       popUp: false,
       noteID: 0,
-      newNote: false
+      newNote: false,
+      text: ''
     };
   }
   componentDidMount() {
@@ -40,8 +43,7 @@ class Summary extends Component {
         }
         else {
           this.setState({
-            notes: json,
-            noteID: json[0][1]
+            notes: json
           });
         }
       });
@@ -156,6 +158,7 @@ class Summary extends Component {
     }
   }
   createNote = () => {
+    console.log('create Note');
     const { cookies } = this.props;
     const email = cookies.get('email');
     return apiFetch('createnote', {
@@ -163,7 +166,7 @@ class Summary extends Component {
        'Content-Type': 'text/plain'
       },
       body: JSON.stringify({
-        text: '',
+        text: this.state.text,
         email
       }),
       method: 'POST'
@@ -171,6 +174,7 @@ class Summary extends Component {
       response.text()
     ).then((json) => {
         json = JSON.parse(json);
+        console.log('json in create Note', json);
         if (!json.success === false) {
             this.setState({ popUp: "Your summary could not be created!" });
             window.setTimeout(function() {
@@ -184,6 +188,42 @@ class Summary extends Component {
           });
         }
       });
+  }
+  summarizeFromUrl = (e) => {
+    e.preventDefault();
+    console.log('e.target.email.value', e.target.url.value);
+    apiFetch('parseURL', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        URL: e.target.url.value
+      }),
+      method: 'POST'
+    }).then(response =>
+      response.text()
+    ).then((json) => {
+        json = JSON.parse(json);
+        console.log('json', json);
+        if (json.success === true) {
+            const sentences = [];
+            json.text.forEach(sentence => {
+              sentences.push(sentence[0]);
+            });
+            console.log('sentences.join', sentences.join(' '));
+            this.setState({
+              text: sentences.join(' ')
+            });
+            this.createNote();
+        }
+        else {
+          this.setState({ popUp: "Your summary could not be created from this article!" });
+          window.setTimeout(function() {
+            this.setState({ popUp: '' });
+          }.bind(this), 2000);
+        }
+      });
+      // this.createNote();
   }
   deleteNote= () => {
   //TODO: delete life and maybe one day my student loans
@@ -215,7 +255,7 @@ class Summary extends Component {
             if (note.name === '') {
               note.name = 'Undefined Title';
             }
-            return (<Link to={`/notes/${note.noteID}}`} key={`${note.name} ${note.noteID}`}><h2>{note.name}</h2><p>Note Id: {note.noteID}</p></Link>);
+            return (<Link to={`/notes/${note.noteID}`} key={`${note.name} ${note.noteID}`}><h2>{note.name}</h2><p>Note Id: {note.noteID}</p></Link>);
           })
           : null
         }
@@ -223,6 +263,10 @@ class Summary extends Component {
           <div className="inputField">
             <h2> Create a new Simplif.ai folder </h2>
             <FolderForm createFolder={this.createFolder}/>
+            <h2>Add collaborator to folder</h2>
+            <CollabForm addCollaborator={this.addCollaborator}/>
+            <h2>Summarize from Article Url</h2>
+            <SummarizeUrl summarizeFromUrl={this.summarizeFromUrl} />
           </div>
           : null
         }
