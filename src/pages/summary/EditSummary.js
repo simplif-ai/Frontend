@@ -29,3 +29,4 @@ const EditSummary = ({ response, updateResponse, setError, brevity }) => {
 }
 
 export default EditSummary;
+
