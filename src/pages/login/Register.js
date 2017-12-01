@@ -66,9 +66,9 @@ class Register extends Component {
             <label htmlFor="fname">First Name</label>
             <input type="text" name="fname" required />
             <label htmlFor="email" >Email</label>
-            <input type="text" name="email" required />
+            <input type="email" name="email" required />
             <label htmlFor="phone" >Phone Number</label>
-            <input type="text" name="phone" required />
+            <input type="tel" name="phone" required />
             <div className="check-con">
               <input type="checkbox" name="prefersEmailUpdates" onChange={this.toggleChecked} value={this.state.checked} />
               <label htmlFor="prefersEmailUpdates">Prefer Email Updates</label>
