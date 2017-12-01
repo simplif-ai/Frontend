@@ -6,9 +6,12 @@
 .carousel-img {
     width: 300px;
     height: auto;
+    display: block;
+    margin: auto;
 }
 i {
     border: solid black;
+    border-width: 0 5px 5px 0;
     display: inline-block;
     padding: 3px;
     opacity: .6;
