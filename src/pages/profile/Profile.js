@@ -37,14 +37,15 @@ class Profile extends Component {
       imagePreviewUrl: '',
       token: tokenFromCookie,
       showTutorial: false,
-      showFeedback: false
+      showFeedback: false,
+      toFeedback: false
     };
   }
   linkGoogleAccount = () => {
     const { cookies } = this.props;
     if (cookies.get('token') !== '') {
       this.setState({
-        error: "You are already successfully linked to a google account!!"
+        error: "You are already successfully linked to a Google account!!"
       });
       return;
     }
@@ -83,6 +84,9 @@ class Profile extends Component {
             }.bind(this), 4000);
           }
         });
+  }
+  seeFeedback = () => {
+      this.setState({toFeedback: true});
   }
   componentWillMount() {
     if (this.state.token && this.state.token.length > 0) {
@@ -232,15 +236,13 @@ class Profile extends Component {
     formData.append('file', this.state.file);
     formData.append('email', email);
     apiFetch('addpicture', {
-      headers: {
-       'Content-Type':'multipart/form-data'
-      },
       body: formData,
       method: 'POST'
     }).then(response =>
       response.text()
     ).then((json) => {
         json = JSON.parse(json);
+        console.log('json', json);
         if (json.success === false) {
             console.log('error', json.error);
         }
@@ -333,6 +335,9 @@ class Profile extends Component {
       return (<Redirect to="/"/>);
     }
     let {imagePreviewUrl} = this.state;
+    if (this.state.toFeedback === true) {
+       return (<Redirect to="/view-feedback"/>);
+    }
     return (
       <div className="page bgorange">
         {this.state.error ? <p>{this.state.error}</p> : null}
@@ -365,15 +370,12 @@ class Profile extends Component {
               <input className="btn" type="submit" name="submit" value="Save" />
               <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
             </form>
-          ) : null
-          }
-          <button onClick={this.deleteAccount}>Delete Account</button>
-          <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
-          <button onClick={this.clickTutorialModal}>Tutorial</button>
+              ) : null
+            }
+            <button onClick={this.clickTutorialModal}>Tutorial</button>
+            {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
 
-          {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
-
-          {this.state.showFeedback ? <ModalConductor name={'showFeedback'} showModal={this.state.showFeedback} toggleState = {this.toggleState} currentModal='FEEDBACK'/> : null }
+            {this.state.showFeedback ? <ModalConductor name={'showFeedback'} showModal={this.state.showFeedback} toggleState = {this.toggleState} currentModal='FEEDBACK'/> : null }
 
             <h1>Prefer Email Updates</h1>
             <div className="check-con">
@@ -384,6 +386,7 @@ class Profile extends Component {
             <button onClick={this.toggleScheme}>Toggle Scheme</button>
             <button onClick={this.deleteAccount}>Delete Account</button>
             <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
+            <button onClick={this.seeFeedback}>View Submitted Feedback</button>
           </div>
         </div>
       </div>

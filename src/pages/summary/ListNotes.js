@@ -6,7 +6,6 @@ import FolderForm from './FolderForm';
 import SummarizeUrl from './SummarizeUrl';
 import '../../css/summary.css';
 import plusIcon from '../../assets/plus-icon.svg';
-import xIcon from '../../assets/x-icon.svg';
 
 class Summary extends Component {
   constructor(props) {
@@ -295,7 +294,6 @@ class Summary extends Component {
         <div className="title-icon">
           <h1>My Notes</h1>
           <button className="icon orange" onClick={this.createNote} onMouseOver={this.popUp}><img src={plusIcon} alt="edit"/></button>
-          <button className="icon orange" onClick={this.deleteNote}><img src={xIcon} alt="delete"/></button>
         </div>
         {this.state.popUp ? <p>{this.state.popUp}</p> : null}
         {this.state.notes.length > 0 ?
@@ -319,13 +317,17 @@ class Summary extends Component {
             <form onSubmit={this.addDate}>
               <label htmlFor="message">Reminder Message</label>
               <input type="text" name="message" required />
-              <label htmlFor="date">Schdedule Date</label>
+              <label htmlFor="date">Schedule Date</label>
               <input type="datetime-local" name="date" required />
               <input className="btn" type="submit" name="submit" value="submit" />
             </form>
           </div>
           : null
         }
+        <div className="inputField">
+            <h2> Create a new Simplif.ai folder </h2>
+            <FolderForm createFolder={this.createFolder}/>
+        </div>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 /* The Modal (background) */
 .modal {
+    display:inline-block;
     position: fixed; /* Stay in place */
     z-index: 100000000; /* Sit on top */
     left: 0;
@@ -12,12 +13,12 @@
 
 /* Modal Content/Box */
 .modal-content {
+    display: block;
     background-color: #fefefe;
     margin: auto;
     margin-top: 50px; 
     padding: 20px;
     width: 60%; 
-    height: 80%;
     border-radius: 10px;
 }
 .modal-top {

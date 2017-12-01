@@ -15,6 +15,7 @@ const ModalWrapper = props => {
       <button
         onClick={() => props.toggleState(props.name, false)}
         disabled={props.okDisabled}
+        style={{'margin':'0 auto'}}
        >
         {props.okText}
       </button>

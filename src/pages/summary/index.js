@@ -45,7 +45,9 @@ class Summary extends Component {
       isOffline: false,
       showAddCollab: false,
       showViewCollab: false,
-      showSendReminder: false
+      showDelCollab: false,
+      showSendReminder: false,
+      redirect: false
     };
   }
   componentDidMount() {
@@ -207,6 +209,7 @@ class Summary extends Component {
         }
       });
   }
+
   setError = (error) => {
     this.setState({
       error
@@ -261,12 +264,20 @@ class Summary extends Component {
         showSendReminder:false
       })
     }
+    else if (state === "showDelCollab") {
+      this.setState( {
+        showDelCollab: false
+      })
+    }
   }
   viewAddCollab = () => {
     this.setState({ showAddCollab: true })
   }
   viewViewCollab = () => {
     this.setState({ showViewCollab: true })
+  }
+  viewDelCollab = () => {
+    this.setState({ showDelCollab: true})
   }
   viewSendReminder = () => {
     this.setState({ showSendReminder: true });
@@ -310,8 +321,41 @@ class Summary extends Component {
           window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
         }
       });
-
   }
+
+  deleteNote = (e)=> {
+    e.preventDefault();
+    const { cookies } = this.props;
+    const email = cookies.get('email');
+    return apiFetch('deletenote', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        email: email,
+        noteID: this.state.noteID
+
+      }),
+      method: 'POST'
+      }).then(response =>
+        response.text()
+      ).then((json) => {
+        json = JSON.parse(json);
+        if (json.success === false) {
+            this.setError("Error deleting note!");
+            window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+        }
+        else {
+          this.setError("Your note was successfully deleted!");
+          window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
+
+          this.setState({
+            redirect: true
+          });
+        }
+      });
+  }
+
   toggleNightMode = () => {
     this.setState({
       nightMode: !this.state.nightMode
@@ -356,6 +400,9 @@ class Summary extends Component {
     const isAuthenticated = cookies.get('isAuthenticated');
     if (isAuthenticated === "false" || !isAuthenticated) {
       return (<Redirect to="/login"/>);
+    }
+    if (this.state.redirect === true) {
+       return (<Redirect to="/notes"/>);
     }
     const sentences = [];
     this.state.sentences.forEach(sentence => {
@@ -405,13 +452,19 @@ class Summary extends Component {
             <p onClick={this.toggleOfflineMode}>Toggle Offline Mode</p>
             <p onClick={this.viewAddCollab}> Add Collaborator </p>
             <p onClick={this.viewViewCollab}> View Collaborator </p>
+            <p onClick={this.viewDelCollab}> Delete Collaborator </p>
+            <p onClick={this.deleteNote}> Delete this Note </p>
           </div>) : null
         }
         {this.state.showAddCollab ?
-        <ModalConductor name={'showAddCollab'} showModal= {this.state.showAddCollab} toggleState = {this.toggleState} currentModal='ADDCOLLAB'/>: null}
 
+        <ModalConductor name={'showAddCollab'} showModal= {this.state.showAddCollab} toggleState = {this.toggleState} noteID = {this.state.noteID} currentModal='ADDCOLLAB'/>: null}
+        
         {this.state.showViewCollab ?
-        <ModalConductor name={'showViewCollab'} showModal= {this.state.showViewCollab} toggleState = {this.toggleState} currentModal='VIEWCOLLAB'/>: null}
+        <ModalConductor name={'showViewCollab'} showModal= {this.state.showViewCollab} toggleState = {this.toggleState}  noteID = {this.state.noteID} currentModal='VIEWCOLLAB'/>: null}
+
+        {this.state.showDelCollab ?
+        <ModalConductor name={'showDelCollab'} showModal= {this.state.showDelCollab} toggleState = {this.toggleState} currentModal='DELCOLLAB' noteID={this.state.noteID} />: null}
 
         {this.state.showSendReminder ?
         <ModalConductor name={'showSendReminder'} showModal= {this.state.showSendReminder} toggleState = {this.toggleState} currentModal='SENDREMINDER'/>: null}
