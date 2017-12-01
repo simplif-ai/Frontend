@@ -3,6 +3,10 @@
     display:inline-block;
     margin-top: 10px;
 }
+.carousel-img {
+    width: 300px;
+    height: auto;
+}
 i {
     border: solid black;
     display: inline-block;
