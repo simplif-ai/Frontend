@@ -3,8 +3,9 @@ import '../../css/profile.css';
 import { Redirect } from 'react-router-dom';
 import { withCookies, Cookies } from 'react-cookie';
 import { instanceOf } from 'prop-types';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
+import ModalConductor from '../components/modal/ModalConductor';
 
 class Profile extends Component {
   static propTypes = {
@@ -34,7 +35,9 @@ class Profile extends Component {
       redirect: false,
       file: '',
       imagePreviewUrl: '',
-      token: tokenFromCookie
+      token: tokenFromCookie,
+      showTutorial: false,
+      showFeedback: false
     };
   }
   linkGoogleAccount = () => {
@@ -71,7 +74,7 @@ class Profile extends Component {
             console.log('saved token', cookies.get('token'));
             this.setState({
               token: json.googleToken,
-              error: "You successfully linked you're google account"
+              error: "You successfully linked your Google account"
             });
             window.setTimeout(function() {
               this.setState({
@@ -187,6 +190,12 @@ class Profile extends Component {
   toggleEditMode = (e) => {
     this.setState({ editMode: true });
   }
+  clickTutorialModal = (e) => {
+      this.setState({showTutorial: true});
+  }
+  clickFeedbackModal = (e) => {
+    this.setState({showFeedback: true});
+  }
   deleteAccount = (e) => {
     const { cookies } = this.props;
     const email = cookies.get('email');
@@ -255,6 +264,21 @@ class Profile extends Component {
     const { cookies } = this.props;
     cookies.get('scheme') === 'bgred' ? cookies.set('scheme','') : cookies.set('scheme','bgred');
     window.location.reload();
+  }
+  toggleState = (state, val) => {
+    this.setState({
+      state: val
+    }); 
+    if (state === "showTutorial") {
+      this.setState({
+        showTutorial:false
+      });
+    }
+    else if (state === "showFeedback") {
+      this.setState({
+        showFeedback:false
+      }); 
+    }
   }
   clearEditMode = (e) => {
     e.preventDefault();
@@ -328,8 +352,32 @@ class Profile extends Component {
             <input type="email" name="email" />
             <br/>
             <input className="btn" type="submit" name="submit" value="Save" />
+          </form>
+        ) : null
+        }
+        <button onClick={this.deleteAccount}>Delete Account</button>
+        <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
+        <button onClick={this.toggleUpdatePassword}>Update Password</button>
+        <button onClick={this.clickTutorialModal}>Tutorial</button>
+
+        {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
+
+        {this.state.showFeedback ? <ModalConductor name={'showFeedback'} showModal={this.state.showFeedback} toggleState = {this.toggleState} currentModal='FEEDBACK'/> : null }
+
+        {this.state.editPassword ?
+          (<form  className="form-width" onSubmit={this.updatePassword}>
+            <h1>Edit Password</h1>
+            <div className = "errorClass">
+              {this.state.error ? `Error= ${this.state.error}` : null}
+            </div>
+            <label htmlFor="password">Current Password </label>
+            <input type="password" name="password" />
+            <label htmlFor="npassword">New Password </label>
+            <input type="password" name="npassword" />
+            <br/>
+            <input className="btn" type="submit" name="submit" value="Save" />
             <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
-            </form>
+          </form>
           ) : null
           }
           <h1>Prefer Email Updates</h1>

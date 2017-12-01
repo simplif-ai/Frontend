@@ -6,6 +6,7 @@ import FolderForm from './FolderForm';
 import CollabForm from './CollabForm';
 import '../../css/summary.css';
 import plusIcon from '../../assets/plus-icon.svg';
+import xIcon from '../../assets/x-icon.svg';
 
 class Summary extends Component {
   constructor(props) {
@@ -145,6 +146,7 @@ class Summary extends Component {
   popUp = () => {
     if (!this.state.popUp) {
       this.setState({
+
         popUp: "Click to create a new note"
       });
       window.setTimeout(function() {
@@ -184,6 +186,9 @@ class Summary extends Component {
         }
       });
   }
+  deleteNote= () => {
+  //TODO: delete life and maybe one day my student loans
+  }
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -203,6 +208,7 @@ class Summary extends Component {
         <div className="title-icon">
           <h1>My Notes</h1>
           <button className="icon orange" onClick={this.createNote} onMouseOver={this.popUp}><img src={plusIcon} alt="edit"/></button>
+          <button className="icon orange" onClick={this.deleteNote}><img src={xIcon} alt="delete"/></button>    
         </div>
         {this.state.popUp ? <p>{this.state.popUp}</p> : null}
         {this.state.notes.length > 0 ?
