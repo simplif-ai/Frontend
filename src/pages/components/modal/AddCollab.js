@@ -17,8 +17,9 @@ class AddCollabModal extends React.Component {
         e.preventDefault();
         e.persist();
         const req = {
-        collaboratorEmail: e.target.email.value,
-        noteID: this.state.noteID
+          userEmail: this.state.userEmail,
+          colabEmail: e.target.email.value,
+          noteID: this.state.noteID
         }
         console.log('req', req);
         return apiFetch('addcollaborators',{
@@ -42,7 +43,7 @@ class AddCollabModal extends React.Component {
                     this.setState({ popUp: "You added a collaborator to your note!" });
                     window.setTimeout(function() {
                         this.setState({ popUp: '' });
-                    }.bind(this), 2000);          
+                    }.bind(this), 2000);
                 }
             });
     };
