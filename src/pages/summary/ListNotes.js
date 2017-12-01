@@ -231,7 +231,7 @@ class Summary extends Component {
     var date = new Date(e.target.date.value);
 
     var d = new Date(e.target.date.value);
-    var string =
+    var dateString =
         ("00" + (d.getMonth() + 1)).slice(-2) + "/" +
         ("00" + d.getDate()).slice(-2) + "/" +
         d.getFullYear() + " " +
@@ -239,39 +239,40 @@ class Summary extends Component {
         ("00" + d.getMinutes()).slice(-2) + ":" +
         ("00" + d.getSeconds()).slice(-2);
 
-    console.log('date from datestring', string);
-    // apiFetch('emailReminder', {
-    //   headers: {
-    //    'Content-Type': 'text/plain'
-    //   },
-    //   body: JSON.stringify({
-    //     email:
-    //     URL: e.target.url.value
-    //   }),
-    //   method: 'POST'
-    // }).then(response =>
-    //   response.text()
-    // ).then((json) => {
-    //     json = JSON.parse(json);
-    //     console.log('json', json);
-    //     if (json.success === true) {
-    //         const sentences = [];
-    //         json.text.forEach(sentence => {
-    //           sentences.push(sentence[0]);
-    //         });
-    //         console.log('sentences.join', sentences.join(' '));
-    //         this.setState({
-    //           text: sentences.join(' ')
-    //         });
-    //         this.createNote();
-    //     }
-    //     else {
-    //       this.setState({ popUp: "Your summary could not be created from this article!" });
-    //       window.setTimeout(function() {
-    //         this.setState({ popUp: '' });
-    //       }.bind(this), 2000);
-    //     }
-    //   });
+    const req = {
+      email,
+      dateString,
+      message: e.target.message.value
+    };
+    console.log('date from datestring', dateString, 'req', req);
+    apiFetch('emailReminder', {
+      headers: {
+       'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        email,
+        dateString,
+        message: e.target.message.value
+      }),
+      method: 'POST'
+    }).then(response =>
+      response.text()
+    ).then((json) => {
+        json = JSON.parse(json);
+        console.log('json', json);
+        if (json.success === true) {
+          this.setState({ popUp: "You were reminded by email!" });
+          window.setTimeout(function() {
+            this.setState({ popUp: '' });
+          }.bind(this), 2000);
+        }
+        else {
+          this.setState({ popUp: "You were unable schedule an email!" });
+          window.setTimeout(function() {
+            this.setState({ popUp: '' });
+          }.bind(this), 2000);
+        }
+      });
 
   }
   render() {
@@ -312,8 +313,11 @@ class Summary extends Component {
             <CollabForm addCollaborator={this.addCollaborator}/>
             <h2>Summarize from Article Url</h2>
             <SummarizeUrl summarizeFromUrl={this.summarizeFromUrl} />
+            <h2>Schdedule Email Reminder</h2>
             <form onSubmit={this.addDate}>
-              <label htmlFor="url">Add Date:</label>
+              <label htmlFor="message">Reminder Message</label>
+              <input type="text" name="message" required />
+              <label htmlFor="date">Schdedule Date</label>
               <input type="datetime-local" name="date" required />
               <input className="btn" type="submit" name="submit" value="submit" />
             </form>
