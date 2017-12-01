@@ -349,11 +349,11 @@ class Profile extends Component {
           </div>
           <div className="profile-info">
             <form className="image-upload" onSubmit={this.savePicture}>
-              <h1>Upload a Picture</h1>
+              <h1>Profile Options</h1>
               <input className="fileInput"
                 type="file"
                 onChange={this.handleImageChange} required />
-              <button className="submitButton" type="submit" >Upload Image</button>
+              <button className="submitButton" type="submit" >Upload New Profile Image</button>
             </form>
             <button onClick={this.toggleEditMode}>Edit Profile</button>
             {this.state.editMode ? (
@@ -372,7 +372,6 @@ class Profile extends Component {
             </form>
               ) : null
             }
-            <button onClick={this.clickTutorialModal}>Tutorial</button>
             {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
 
             {this.state.showFeedback ? <ModalConductor name={'showFeedback'} showModal={this.state.showFeedback} toggleState = {this.toggleState} currentModal='FEEDBACK'/> : null }
@@ -383,10 +382,12 @@ class Profile extends Component {
               <label htmlFor="preferEmailUpdates">Prefer Email Updates</label>
             </div>
             <button onClick={this.updateEmailPreference}>Save Email Preference</button>
+            <h1> More User Options </h1>
             <button onClick={this.toggleScheme}>Toggle Scheme</button>
             <button onClick={this.deleteAccount}>Delete Account</button>
             <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
             <button onClick={this.seeFeedback}>View Submitted Feedback</button>
+            <button onClick={this.clickTutorialModal}>Tutorial</button>
           </div>
         </div>
       </div>

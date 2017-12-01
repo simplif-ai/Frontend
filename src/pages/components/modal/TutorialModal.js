@@ -51,7 +51,7 @@ class TutorialModal extends React.Component {
           >
           <div className="carousel">
             <img className="carousel-img" src= {this.state.slides[(this.state.slideIndex)]} style={{'width':'60%'}}alt = "slide"/>
-            <p style={{'font-family':'Crimson Text, serif'}}>{this.state.tutText[this.state.slideIndex]}</p>
+            <p style={{'font-family':'Crimson Text, serif', 'font-size':'16px'}}>{this.state.tutText[this.state.slideIndex]}</p>
           </div>
            {this.state.slideIndex > 0 ? <i className="arrow leftArrow" onClick={this.clickPrev}></i> : null}
            {this.state.slideIndex < this.state.slideNum - 1 ? <i className="arrow rightArrow" onClick={this.clickNext}></i> : null}
