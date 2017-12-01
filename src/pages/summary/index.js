@@ -47,7 +47,8 @@ class Summary extends Component {
       showViewCollab: false,
       showDelCollab: false,
       showSendReminder: false,
-      redirect: false
+      redirect: false,
+      dates: []
     };
   }
   componentDidMount() {
@@ -279,11 +280,6 @@ class Summary extends Component {
   viewDelCollab = () => {
     this.setState({ showDelCollab: true})
   }
-  viewSendReminder = () => {
-    this.setState({ showSendReminder: true });
-    // TODO: add search for reg x and push props to modal component
-
-  }
   exportToText = () => {
     var e = document.createElement("a");
     var file = new Blob([this.state.text], {type: 'text/plain'}, "name");
@@ -395,6 +391,37 @@ class Summary extends Component {
       window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
     }
   }
+
+  viewSendReminder = () => {
+    // this.setState({ showSendReminder: true });
+    // TODO: add search for reg x and push props to modal component
+    let dates = [];
+
+    var regex = /((((0[13578]|1[02])[\/\.-](0[1-9]|[12]\d|3[01])[\/\.-]((19|[2-9]\d)\d{2})\s(0[0-9]|1[0-2]):(0[0-9]|[1-59]\d):(0[0-9]|[1-59]\d)\s(AM|am|PM|pm))|((0[13456789]|1[012])[\/\.-](0[1-9]|[12]\d|30)[\/\.-]((19|[2-9]\d)\d{2})\s(0[0-9]|1[0-2]):(0[0-9]|[1-59]\d):(0[0-9]|[1-59]\d)\s(AM|am|PM|pm))|((02)[\/\.-](0[1-9]|1\d|2[0-8])[\/\.-]((19|[2-9]\d)\d{2})\s(0[0-9]|1[0-2]):(0[0-9]|[1-59]\d):(0[0-9]|[1-59]\d)\s(AM|am|PM|pm))|((02)[\/\.-](29)[\/\.-]((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))\s(0[0-9]|1[0-2]):(0[0-9]|[1-59]\d):(0[0-9]|[1-59]\d)\s(AM|am|PM|pm))))+/g;
+
+    if (this.state.text) {
+      dates = this.state.text.match(regex);
+      console.log('dates after regex', dates);
+      if (!dates) {
+        this.setState({
+          dateFound: false,
+          dates: dates,
+          showSendReminder: true
+        });
+        return;
+      }
+      this.setState({
+        dates: dates,
+        dateFound: true,
+        showSendReminder: true
+      });
+    }
+    else {
+      this.setState({
+        dateFound: false
+      });
+    }
+  }
   render() {
     const { cookies } = this.props;
     const isAuthenticated = cookies.get('isAuthenticated');
@@ -459,7 +486,7 @@ class Summary extends Component {
         {this.state.showAddCollab ?
 
         <ModalConductor name={'showAddCollab'} showModal= {this.state.showAddCollab} toggleState = {this.toggleState} noteID = {this.state.noteID} currentModal='ADDCOLLAB'/>: null}
-        
+
         {this.state.showViewCollab ?
         <ModalConductor name={'showViewCollab'} showModal= {this.state.showViewCollab} toggleState = {this.toggleState}  noteID = {this.state.noteID} currentModal='VIEWCOLLAB'/>: null}
 
@@ -467,7 +494,7 @@ class Summary extends Component {
         <ModalConductor name={'showDelCollab'} showModal= {this.state.showDelCollab} toggleState = {this.toggleState} currentModal='DELCOLLAB' noteID={this.state.noteID} />: null}
 
         {this.state.showSendReminder ?
-        <ModalConductor name={'showSendReminder'} showModal= {this.state.showSendReminder} toggleState = {this.toggleState} currentModal='SENDREMINDER'/>: null}
+        <ModalConductor name={'showSendReminder'} text={this.state.text} dates={this.state.dates} dateFound={this.state.dateFound} showModal={this.state.showSendReminder} toggleState={this.toggleState} currentModal='SENDREMINDER'/>: null}
 
       </div>
     );
