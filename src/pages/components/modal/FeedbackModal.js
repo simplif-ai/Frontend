@@ -1,7 +1,7 @@
 import React from 'react';
 import ModalWrapper from './ModalWrapper';
 
-import '../../../css/feedback.css';
+import '../../../css/old_feedback.css';
 
 class FeedbackModal extends React.Component {
     constructor(props) {

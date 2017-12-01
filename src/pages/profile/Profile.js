@@ -349,7 +349,6 @@ class Profile extends Component {
         <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
         <button onClick={this.toggleUpdatePassword}>Update Password</button>
         <button onClick={this.clickTutorialModal}>Tutorial</button>
-        <button onClick={this.clickFeedbackModal}>Send Feedback!</button>
 
         {this.state.showTutorial ? <ModalConductor name={'showTutorial'} showModal={this.state.showTutorial} toggleState = {this.toggleState} currentModal='TUTORIAL'/> : null }
 
