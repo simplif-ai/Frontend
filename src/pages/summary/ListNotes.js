@@ -40,8 +40,7 @@ class Summary extends Component {
         }
         else {
           this.setState({
-            notes: json,
-            noteID: json[0][1]
+            notes: json
           });
         }
       });
@@ -210,7 +209,7 @@ class Summary extends Component {
             if (note.name === '') {
               note.name = 'Undefined Title';
             }
-            return (<Link to={`/notes/${note.noteID}}`} key={`${note.name} ${note.noteID}`}><h2>{note.name}</h2><p>Note Id: {note.noteID}</p></Link>);
+            return (<Link to={`/notes/${note.noteID}`} key={`${note.name} ${note.noteID}`}><h2>{note.name}</h2><p>Note Id: {note.noteID}</p></Link>);
           })
           : null
         }
