@@ -230,6 +230,9 @@ class Profile extends Component {
     formData.append('file', this.state.file);
     formData.append('email', email);
     apiFetch('addpicture', {
+      headers: {
+       'Content-Type':'multipart/form-data'
+      },
       body: formData,
       method: 'POST'
     }).then(response =>
@@ -268,7 +271,7 @@ class Profile extends Component {
   toggleState = (state, val) => {
     this.setState({
       state: val
-    }); 
+    });
     if (state === "showTutorial") {
       this.setState({
         showTutorial:false
@@ -277,7 +280,7 @@ class Profile extends Component {
     else if (state === "showFeedback") {
       this.setState({
         showFeedback:false
-      }); 
+      });
     }
   }
   clearEditMode = (e) => {
