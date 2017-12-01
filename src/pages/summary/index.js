@@ -9,7 +9,6 @@ import '../../css/footer.css';
 import edit_icon_white from '../../assets/pencil-icon.svg';
 import edit_icon_orange from '../../assets/pencil-icon-orange.svg';
 import Loader from '../components/Loader';
-import CollabForm from './CollabForm';
 import EditSummary from './EditSummary';
 import ModalConductor from '../components/modal/ModalConductor';
 
@@ -414,7 +413,7 @@ class Summary extends Component {
             <p onClick={this.viewSendReminder}>Search for Dates</p>
             <p onClick={this.toggleOfflineMode}>Toggle Offline Mode</p>
             <p onClick={this.viewAddCollab}> Add Collaborator </p>
-            <p onClick={this.viewViewCollab}> View Collaborators </p>
+            <p onClick={this.viewViewCollab}> View Collaborator </p>
           </div>) : null
         }
         {this.state.showAddCollab ?
