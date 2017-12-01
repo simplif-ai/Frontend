@@ -82,8 +82,8 @@ class ViewFeedback extends Component {
     const fback = [];
     if (this.state.feederbackers.length > 0){
             this.state.feederbackers.forEach(feedback => {
-                fback.push(<p>{feedback.name}: {feedback.feedback}</p>);
-                fback.push(<hr/>);
+                fback.push(<p style = {{'font-size':'20px'}}><b>{feedback.name}: {feedback.feedback}</b></p>);
+                fback.push(<hr style={{'border-top': '2px double #ffffff','width':'60%'}}/>);
             })
     }
     return (
