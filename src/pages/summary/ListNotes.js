@@ -3,7 +3,6 @@ import { withCookies } from 'react-cookie';
 import { Redirect, Link } from 'react-router-dom';
 import apiFetch from '../../utils/api.js';
 import FolderForm from './FolderForm';
-import CollabForm from './CollabForm';
 import SummarizeUrl from './SummarizeUrl';
 import '../../css/summary.css';
 import plusIcon from '../../assets/plus-icon.svg';
