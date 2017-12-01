@@ -316,6 +316,22 @@ class Profile extends Component {
             <button className="submitButton" type="submit" >Upload Image</button>
           </form>
           <button onClick={this.toggleEditMode}>Edit Profile</button>
+          {this.state.editMode ? (
+            <form className="form-width" onSubmit={this.editProfile}>
+            <h1>Edit Profile</h1>
+            <div className = "errorClass">
+            {this.state.error ? `Error= ${this.state.error}` : null}
+            </div>
+            <label htmlFor="name">Name </label>
+            <input type="text" name="name" />
+            <label htmlFor="email">Email </label>
+            <input type="email" name="email" />
+            <br/>
+            <input className="btn" type="submit" name="submit" value="Save" />
+            <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
+            </form>
+          ) : null
+          }
           <h1>Prefer Email Updates</h1>
           <div className="check-con">
             <input type="checkbox" name="preferEmailUpdates" onChange={this.togglepreferEmailUpdates} value={this.state.preferEmailUpdates} />
@@ -323,22 +339,6 @@ class Profile extends Component {
           </div>
           <button onClick={this.updateEmailPreference}>Save Email Preference</button>
           <button onClick={this.toggleScheme}>Toggle Scheme</button>
-          {this.state.editMode ? (
-            <form className="form-width" onSubmit={this.editProfile}>
-              <h1>Edit Profile</h1>
-              <div className = "errorClass">
-                {this.state.error ? `Error= ${this.state.error}` : null}
-              </div>
-              <label htmlFor="name">Name </label>
-              <input type="text" name="name" />
-              <label htmlFor="email">Email </label>
-              <input type="email" name="email" />
-              <br/>
-              <input className="btn" type="submit" name="submit" value="Save" />
-              <input onClick={this.clearEditMode} className="btn" type="button" name="cancel" value="Cancel" />
-            </form>
-          ) : null
-          }
           <button onClick={this.deleteAccount}>Delete Account</button>
           <button onClick={this.linkGoogleAccount}>Authorize Google Account</button>
         </div>
