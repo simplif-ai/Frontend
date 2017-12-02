@@ -13,6 +13,7 @@ const SummarizeUrl = ({ summarize, name, label, type, handleChange }) => (
         required
       /> :
       <input
+        id="input-url"
         type={type}
         name={name}
         required
