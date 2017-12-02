@@ -96,3 +96,7 @@ errorClass {
 .left {
   text-align: left;
 }
+.block {
+  display: block;
+  cursor: pointer;
+}

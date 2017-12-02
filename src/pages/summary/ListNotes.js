@@ -120,6 +120,8 @@ class Summary extends Component {
        'Content-Type': 'text/plain'
       },
       body: JSON.stringify({
+        noteText: this.state.text,
+        name: '',
         text: this.state.text,
         email
       }),
