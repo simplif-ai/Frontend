@@ -132,7 +132,8 @@ button:hover {
   border-radius: 50px;
   margin: 0px;
   padding: 13px;
-  width: 59px;
+  height: 60px;
+  width: 60px;
 }
 
 .orange {
