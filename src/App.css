@@ -100,3 +100,6 @@ errorClass {
   display: block;
   cursor: pointer;
 }
+.hide {
+  display: none;
+}

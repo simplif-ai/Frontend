@@ -142,7 +142,7 @@ class Nav extends Component {
         }
         <div className="user">
           {isAuthenticated === "true" && this.state.imagePreviewUrl ?
-            <img src={this.state.imagePreviewUrl} alt="cute prof pic"/>
+            <img className={`${this.state.imagePreviewUrl ? 'hide' : null }`} src={this.state.imagePreviewUrl} alt="cute prof pic"/>
             :
             null
           }
