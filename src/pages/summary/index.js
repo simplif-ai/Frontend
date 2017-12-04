@@ -156,9 +156,12 @@ class Summary extends Component {
   summarizeLink = (e) => {
     //call function to grab text from article and pass it into summarize in request body?
   }
-  handleKeyUp = (e) => {
+  handleTitle = (e) => {
     e.target.style.height = '1px';
     e.target.style.height = 25 + e.target.scrollHeight + 'px';
+  }
+  handleKeyUp = (e) => {
+    e.target.style.height = (e.target.scrollHeight >= e.target.clientHeight && e.target.scrollHeight > 350) ? (e.target.scrollHeight)+"px" : "50vh";
   }
   onEdit = (e) => {
     this.setState({ text: e.target.value });
@@ -461,7 +464,7 @@ class Summary extends Component {
       <div className="summary">
         {this.state.wait ? <Loader/> : null}
         <form onSubmit={this.summarize}>
-          <textarea className="h1" name="textarea" placeholder="Enter a Title..." value={this.state.title} onChange={this.onEditTitle} onKeyUp={this.handleKeyUp} />
+          <textarea className="h1" name="textarea" placeholder="Enter a Title..." value={this.state.title} onChange={this.onEditTitle} onKeyPress={this.handleTitle} />
 
           <button className="icon orange" onClick={this.toggleEditMode}><img src={edit_icon_orange} alt="edit"/></button>
           {this.state.error ? <p>{this.state.error}</p> : null}
