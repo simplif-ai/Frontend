@@ -30,7 +30,7 @@ class Summary extends Component {
       summaryArray: [],
       sentencesArray: [],
       sentences: [],
-      response: {},
+      response: [],
       brevity: 50,
       isWaiting: false,
       editMode: false,
@@ -83,6 +83,14 @@ class Summary extends Component {
         }
         else {
           // call funtion to send data to page
+          let summary = JSON.parse(json[0].summary);
+          if (summary !== "empty" && summary !== "") {
+            console.log('receivedSummary = true');
+            this.setState({
+              receivedSummary: true,
+              response: summary
+            });
+          }
           this.setState({
             text: json[0].noteText,
             title: json[0].name
@@ -193,12 +201,17 @@ class Summary extends Component {
       window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
       return;
     }
+    let summary = 'empty';
+    if (this.state.receivedSummary === true) {
+      console.log('response', this.state.response);
+      summary = this.state.response;
+    }
     return apiFetch('createnote', {
       headers: {
        'Content-Type': 'text/plain'
       },
       body: JSON.stringify({
-        text: this.state.text,
+        text: summary,
         noteID: this.state.noteID,
         noteText: this.state.text,
         name: this.state.title,
@@ -475,14 +488,6 @@ class Summary extends Component {
           }
           <button className="fixed" type="submit">Summarize</button>
           <button onClick={this.updateNote} className="fixed save">Save</button>
-          {/*{this.state.linkOpen
-          ?
-          (<div className="linkbox drop">
-            <p>Enter URL</p>
-            <input type = "text" className="linkbox" text="summarize"/>
-            <p onClick={this.summarizeLink}><u>Click here to summarize</u></p>
-          </div>) : null
-          }*/}
         </form>
         <div className="brevity fixed fixed-slider">
           <label>Brevity {this.state.brevity}%</label>
