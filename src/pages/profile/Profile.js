@@ -343,7 +343,7 @@ class Profile extends Component {
         {this.state.error ? <p>{this.state.error}</p> : null}
         <div className="profile-page">
           <div className="profileCard">
-            <img src={imagePreviewUrl} alt="cute prof pic"/>
+            <img src={imagePreviewUrl} alt="upload a pic"/>
             <h2 className="topSpacing questrial">{this.state.name}</h2>
             <p className="title">{this.state.email}</p>
           </div>
