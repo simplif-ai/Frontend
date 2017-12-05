@@ -8,7 +8,8 @@ class ReminderModal extends React.Component {
             text: props.text,
             error: '',
             dates: props.dates,
-            selectedDate: ''
+            selectedDate: '',
+            eventTitle: ''
         };
     }
     componentDidMount() {
@@ -21,7 +22,13 @@ class ReminderModal extends React.Component {
       console.log('add to calendar: ', date);
       this.setState({
         dateSelect: true,
-        selectedDate: date
+        selectedDate: date,
+        eventTitle: `Event on ${date}`
+      });
+    }
+    onChange = (e) => {
+      this.setState({
+        eventTitle: e.target.value
       });
     }
     render() {
@@ -63,7 +70,7 @@ class ReminderModal extends React.Component {
                 <form onSubmit={this.addDate}>
                   <h2>Edit Your Event</h2>
                   <label htmlFor="summary">Event Title</label>
-                  <input type="text" name="summary" placeholder={`Event on ${this.state.selectedDate}`} required />
+                  <input type="text" name="summary" value={this.state.eventTitle} onChange={this.onChange} required />
                   <label htmlFor="start-date">Start Date</label>
                   <input type="datetime-local" name="start-date" required />
                   <label htmlFor="end-date">End Date</label>

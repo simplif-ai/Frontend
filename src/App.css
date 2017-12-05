@@ -103,3 +103,7 @@ errorClass {
 .hide {
   display: none;
 }
+
+.modal label {
+  color: #1A334F;
+}
