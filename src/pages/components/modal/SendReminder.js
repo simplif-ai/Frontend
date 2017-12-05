@@ -41,10 +41,10 @@ class ReminderModal extends React.Component {
         return;
       }
       const start = {
-        date: this.state.selectDate
+        date: this.state.selectedDate
       };
       const end = {
-        date: this.state.selectDate
+        date: this.state.selectedDate
       }
       const event = {
         summary: e.target.summary.value,
@@ -137,7 +137,7 @@ class ReminderModal extends React.Component {
               showModal={this.props.showModal}
               toggleState={this.props.toggleState}
               name={this.props.name}
-              okText="Submit"
+              okText="Close"
             >
               {this.state.error ? <p>{this.state.error}</p> : null}
               {this.props.dateFound === false ?
