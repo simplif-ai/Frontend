@@ -14,7 +14,8 @@ class ReminderModal extends React.Component {
             dates: props.dates,
             selectedDate: '',
             eventTitle: '',
-            token: googleToken
+            token: googleToken,
+            sendEmail: false
         };
     }
     handleInput = (e) =>  {
@@ -73,6 +74,51 @@ class ReminderModal extends React.Component {
           }
         });
     }
+    showEmail = (e) => {
+      e.preventDefault();
+      this.setState({
+        sendEmail: true
+      })
+    }
+    sendEmail = (e) => {
+      e.preventDefault();
+      const { cookies } = this.props;
+      const email = cookies.get('email');
+      const message = '<h3>Here is a reminder for a Simplif.ai event we found in your notes</h3><br/><br/>' + 'Event: ' + this.state.eventTitle + "<br/><br/>Message: " + e.target.message.value + '<br/><br/>Cheers,<br/><br/>Simplif.ai Team';
+      const req = {
+        email,
+        dateString: this.state.dateSelect,
+        message
+      };
+      apiFetch('emailReminder', {
+        headers: {
+         'Content-Type': 'text/plain'
+        },
+        body: JSON.stringify({
+          email,
+          dateString: this.state.dateSelect,
+          message
+        }),
+        method: 'POST'
+      }).then(response =>
+        response.text()
+      ).then((json) => {
+          json = JSON.parse(json);
+          console.log('json', json);
+          if (json.success === true) {
+            this.setState({ error: "You were reminded by email!" });
+            window.setTimeout(function() {
+              this.setState({ error: '' });
+            }.bind(this), 2000);
+          }
+          else {
+            this.setState({ error: "You were unable schedule an email!" });
+            window.setTimeout(function() {
+              this.setState({ error: '' });
+            }.bind(this), 2000);
+          }
+        });
+    }
     render() {
         console.log('dateFound', this.props.dateFound, 'dates', this.state.dates);
         console.log('this.state.dateSelect', this.state.dateSelect);
@@ -114,6 +160,19 @@ class ReminderModal extends React.Component {
                   <label htmlFor="summary">Event Title</label>
                   <input type="text" name="summary" value={this.state.eventTitle} onChange={this.onChange} required />
                   <input className="btn" type="submit" name="submit" value="Save Event in Google Calendar" />
+                  <input className="btn" onClick={this.showEmail} value="Send Email" />
+                </form>
+                :
+                null
+              }
+              {(this.state.dateSelect === true && this.state.sendEmail === true) ?
+                <form onSubmit={this.sendEmail}>
+                  <h2>Send an Email Reminder with this Event</h2>
+                  <label htmlFor="summary">Event Title</label>
+                  <input type="text" name="summary" value={this.state.eventTitle} onChange={this.onChange} required />
+                  <label htmlFor="message">Email Message</label>
+                  <input type="text" name="message" required />
+                  <input className="btn" type="submit" name="submit" value="Send Email" />
                 </form>
                 :
                 null
