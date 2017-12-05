@@ -23,6 +23,10 @@
 .image-upload {
   width: 235px;
   margin: 20px;
+  margin: 5px 10px;
+}
+.image-upload button {
+  margin: 0px;
 }
 .card {
     padding: 20px;

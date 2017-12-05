@@ -376,7 +376,9 @@ class Profile extends Component {
             <div className="check-con">
               <input type="checkbox" name="preferEmailUpdates" onChange={this.togglepreferEmailUpdates} checked={this.state.preferEmailUpdates} />
               <label htmlFor="preferEmailUpdates">Prefer Email Updates</label>
-              <button onClick={this.updateEmailPreference}>Save Email Preference</button>
+              <div style={{'margin':'0px'}}>
+                <button onClick={this.updateEmailPreference}>Save Email Preference</button>
+              </div>
             </div>
             </div>
             <div className="profile-info" style={{'margin-left':'30px'}}>
