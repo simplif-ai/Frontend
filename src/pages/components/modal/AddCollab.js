@@ -39,6 +39,10 @@ class AddCollabModal extends React.Component {
                 if(json.success === false) {
                     console.log('error', json.error);
                     this.setState({ error: json.error });
+                    this.setState({ popUp: "Error adding this collaborator" });
+                    window.setTimeout(function() {
+                        this.setState({ popUp: '' });
+                    }.bind(this), 2000);
                 }
                 else {
                     this.setState({ popUp: "You added a collaborator to your note!" });
