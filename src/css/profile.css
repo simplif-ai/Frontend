@@ -73,9 +73,13 @@
 .profile-info {
   flex-basis: auto;
   text-align: left;
-  display: block;
+  display: inline-block;
 }
 
 .profile-info button {
   display: block;
+}
+
+.profile-table {
+  border: none;
 }
