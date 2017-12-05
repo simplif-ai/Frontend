@@ -59,15 +59,12 @@ class Nav extends Component {
       }).then((response) => response.blob())
           .then((json) => {
             let url;
-            console.log('json', json);
-            console.log('hmm');
             if (json.success === false) {
                 console.log('error', json.error);
                 this.setState({ error: json.error });
             }
             else {
               const url = window.URL.createObjectURL(json);
-              console.log('?');
               this.setState({
                 imagePreviewUrl: url
               });

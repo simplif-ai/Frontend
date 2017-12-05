@@ -149,11 +149,9 @@ class Profile extends Component {
           }
           else {
             let preferEmailUpdates = false;
-            console.log('json.preferEmailUpdates',json.prefersEmailUpdates);
             if (json.prefersEmailUpdates === 1) {
               preferEmailUpdates = true;
             }
-            console.log('preferEmailUpdates', preferEmailUpdates);
             this.setState({
               error: null,
               name: json.name,

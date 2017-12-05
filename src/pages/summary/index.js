@@ -27,7 +27,6 @@ class Summary extends Component {
     this.state = {
       redirectToReferrer: false,
       summary: {},
-      summaryArray: [],
       sentencesArray: [],
       sentences: [],
       response: [],
@@ -122,7 +121,6 @@ class Summary extends Component {
     });
     this.setState({
       summary: summary.join(' '),
-      summaryArray: summary,
       text: summary.join(' '),
       sentencesArray: sentences
     });
@@ -172,7 +170,7 @@ class Summary extends Component {
     e.target.style.height = (e.target.scrollHeight >= e.target.clientHeight && e.target.scrollHeight > 350) ? (e.target.scrollHeight)+"px" : "50vh";
   }
   onEdit = (e) => {
-    this.setState({ text: e.target.value });
+    this.setState({ text: e.target.value, receivedSummary: false });
   }
   onEditTitle = (e) => {
     this.setState({ title: e.target.value });
@@ -206,6 +204,8 @@ class Summary extends Component {
       console.log('response', this.state.response);
       summary = this.state.response;
     }
+    let noteText = this.state.text.replace("'", "\\'");
+    console.log('noteText', noteText);
     return apiFetch('createnote', {
       headers: {
        'Content-Type': 'text/plain'
@@ -213,7 +213,7 @@ class Summary extends Component {
       body: JSON.stringify({
         text: summary,
         noteID: this.state.noteID,
-        noteText: this.state.text,
+        noteText: noteText,
         name: this.state.title,
         email
       }),
