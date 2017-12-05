@@ -100,3 +100,10 @@ errorClass {
   display: block;
   cursor: pointer;
 }
+.hide {
+  display: none;
+}
+
+.modal label {
+  color: #1A334F;
+}

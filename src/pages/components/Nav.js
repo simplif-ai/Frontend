@@ -83,17 +83,17 @@ class Nav extends Component {
         })
       }).then((response) => response.blob())
           .then((json) => {
-            const url = window.URL.createObjectURL(json);
-                if(json.success === false) {
-                    console.log('error', json.error);
-                    this.setState({ error: json.error });
-                }
-                else {
-                  this.setState({
-                    imagePreviewUrl: url
-                  });
-                }
+            if (json.success === false) {
+                console.log('error', json.error);
+                this.setState({ error: json.error });
+            }
+            else {
+              const url = window.URL.createObjectURL(json);
+              this.setState({
+                imagePreviewUrl: url
               });
+            }
+          });
       this.setState({
         open: false
       });
@@ -113,6 +113,7 @@ class Nav extends Component {
     }).then((response) => response.blob())
         .then((json) => {
           const url = window.URL.createObjectURL(json);
+          console.log('?');
               if(json.success === false) {
                 console.log('error', json.error);
                 this.setState({ error: json.error });
@@ -167,7 +168,7 @@ class Nav extends Component {
         }
         <div className="user">
           {isAuthenticated === "true" && this.state.imagePreviewUrl ?
-            <img src={this.state.imagePreviewUrl} alt="cute prof pic"/>
+            (this.state.imagePreviewUrl.length > 0 ) ? (<img src={this.state.imagePreviewUrl} alt=""/>) : null
             :
             null
           }

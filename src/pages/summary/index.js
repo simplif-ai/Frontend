@@ -27,10 +27,9 @@ class Summary extends Component {
     this.state = {
       redirectToReferrer: false,
       summary: {},
-      summaryArray: [],
       sentencesArray: [],
       sentences: [],
-      response: {},
+      response: [],
       brevity: 50,
       isWaiting: false,
       editMode: false,
@@ -83,6 +82,14 @@ class Summary extends Component {
         }
         else {
           // call funtion to send data to page
+          let summary = JSON.parse(json[0].summary);
+          if (summary !== "empty" && summary !== "") {
+            console.log('receivedSummary = true');
+            this.setState({
+              receivedSummary: true,
+              response: summary
+            });
+          }
           this.setState({
             text: json[0].noteText,
             title: json[0].name
@@ -114,7 +121,6 @@ class Summary extends Component {
     });
     this.setState({
       summary: summary.join(' '),
-      summaryArray: summary,
       text: summary.join(' '),
       sentencesArray: sentences
     });
@@ -156,12 +162,15 @@ class Summary extends Component {
   summarizeLink = (e) => {
     //call function to grab text from article and pass it into summarize in request body?
   }
-  handleKeyUp = (e) => {
+  handleTitle = (e) => {
     e.target.style.height = '1px';
     e.target.style.height = 25 + e.target.scrollHeight + 'px';
   }
+  handleKeyUp = (e) => {
+    e.target.style.height = (e.target.scrollHeight >= e.target.clientHeight && e.target.scrollHeight > 350) ? (e.target.scrollHeight)+"px" : "50vh";
+  }
   onEdit = (e) => {
-    this.setState({ text: e.target.value });
+    this.setState({ text: e.target.value, receivedSummary: false });
   }
   onEditTitle = (e) => {
     this.setState({ title: e.target.value });
@@ -190,14 +199,21 @@ class Summary extends Component {
       window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
       return;
     }
+    let summary = 'empty';
+    if (this.state.receivedSummary === true) {
+      console.log('response', this.state.response);
+      summary = this.state.response;
+    }
+    let noteText = this.state.text.replace("'", "\\'");
+    console.log('noteText', noteText);
     return apiFetch('createnote', {
       headers: {
        'Content-Type': 'text/plain'
       },
       body: JSON.stringify({
-        text: this.state.text,
+        text: summary,
         noteID: this.state.noteID,
-        noteText: this.state.text,
+        noteText: noteText,
         name: this.state.title,
         email
       }),
@@ -420,8 +436,19 @@ class Summary extends Component {
         });
         return;
       }
+      let formatted =  [];
+      dates.forEach(date => {
+        var momentDate = moment(date, "MM/DD/YYYY HH:mm:ss A");
+        var iso = momentDate.toISOString();
+        console.log('iso', iso);
+        var index = iso.split("").reverse().join("").indexOf('.');
+        console.log('index', index);
+        var substring = iso.substring(0, 10);
+        console.log('substring', substring);
+        formatted.push(substring);
+      });
       this.setState({
-        dates: dates,
+        dates: formatted,
         dateFound: true,
         showSendReminder: true
       });
@@ -432,16 +459,17 @@ class Summary extends Component {
       });
     }
 
-    var momentDate = moment('06/12/2014 12:45:56 AM', "YYYY/MM/DD HH:mm:ss A");
-
-    var iso = momentDate.toISOString();
-    console.log('iso', iso);
-    var index = iso.split("").reverse().join("").indexOf('.');
-    console.log('index', index);
-    var substring = iso.substring(0, iso.length - index - 1);
-    console.log('substring', substring);
-    var newData = substring + '-05:00';
-    console.log('newData', newData);
+    // console.log('date pulled from array', dates[0]);
+    // var momentDate = moment(dates[0], "MM/DD/YYYY HH:mm:ss A");
+    //
+    // var iso = momentDate.toISOString();
+    // console.log('iso', iso);
+    // var index = iso.split("").reverse().join("").indexOf('.');
+    // console.log('index', index);
+    // var substring = iso.substring(0, iso.length - index - 1);
+    // console.log('substring', substring);
+    // var newData = substring + '-05:00';
+    // console.log('newData', newData);
 
   }
   render() {
@@ -461,7 +489,7 @@ class Summary extends Component {
       <div className="summary">
         {this.state.wait ? <Loader/> : null}
         <form onSubmit={this.summarize}>
-          <textarea className="h1" name="textarea" placeholder="Enter a Title..." value={this.state.title} onChange={this.onEditTitle} onKeyUp={this.handleKeyUp} />
+          <textarea className="h1" name="textarea" placeholder="Enter a Title..." value={this.state.title} onChange={this.onEditTitle} onKeyPress={this.handleTitle} />
 
           <button className="icon orange" onClick={this.toggleEditMode}><img src={edit_icon_orange} alt="edit"/></button>
           {this.state.error ? <p>{this.state.error}</p> : null}
@@ -472,14 +500,6 @@ class Summary extends Component {
           }
           <button className="fixed" type="submit">Summarize</button>
           <button onClick={this.updateNote} className="fixed save">Save</button>
-          {/*{this.state.linkOpen
-          ?
-          (<div className="linkbox drop">
-            <p>Enter URL</p>
-            <input type = "text" className="linkbox" text="summarize"/>
-            <p onClick={this.summarizeLink}><u>Click here to summarize</u></p>
-          </div>) : null
-          }*/}
         </form>
         <div className="brevity fixed fixed-slider">
           <label>Brevity {this.state.brevity}%</label>

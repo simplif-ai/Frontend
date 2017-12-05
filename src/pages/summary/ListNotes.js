@@ -20,6 +20,7 @@ class Summary extends Component {
       noteID: 0,
       newNote: false,
       text: '',
+      response: [],
       file: ''
     };
   }
@@ -122,7 +123,7 @@ class Summary extends Component {
       body: JSON.stringify({
         noteText: this.state.text,
         name: '',
-        text: this.state.text,
+        text: this.state.response,
         email
       }),
       method: 'POST'
@@ -168,7 +169,8 @@ class Summary extends Component {
             });
             console.log('sentences.join', sentences.join(' '));
             this.setState({
-              text: sentences.join(' ')
+              text: sentences.join(' '),
+              response: json.text
             });
             this.createNote();
         }
@@ -249,7 +251,8 @@ class Summary extends Component {
             });
             console.log('sentences.join', sentences.join(' '));
             this.setState({
-              text: sentences.join(' ')
+              text: sentences.join(' '),
+              response: json.text
             });
             this.createNote();
         }

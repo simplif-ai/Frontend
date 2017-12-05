@@ -1,18 +1,21 @@
 import React from 'react';
 import ModalWrapper from './ModalWrapper';
+import apiFetch from '../../../utils/api.js';
+import { withCookies } from 'react-cookie';
 
 class ReminderModal extends React.Component {
     constructor(props) {
         super(props);
+        const { cookies } = this.props;
+        const googleToken = cookies.get('token');
         this.state = {
             text: props.text,
             error: '',
             dates: props.dates,
-            selectedDate: ''
+            selectedDate: '',
+            eventTitle: '',
+            token: googleToken
         };
-    }
-    componentDidMount() {
-
     }
     handleInput = (e) =>  {
       this.setState({ text: e.target.value });
@@ -21,8 +24,54 @@ class ReminderModal extends React.Component {
       console.log('add to calendar: ', date);
       this.setState({
         dateSelect: true,
-        selectedDate: date
+        selectedDate: date,
+        eventTitle: `Event on ${date}`
       });
+    }
+    onChange = (e) => {
+      this.setState({
+        eventTitle: e.target.value
+      });
+    }
+    addDate = (e) => {
+      e.preventDefault();
+      if (this.state.token === '') {
+        this.setState({ error: "You do have an account attached." });
+        return;
+      }
+      const start = {
+        date: this.state.selectDate
+      };
+      const end = {
+        date: this.state.selectDate
+      }
+      const event = {
+        summary: e.target.summary.value,
+        start,
+        end
+      };
+      console.log('event', event, 'token', this.state.token);
+      return apiFetch('createGoogleEvent', {
+        headers: {
+         'Content-Type': 'text/plain'
+        },
+        body: JSON.stringify({
+          googleToken: this.state.token,
+          event
+        }),
+        method: 'POST'
+      }).then(response =>
+        response.json()
+      ).then((json) => {
+          console.log('json', json);
+          if (json.success === false) {
+            this.setState({ error: "We could not pull a summary from this noteID" });
+            window.setTimeout(function() { this.setState({ error: "" }); }.bind(this), 4000);
+          }
+          else {
+            this.setState({ error: "the date was successfully added to your calendar" });
+          }
+        });
     }
     render() {
         console.log('dateFound', this.props.dateFound, 'dates', this.state.dates);
@@ -31,7 +80,7 @@ class ReminderModal extends React.Component {
         if (this.state.dates && this.state.dates.length > 0) {
           this.state.dates.forEach(date => {
             console.log('date in for each', date);
-            dates.push(<a className="block" onClick={() => this.selectDate(date)}>{date}</a>);
+            dates.push(<a key={`event = ${date}`} className="block" onClick={() => this.selectDate(date)}>{date}</a>);
           });
         }
         return (
@@ -49,7 +98,7 @@ class ReminderModal extends React.Component {
                 (
                   <div>
                     <h2>Sorry we could not find a date in your summary</h2>
-                    <p>Try using this format instead `mm[/.-]dd[/.-]yyyy hh:mm:ss am|pm`</p>
+                    <p>Try using this format instead `mm[/.-]dd[/.-]yyyy hh:mm:ss AM|PM`</p>
                   </div>
                 )
                 :
@@ -63,11 +112,7 @@ class ReminderModal extends React.Component {
                 <form onSubmit={this.addDate}>
                   <h2>Edit Your Event</h2>
                   <label htmlFor="summary">Event Title</label>
-                  <input type="text" name="summary" placeholder={`Event on ${this.state.selectedDate}`} required />
-                  <label htmlFor="start-date">Start Date</label>
-                  <input type="datetime-local" name="start-date" required />
-                  <label htmlFor="end-date">End Date</label>
-                  <input type="datetime-local" name="end-date" required />
+                  <input type="text" name="summary" value={this.state.eventTitle} onChange={this.onChange} required />
                   <input className="btn" type="submit" name="submit" value="Save Event in Google Calendar" />
                 </form>
                 :
@@ -78,4 +123,4 @@ class ReminderModal extends React.Component {
     };
 }
 
-export default ReminderModal;
+export default withCookies(ReminderModal);
