@@ -58,7 +58,6 @@ class Nav extends Component {
         })
       }).then((response) => response.blob())
           .then((json) => {
-            let url;
             if (json.success === false) {
                 console.log('error', json.error);
                 this.setState({ error: json.error });

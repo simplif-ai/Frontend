@@ -27,8 +27,9 @@
 .modal-top {
     display: block;
     margin: 0px 10px 0px 0px;
-    width: 95%;
-    height: 60px;
+    width: 100%;
+    box-sizing: border-box;
+    height: auto;
     background-color: #f9b045;
     outline: none;
 }
