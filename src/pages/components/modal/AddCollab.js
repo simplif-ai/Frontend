@@ -10,7 +10,8 @@ class AddCollabModal extends React.Component {
         this.state = {
             noteID:props.noteID,
             userEmail:cookies.get('email'),
-            colabEmail:''
+            colabEmail:'',
+            popUp: ''
         };
     }
     addCollaborator = (e) => {
@@ -71,6 +72,7 @@ class AddCollabModal extends React.Component {
             name={this.props.name}
             okText="Done"
             >
+            {this.state.popUp ? <p>{this.state.popUp}</p> : null}
             <form onSubmit={this.addCollaborator}>
                 Enter email: <input type="text" name="email" required/>
                 <input type="submit" value="Submit"/>
