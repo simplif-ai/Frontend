@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import ModalWrapper from './ModalWrapper';
 import apiFetch from '../../../utils/api.js';
@@ -85,11 +86,6 @@ class ReminderModal extends React.Component {
       const { cookies } = this.props;
       const email = cookies.get('email');
       const message = '<h3>Here is a reminder for a Simplif.ai event we found in your notes</h3><br/><br/>' + 'Event: ' + this.state.eventTitle + "<br/><br/>Message: " + e.target.message.value + '<br/><br/>Cheers,<br/><br/>Simplif.ai Team';
-      const req = {
-        email,
-        dateString: this.state.dateSelect,
-        message
-      };
       apiFetch('emailReminder', {
         headers: {
          'Content-Type': 'text/plain'
