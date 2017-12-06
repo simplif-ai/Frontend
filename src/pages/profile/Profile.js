@@ -347,11 +347,11 @@ class Profile extends Component {
           </div>
           <div className="profile-info">
             <form className="image-upload" onSubmit={this.savePicture}>
-              <h1>Upload a Picture</h1>
+              <h1>Profile Options</h1>
               <input className="fileInput"
                 type="file"
                 onChange={this.handleImageChange} required />
-              <button className="submitButton" type="submit" >Upload Image</button>
+              <button className="submitButton" type="submit" >Upload New Profile Image</button>
             </form>
             <button onClick={this.toggleEditMode}>Edit Profile</button>
             {this.state.editMode ? (

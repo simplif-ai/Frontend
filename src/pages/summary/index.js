@@ -436,8 +436,19 @@ class Summary extends Component {
         });
         return;
       }
+      let formatted =  [];
+      dates.forEach(date => {
+        var momentDate = moment(date, "MM/DD/YYYY HH:mm:ss A");
+        var iso = momentDate.toISOString();
+        console.log('iso', iso);
+        var index = iso.split("").reverse().join("").indexOf('.');
+        console.log('index', index);
+        var substring = iso.substring(0, 10);
+        console.log('substring', substring);
+        formatted.push(substring);
+      });
       this.setState({
-        dates: dates,
+        dates: formatted,
         dateFound: true,
         showSendReminder: true
       });
@@ -448,16 +459,17 @@ class Summary extends Component {
       });
     }
 
-    var momentDate = moment('06/12/2014 12:45:56 AM', "YYYY/MM/DD HH:mm:ss A");
-
-    var iso = momentDate.toISOString();
-    console.log('iso', iso);
-    var index = iso.split("").reverse().join("").indexOf('.');
-    console.log('index', index);
-    var substring = iso.substring(0, iso.length - index - 1);
-    console.log('substring', substring);
-    var newData = substring + '-05:00';
-    console.log('newData', newData);
+    // console.log('date pulled from array', dates[0]);
+    // var momentDate = moment(dates[0], "MM/DD/YYYY HH:mm:ss A");
+    //
+    // var iso = momentDate.toISOString();
+    // console.log('iso', iso);
+    // var index = iso.split("").reverse().join("").indexOf('.');
+    // console.log('index', index);
+    // var substring = iso.substring(0, iso.length - index - 1);
+    // console.log('substring', substring);
+    // var newData = substring + '-05:00';
+    // console.log('newData', newData);
 
   }
   render() {
@@ -502,7 +514,7 @@ class Summary extends Component {
         {this.state.options
           ?
           (<div className="options drop">
-            <p onClick={this.exportToText}>Export to text File</p>
+            <p onClick={this.exportToText}>Export to text file</p>
             {this.state.token !== '' ? <p onClick={this.exportToGoogle}>Export to Google Drive</p> : null}
             <p onClick={this.toggleNightMode}>Toggle Night Mode</p>
             <p onClick={this.viewSendReminder}>Search for Dates</p>
