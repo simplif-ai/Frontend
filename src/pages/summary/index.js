@@ -23,7 +23,6 @@ class Summary extends Component {
   constructor(props) {
     super(props);
     const { cookies } = this.props;
-    const googleToken = cookies.get('token');
     this.state = {
       redirectToReferrer: false,
       summary: {},
@@ -43,7 +42,7 @@ class Summary extends Component {
       noteID: '',
       options: false,
       linkOpen: false,
-      token: googleToken,
+      token: cookies.get('token'),
       nightMode: false,
       isOffline: false,
       showAddCollab: false,
@@ -315,10 +314,18 @@ class Summary extends Component {
   }
   exportToGoogle = (e) => {
     e.preventDefault();
-    if (this.state.token === '') {
+    const { cookies } = this.props;
+    const token = cookies.get('token');
+    if (token === '') {
       this.setError("You do have an account attached.");
       return;
     }
+    const req = {
+      text: this.state.text,
+      title: this.state.title,
+      googleToken: token
+    };
+    console.log('req', req);
     return apiFetch('exportToDrive', {
       headers: {
        'Content-Type': 'text/plain'
@@ -326,20 +333,20 @@ class Summary extends Component {
       body: JSON.stringify({
         text: this.state.text,
         title: this.state.title,
-        googleToken: this.state.token
+        googleToken: token
       }),
       method: 'POST'
     }).then(response =>
       response.text()
     ).then((json) => {
         json = JSON.parse(json);
-        if (json.success === false) {
+        if (json.fileID) {
             this.setError("Your summary was successfully exported to Google Drive!");
             window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
         }
         else {
           // call funtion to send data to page
-          this.setError("Your summary was successfully exported!");
+          this.setError("Your summary was not successfully exported!");
           window.setTimeout(function() { this.setError(null); }.bind(this), 4000);
         }
       });
