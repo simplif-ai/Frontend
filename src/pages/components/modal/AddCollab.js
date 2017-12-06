@@ -10,7 +10,8 @@ class AddCollabModal extends React.Component {
         this.state = {
             noteID:props.noteID,
             userEmail:cookies.get('email'),
-            colabEmail:''
+            colabEmail:'',
+            popUp: ''
         };
     }
     addCollaborator = (e) => {
@@ -35,15 +36,15 @@ class AddCollabModal extends React.Component {
             }).then((response) => response.json())
             .then((json) => {
                 console.log('json',json);
-                if(json.success === false) {
-                    console.log('error', json.error);
-                    this.setState({ error: json.error });
+                if(json.success === true) {
+                  this.setState({ popUp: "You added a collaborator to your note!" });
+                  window.setTimeout(function() {
+                    this.setState({ popUp: '' });
+                  }.bind(this), 2000);
                 }
                 else {
-                    this.setState({ popUp: "You added a collaborator to your note!" });
-                    window.setTimeout(function() {
-                        this.setState({ popUp: '' });
-                    }.bind(this), 2000);
+                  console.log('error', json.error);
+                  this.setState({ popup: json.error });
                 }
             });
     };
@@ -71,8 +72,9 @@ class AddCollabModal extends React.Component {
             name={this.props.name}
             okText="Done"
             >
+            {this.state.popUp ? <p>{this.state.popUp}</p> : null}
             <form onSubmit={this.addCollaborator}>
-                Enter email: <input type="text" name="email" required/>
+                Enter email: <input type="email" name="email" required/>
                 <input type="submit" value="Submit"/>
             </form>
             </ModalWrapper>

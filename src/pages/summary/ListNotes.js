@@ -315,7 +315,7 @@ class Summary extends Component {
             <SummarizeUrl summarize={this.summarizeFromUrl} name="url" label="Summarize from URL" type="text" />
             <h2>Summarize from pptx or pdf</h2>
             <SummarizeUrl summarize={this.uploadfile} name="file" label="Upload a pptx or pdf" type="file" handleChange={this.handleChange}/>
-            <h2>Schdedule Email Reminder</h2>
+            <h2>Schedule Email Reminder</h2>
             <form onSubmit={this.addDate}>
               <label htmlFor="message">Reminder Message</label>
               <input type="text" name="message" required />

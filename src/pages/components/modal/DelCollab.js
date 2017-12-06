@@ -5,10 +5,12 @@ import ModalWrapper from './ModalWrapper';
 
 class DelCollabModal extends React.Component {
     constructor(props) {
+        const { cookies } = props;
         super(props);
         this.state = {
             noteID: props.noteID,
             colabEmail: '',
+            userEmail: cookies.get('email'),
             popUp: false
         };
     }
@@ -34,7 +36,8 @@ class DelCollabModal extends React.Component {
         method: 'POST',
         body: JSON.stringify( {
             colabEmail: e.target.email.value,
-            noteID: this.state.noteID
+            noteID: this.state.noteID,
+            userEmail: this.state.userEmail
         })
         }).then((response) => response.json())
         .then((json) => {

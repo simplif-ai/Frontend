@@ -5,7 +5,7 @@ import '../../css/register.css';
 const LoginForm = ({ login , error }) => (
   <form onSubmit={login}>
     <div className = "errorClass">
-      {error ? `Error= ${error}` : null}
+      {error ? {error} : null}
     </div>
     <label htmlFor="email">email </label>
     <input type="email" name="email" required />

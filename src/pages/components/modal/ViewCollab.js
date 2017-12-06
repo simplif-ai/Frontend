@@ -30,7 +30,6 @@ class ViewCollabModal extends React.Component {
         }
     }
     getCollaborator() {
-        console.log("im in here");
         console.log('userEmail:',this.state.userEmail);
         console.log('noteID:',this.state.noteID);
         apiFetch('getcollaborators', {

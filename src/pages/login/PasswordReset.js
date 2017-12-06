@@ -37,6 +37,7 @@ class PasswordReset extends Component {
               this.setState({ error: json.error });
           }
           else {
+            console.log("reset!");
             this.setState({ error: "Your password was updated!" });
           }
         });
