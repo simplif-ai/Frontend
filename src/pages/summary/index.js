@@ -203,7 +203,7 @@ class Summary extends Component {
       console.log('response', this.state.response);
       summary = this.state.response;
     }
-    let noteText = this.state.text.replace("'", "\\'");
+    let noteText = this.state.text.replace(/[']*/g, "\\'");
     console.log('noteText', noteText);
     return apiFetch('createnote', {
       headers: {
